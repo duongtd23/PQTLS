@@ -1,7 +1,7 @@
 ### Contents:
 - `hbtls-wtca.cafe`: the specification of the protocol without client authentication.
 - `invariants.cafe`: all invariants/lemmas.
-- others: proof scores, for example, `gen1.cafe` is the generated proof score for `inv1`.
+- others: proof scores, for example, `gen2.cafe` is the generated proof score for `inv2`.
 - `inputs`: folder contains all input files for IPSG tool.
 
 ----
