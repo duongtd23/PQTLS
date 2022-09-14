@@ -1,0 +1,91 @@
+open INV .
+	ops a b b1 b2 b3 : -> Prin .
+	op cert : -> Cert .
+	op ci : -> Cipher .
+	op pk : -> ClPubKeyEx .
+	op pk' : -> PqPubKey .
+  op k2 : -> ClPriKeyEx .
+	op k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+  ops sd sd2 : -> Seed .
+  op h : -> Hash .
+	op s : -> Sys .
+  eq timeLeak(priKey(b), ltkLeaked(s)) > n = true .
+  eq skexM(b,b,a,pk,pk',ci,n) \in nw(s) = true .
+  red inv17(s,a,b,b2,priClKey(pk),priPqKey(pk'),k2,k2',sd,sd2,h,ci,n,n2)
+  implies inv15(s,a,b,b1,b2,pk,pk',k2,k2',sd,sd2,h,ci,cert,n,n2) .
+close
+
+open INV .
+	ops a b b1 b2 b3 : -> Prin .
+	op cert : -> Cert .
+	op ci : -> Cipher .
+	op pk : -> ClPubKeyEx .
+	op pk' : -> PqPubKey .
+  op k2 : -> ClPriKeyEx .
+	op k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+  ops sd sd2 : -> Seed .
+  op h : -> Hash .
+	op s : -> Sys .
+  eq timeLeak(priKey(b), ltkLeaked(s)) > n = true .
+  eq skexM(b,b,a,pk,pk',ci,n) \in nw(s) = false .
+  red inv8(s,a,b,b1,pk,pk',k2,k2',ci,cert,n,n2)
+  implies inv15(s,a,b,b1,b2,pk,pk',k2,k2',sd,sd2,h,ci,cert,n,n2) .
+close
+
+open INV .
+	ops a b b1 b2 b3 : -> Prin .
+	op cert : -> Cert .
+	op ci : -> Cipher .
+	op pk : -> ClPubKeyEx .
+	op pk' : -> PqPubKey .
+  op k2 : -> ClPriKeyEx .
+	op k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+  ops sd sd2 : -> Seed .
+  op h : -> Hash .
+	op s : -> Sys .
+  eq timeLeak(priKey(b), ltkLeaked(s)) > n = false .
+  eq n2 > timeLeak(priKey(b), ltkLeaked(s)) = true .
+  eq skexM(b,b,a,pk,pk',ci,n) \in nw(s) = true .
+  red inv17(s,a,b,b2,priClKey(pk),priPqKey(pk'),k2,k2',sd,sd2,h,ci,n,n2)
+  implies inv15(s,a,b,b1,b2,pk,pk',k2,k2',sd,sd2,h,ci,cert,n,n2) .
+close
+
+open INV .
+	ops a b b1 b2 b3 : -> Prin .
+	op cert : -> Cert .
+	op ci : -> Cipher .
+	op pk : -> ClPubKeyEx .
+	op pk' : -> PqPubKey .
+  op k2 : -> ClPriKeyEx .
+	op k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+  ops sd sd2 : -> Seed .
+  op h : -> Hash .
+	op s : -> Sys .
+  eq timeLeak(priKey(b), ltkLeaked(s)) > n = false .
+  eq n2 > timeLeak(priKey(b), ltkLeaked(s)) = true .
+  eq skexM(b,b,a,pk,pk',ci,n) \in nw(s) = false .
+  red inv8(s,a,b,b1,pk,pk',k2,k2',ci,cert,n,n2)
+  implies inv15(s,a,b,b1,b2,pk,pk',k2,k2',sd,sd2,h,ci,cert,n,n2) .
+close
+
+open INV .
+	ops a b b1 b2 b3 : -> Prin .
+	op cert : -> Cert .
+	op ci : -> Cipher .
+	op pk : -> ClPubKeyEx .
+	op pk' : -> PqPubKey .
+  op k2 : -> ClPriKeyEx .
+	op k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+  ops sd sd2 : -> Seed .
+  op h : -> Hash .
+	op s : -> Sys .
+  eq timeLeak(priKey(b), ltkLeaked(s)) > n = false .
+  eq n2 > timeLeak(priKey(b), ltkLeaked(s)) = false .
+  red lm1(n,n2,timeLeak(priKey(b), ltkLeaked(s)))
+  implies inv15(s,a,b,b1,b2,pk,pk',k2,k2',sd,sd2,h,ci,cert,n,n2) .
+close

@@ -1,0 +1,27 @@
+open INV .
+	ops a b a1 : -> Prin .
+	op cert : -> Cert .
+	ops ci ci2 : -> Cipher .
+	op pk2 : -> ClPubKeyEx .
+  op k : -> ClPriKeyEx .
+	ops k' k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+	op s : -> Sys .
+  eq pubKey(a) = pubKey(cert) .
+  red inv38(s,a,b,a1,pk2,k',k2',ci2,n2)
+    implies inv35(s,a,b,a1,k,k',pk2,k2',ci,ci2,cert,n,n2) .
+close
+
+open INV .
+	ops a b a1 : -> Prin .
+	op cert : -> Cert .
+	ops ci ci2 : -> Cipher .
+	op pk2 : -> ClPubKeyEx .
+  op k : -> ClPriKeyEx .
+	ops k' k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+	op s : -> Sys .
+  eq (pubKey(a) = pubKey(cert)) = false .
+  red inv37(s,a,b,a1,cert)
+    implies inv35(s,a,b,a1,k,k',pk2,k2',ci,ci2,cert,n,n2) .
+close

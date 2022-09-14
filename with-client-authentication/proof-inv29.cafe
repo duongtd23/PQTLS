@@ -1,0 +1,12 @@
+open INV .
+	ops a b : -> Prin .
+	op h : -> Hash .
+	op k' : -> PqPriKey .
+	op k2' : -> PqPriKey .
+	op kc : -> ClassicKey .
+	op n : -> Nat .
+	ops sd sd2 : -> Seed .
+	op s : -> Sys .
+  red inv32(s,a,b,kc,k',k2',sd,sd2,h,n)
+  implies inv29(s,a,b,kc,k',k2',sd,sd2,h,n) .
+close

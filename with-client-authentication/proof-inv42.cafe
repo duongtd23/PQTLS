@@ -1,0 +1,37 @@
+open INV .
+	ops a b a1 a2 : -> Prin .
+  ops r r2 : -> Rand .
+	op cert : -> Cert .
+	ops ci ci2 : -> Cipher .
+	op pk2 : -> ClPubKeyEx .
+  op k : -> ClPriKeyEx .
+	ops k' k2' : -> PqPriKey .
+	ops n n2 : -> Nat .
+  op h : -> Hash .
+  op sd : -> Seed .
+	op s : -> Sys .
+  eq ckexM(a,a,b,pk2,encapsCipher(pqPubKeyEn(k'),k2'),n2) \in nw(s) = true .
+  red inv39(s,a,b,a2,k,k',priClKey(pk2),k2',
+      seedMs(r,r2,pk2,encapsCipher(pqPubKeyEn(k'),k2')),
+      sd,
+      encH(priKey(b),hParams(r,r2,clPubKeyEx(k),pqPubKeyEn(k'))),
+      h,n,n2) 
+  implies inv42(s,a,b,a1,a2,k,k',pk2,k2',r,r2,sd,ci,cert,h,n,n2) .
+close
+
+open INV .
+	ops a b a1 a2 : -> Prin .
+  ops r r2 : -> Rand .
+	op cert : -> Cert .
+	ops ci ci2 : -> Cipher .
+	op pk2 : -> ClPubKeyEx .
+  op k : -> ClPriKeyEx .
+	ops k' k2' : -> PqPriKey .
+	ops n n2 n3 : -> Nat .
+  op sd : -> Seed .
+  op h : -> Hash .
+	op s : -> Sys .
+  eq ckexM(a,a,b,pk2,encapsCipher(pqPubKeyEn(k'),k2'),n2) \in nw(s) = false .
+  red inv35(s,a,b,a1,k,k',pk2,k2',encH(priKey(b),hParams(r,r2,clPubKeyEx(k),pqPubKeyEn(k'))),ci,cert,n,n2)
+    implies inv42(s,a,b,a1,a2,k,k',pk2,k2',r,r2,sd,ci,cert,h,n,n2) .
+close

@@ -1,0 +1,672 @@
+mod INV {
+  pr(HB-TLS12)
+
+  var S : Sys
+  vars A A1 A2 B B1 B2 B3 : Prin
+  vars R R2 : Rand
+  var CS : CipherSuite
+  var CSs : CipherSuites
+  var I : Sid
+  vars PK PK2 : ClPubKeyEx
+  vars PK0' PK' PK2' : PqPubKey
+  vars CI CI2 : Cipher
+  vars PMS : Pms
+  vars KEMs : PqKemParams
+  vars KC KC2 : ClassicKey 
+  vars KP KP2 : PqKey 
+  vars K' K2' : PqPriKey
+  vars K K2 : ClPriKeyEx
+  vars HSK HSK2 : Key
+  vars H H2 : Hash
+  vars SD SD2 SD3 : Seed
+  vars N N2 N3 : Nat
+  vars SK : PriKey
+  vars M M2 : Msg
+  vars CERT : Cert
+  vars PKE : PubKey
+  vars SIGN : Sign 
+  var EN : PqCipher
+
+-- 2, no induction
+  op inv0 : Sys Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv0(S,A,B,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      not(prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in hskLeaked(S)) and
+      not(priKey(B) \in' ltkLeaked(S)) and
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      not (prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in chsk(S)) .
+
+-- 2, no induction
+  op inv1 : Sys Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv1(S,A,B,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      not(prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in hskLeaked(S)) and
+      priKey(B) \in' ltkLeaked(S) and
+      not(N > timeLeak(priKey(B), ltkLeaked(S))) and
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      not (prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in chsk(S)) .
+
+-- 3+7
+  op inv2 : Sys Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv2(S,A,B,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(B) \in' ltkLeaked(S)) or
+       not(N > timeLeak(priKey(B), ltkLeaked(S)))) and
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      not existPqPriKexM(pqKey(K' & K2',N), nw(S)) .
+
+-- 4+4'
+  op inv3 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
+  eq inv3(S,KC,K',K2',SD,SD2,N,M) = 
+    (M \in nw(S) and cfM?(M) and crt(M) = src(M) and 
+     not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
+     decSym?(getCipher(M),prf-ckey(prf-ms(KC || pqKey(K' & K2', N),SD),SD2)))
+    implies 
+      (K' \in upqk(S) and K2' \in upqk(S)) .
+
+-- 6
+  op inv4 : Sys Msg -> Bool 
+  eq inv4(S,M) = (M \in nw(S) and skexM?(M))
+    implies priPqKey(getPqKey(M)) \in upqk(S) .
+  op inv4' : Sys Msg -> Bool 
+  eq inv4'(S,M) = (M \in nw(S) and ckexM?(M))
+    implies priPqKey(getPqCipher(M)) \in upqk(S) .
+  op inv4'' : Sys Prin Prin ClPriKeyEx PqPriKey PqPriKey Nat -> Bool 
+  eq inv4''(S,A,B,K2,K',K2',N2) =
+    (not (A = intruder or B = intruder or A = B) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S))
+    implies K' \in upqk(S) .
+
+-- 6
+  op inv5 : Sys PqPriKey PqPriKey Nat -> Bool
+  eq inv5(S,K',K2',N) = 
+     existPqPriKexM(pqKey(K' & K2',N), nw(S))
+    implies (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 4
+  op inv6 : Sys PqPriKey -> Bool 
+  eq inv6(S,K') = K' \in pqkLeaked(S) implies K' \in upqk(S) .
+
+-- 8+9, no induction
+  op inv7 : Sys Prin Prin Prin ClPubKeyEx PqPubKey ClPriKeyEx PqPriKey 
+    Cipher Cert Nat Nat -> Bool
+  eq inv7(S,A,B,B1,PK,PK',K2,K2',CI,CERT,N,N2) = 
+    (not (A = intruder or B = intruder or A = B) and
+     not(priPqKey(PK') \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     (not(priKey(B) \in' ltkLeaked(S)) or
+      not(N2 > timeLeak(priKey(B), ltkLeaked(S)))) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
+     skexM(B1,B,A,PK,PK',CI,N) \in nw(S) and N2 > N and
+     scertM(B1,B,A,CERT) \in nw(S) and
+     sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+     decAsym?(CI,pubKey(CERT))) 
+    implies
+      not existPqPriKexM(pqKey(priPqKey(PK') & K2',N2), nw(S)) .
+
+-- 12+13, no induction
+  op inv8 : Sys Prin Prin Prin ClPubKeyEx PqPubKey ClPriKeyEx PqPriKey 
+    Cipher Cert Nat Nat -> Bool
+  eq inv8(S,A,B,B1,PK,PK',K2,K2',CI,CERT,N,N2) = 
+    (not (A = intruder or B = intruder or A = B) and
+     (not(priKey(B) \in' ltkLeaked(S)) or
+      timeLeak(priKey(B), ltkLeaked(S)) > N) and
+     not(priPqKey(PK') \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
+     skexM(B1,B,A,PK,PK',CI,N) \in nw(S) and N2 > N and
+     scertM(B1,B,A,CERT) \in nw(S) and
+     sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+     decAsym?(CI,pubKey(CERT))) 
+    implies 
+    (pubKey(B) = pubKey(CERT) and
+      skexM(B,B,A,PK,PK',CI,N) \in nw(S)) .
+
+-- 4+4'+10
+  op inv9 : Sys Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Cipher Nat Nat -> Bool
+  eq inv9(S,A,B,K,K',K2,K2',CI,N,N2) = 
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S))
+    implies
+     not existPqPriKexM(pqKey(K' & K2',N2), nw(S)) .
+
+-- 4+5
+  op inv10 : Sys Prin Prin ClPriKeyEx PqPriKey PqPriKey 
+    Cipher Nat Nat -> Bool 
+  eq inv10(S,A,B,K,K',K2',CI,N,N2) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     existPqPriKexM(pqKey(K' & K2', N2), nw(S)) and
+     (skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) or 
+      ckexM(A,A,B,clPubKeyEx(K),encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S)))
+    implies (K' \in upqk(S) and K2' \in upqk(S)) .
+
+  op inv11 : Sys Prin PubKey Sign -> Bool
+  eq inv11(S,B,PKE,SIGN) = 
+    (not (B = intruder) and sign(ca,B,PKE) \in csign(nw(S)))
+    implies (pubKey(B) = PKE) .
+
+-- 11
+  op inv12 : Sys Prin Prin Prin Cert -> Bool
+  eq inv12(S,A,B,B1,CERT) = 
+    (not (A = intruder or B = intruder or A = B) and
+      scertM(B1,B,A,CERT) \in nw(S) and
+      sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)))
+    implies (owner(CERT) = B and pubKey(CERT) = pubKey(B)) .
+
+-- 16
+  op inv13 : Sys Prin Prin Prin ClPubKeyEx PqPubKey Cipher Nat -> Bool
+  eq inv13(S,A,B,B1,PK,PK',CI,N) = 
+    (not (A = intruder or B = intruder or A = B) and
+     (not(priKey(B) \in' ltkLeaked(S)) or
+      timeLeak(priKey(B), ltkLeaked(S)) > N) and
+     skexM(B1,B,A,PK,PK',CI,N) \in nw(S) and
+     decAsym?(CI,pubKey(B))) 
+    implies (
+      skexM(B,B,A,PK,PK',CI,N) \in nw(S)) .
+
+-- 2+15
+  op inv14 : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv14(S,A,B,B1,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(B) \in' ltkLeaked(S)) or
+       not(N > timeLeak(priKey(B), ltkLeaked(S)))) and
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) and
+      sfM(B1,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) .
+
+-- 8+17, no induction
+  op inv15 : Sys Prin Prin Prin Prin ClPubKeyEx PqPubKey 
+    ClPriKeyEx PqPriKey Seed Seed Hash Cipher Cert Nat Nat -> Bool
+  eq inv15(S,A,B,B1,B2,PK,PK',K2,K2',SD,SD2,H,CI,CERT,N,N2) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(priPqKey(PK') \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(B) \in' ltkLeaked(S)) or
+       not(N2 > timeLeak(priKey(B), ltkLeaked(S)))) and
+      ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
+      skexM(B1,B,A,PK,PK',CI,N) \in nw(S) and N2 > N and
+      scertM(B1,B,A,CERT) \in nw(S) and
+      sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+      decAsym?(CI,pubKey(CERT)) and 
+      sfM(B2,B,A,encFin(
+        prf-skey(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),SD2),
+        prf-sfin(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),H))) \in nw(S))
+    implies 
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),SD2),
+        prf-sfin(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),H))) \in nw(S) .
+
+  op inv16 : Sys PriKey -> Bool .
+  eq inv16(S,SK) = SK \in' ltkLeaked(S)
+    implies not(timeLeak(SK,ltkLeaked(S)) > time(S)) .
+
+-- 9+18+19
+  op inv17 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Hash Cipher Nat Nat -> Bool
+  eq inv17(S,A,B,B1,K,K',K2,K2',SD,SD2,H,CI,N,N2) = 
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     (not(priKey(B) \in' ltkLeaked(S)) or
+      timeLeak(priKey(B), ltkLeaked(S)) > N) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+     sfM(B1,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-sfin(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies 
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-sfin(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S) .
+
+-- 4+4''+10
+  op inv18 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Hash Nat -> Bool 
+  eq inv18(S,A,B,B1,K,K',K2,K2',SD,SD2,H,N) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N) \in nw(S) and
+     sfM(B1,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(K & K2 || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies K' \in upqk(S) .
+
+-- 4'+10+20
+  op inv19 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Hash Cipher Nat Nat -> Bool 
+  eq inv19(S,A,B,B1,K,K',K2,K2',SD,SD2,H,CI,N,N2) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and 
+     sfM(B1,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-sfin(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies K2' \in upqk(S) .
+
+-- 4+5+21
+  op inv20 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
+  eq inv20(S,KC,K',K2',SD,SD2,N,M) = 
+    (M \in nw(S) and (sfM?(M) or sf2M?(M)) and 
+     not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     decSym?(getCipher(M),prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2)))
+    implies 
+      (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 4
+  op inv21 : Sys Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Nat Sid -> Bool
+  eq inv21(S,A,B,KC,K',K2',SD,N,I) = 
+    (not (ss(S,A,B,I) = none) and
+      ms(ss(S,A,B,I)) = prf-ms(KC || pqKey(K' & K2',N),SD))
+    implies (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 2+23
+  op inv22 : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Seed Hash Hash Nat -> Bool
+  eq inv22(S,A,B,B1,KC,K',K2',SD,SD2,SD3,H,H2,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(B) \in' ltkLeaked(S)) or
+       not(N > timeLeak(priKey(B), ltkLeaked(S)))) and
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) and
+      sf2M(B1,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD3),
+        prf-sfin2(prf-ms(KC || pqKey(K' & K2',N),SD),H2))) \in nw(S))
+    implies 
+      sf2M(B,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD3),
+        prf-sfin2(prf-ms(KC || pqKey(K' & K2',N),SD),H2))) \in nw(S) .
+
+-- 8+24, no induction
+  op inv23 : Sys Prin Prin Prin Prin ClPubKeyEx PqPubKey 
+    ClPriKeyEx PqPriKey Seed Seed Hash Cipher Cert Nat Nat -> Bool
+  eq inv23(S,A,B,B1,B2,PK,PK',K2,K2',SD,SD2,H,CI,CERT,N,N2) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(priPqKey(PK') \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(B) \in' ltkLeaked(S)) or
+       not(N2 > timeLeak(priKey(B), ltkLeaked(S)))) and
+      ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
+      skexM(B1,B,A,PK,PK',CI,N) \in nw(S) and N2 > N and
+      scertM(B1,B,A,CERT) \in nw(S) and
+      sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+      decAsym?(CI,pubKey(CERT)) and 
+      sf2M(B2,B,A,encFin(
+        prf-skey(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),SD2),
+        prf-sfin2(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),H))) \in nw(S))
+    implies 
+      sf2M(B,B,A,encFin(
+        prf-skey(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),SD2),
+        prf-sfin2(prf-ms(priClKey(PK) & K2 || pqKey(priPqKey(PK') & K2',N2),SD),H))) \in nw(S) .
+
+-- 9+25+26
+  op inv24 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Hash Cipher Nat Nat -> Bool
+  eq inv24(S,A,B,B1,K,K',K2,K2',SD,SD2,H,CI,N,N2) = 
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     (not(priKey(B) \in' ltkLeaked(S)) or
+      timeLeak(priKey(B), ltkLeaked(S)) > N) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+     sf2M(B1,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-sfin2(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies 
+      sf2M(B,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-sfin2(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S) .
+
+-- 4+4''
+  op inv25 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Hash Nat -> Bool 
+  eq inv25(S,A,B,B1,K,K',K2,K2',SD,SD2,H,N) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N) \in nw(S) and
+     sf2M(B1,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin2(prf-ms(K & K2 || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies K' \in upqk(S) .
+
+-- 10+27+20
+  op inv26 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Hash Cipher Nat Nat -> Bool 
+  eq inv26(S,A,B,B1,K,K',K2,K2',SD,SD2,H,CI,N,N2) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and 
+     sf2M(B1,B,A,encFin(
+        prf-skey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-sfin2(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies K2' \in upqk(S) .
+
+-- 4'+21
+  op inv27 : Sys Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Sid Nat Seed Msg -> Bool
+  eq inv27(S,A,B,K,K',K2,K2',I,N,SD,M) = 
+    (not(ss(S,A,B,I) = none) and
+      ms(ss(S,A,B,I)) = prf-ms(K & K2 || pqKey(K' & K2',N),SD) and
+      skexM?(M) and M \in nw(S) and crt(M) = src(M) and
+      getPqKey(M) = pqPubKeyEn(K') and
+      not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)))
+    implies K2' \in upqk(S) .
+
+** client authentication **
+-- 32, no induction
+  op inv28 : Sys Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv28(S,A,B,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      not(prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in hskLeaked(S)) and
+      not(priKey(A) \in' ltkLeaked(S)) and
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      not (prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in chsk(S)) .
+
+-- 32, no induction
+  op inv29 : Sys Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv29(S,A,B,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      not(prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in hskLeaked(S)) and
+      priKey(A) \in' ltkLeaked(S) and
+      not(N > timeLeak(priKey(A), ltkLeaked(S))) and
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      not (prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2) \in chsk(S)) .
+
+-- 32+40
+  op inv30 : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv30(S,A,B,A1,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(A) \in' ltkLeaked(S)) or
+       not(N > timeLeak(priKey(A), ltkLeaked(S)))) and
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) and
+      cfM(A1,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) .
+
+-- 32+42
+  op inv31 : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Seed Hash Hash Nat -> Bool
+  eq inv31(S,A,B,A1,KC,K',K2',SD,SD2,SD3,H,H2,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(A) \in' ltkLeaked(S)) or
+       not(N > timeLeak(priKey(A), ltkLeaked(S)))) and
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) and
+      cf2M(A1,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD3),
+        prf-cfin2(prf-ms(KC || pqKey(K' & K2',N),SD),H2))) \in nw(S))
+    implies 
+      cf2M(A,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD3),
+        prf-cfin2(prf-ms(KC || pqKey(K' & K2',N),SD),H2))) \in nw(S) .
+
+-- 33+34
+  op inv32 : Sys Prin Prin ClassicKey PqPriKey PqPriKey 
+    Seed Seed Hash Nat -> Bool
+  eq inv32(S,A,B,KC,K',K2',SD,SD2,H,N) = 
+    (not(A = intruder or B = intruder or A = B) and 
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(A) \in' ltkLeaked(S)) or
+       not(N > timeLeak(priKey(A), ltkLeaked(S)))) and
+      sfM(B,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      not existPqPriKexM(pqKey(K' & K2',N), nw(S)) .
+
+-- 4+4', variant of 3
+  op inv33 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
+  eq inv33(S,KC,K',K2',SD,SD2,N,M) = 
+    (M \in nw(S) and sfM?(M) and crt(M) = src(M) and 
+     not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
+     decSym?(getCipher(M),prf-skey(prf-ms(KC || pqKey(K' & K2', N),SD),SD2)))
+    implies 
+      (K' \in upqk(S) and K2' \in upqk(S)) .
+
+-- 9+35, no induction
+  op inv34 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPubKeyEx PqPriKey 
+    Rand Rand Cipher Cert Nat Nat -> Bool
+  eq inv34(S,A,B,A1,K,K',PK2,K2',R,R2,CI,CERT,N,N2) = 
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     (not(priKey(A) \in' ltkLeaked(S)) or
+      not(N2 > timeLeak(priKey(A), ltkLeaked(S)))) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
+       encH(priKey(B), hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), N) \in nw(S) and
+     ckexM(A1,A,B,PK2,encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+	   ccertM(A1,A,B,CERT) \in nw(S) and
+     sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+	   certVerM(A1,A,B,CI) \in nw(S) and
+     decAsym?(CI,pubKey(CERT)) and
+     getClientClKEx(decH(CI,pubKey(CERT))) = PK2 and
+     getClientPqCiph(decH(CI,pubKey(CERT))) = encapsCipher(pqPubKeyEn(K'),K2'))
+    implies
+      not existPqPriKexM(pqKey(K' & K2',N2), nw(S)) .
+
+-- 37+38, no induction, variant of 8
+  op inv35 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPubKeyEx PqPriKey 
+    Cipher Cipher Cert Nat Nat -> Bool
+  eq inv35(S,A,B,A1,K,K',PK2,K2',CI,CI2,CERT,N,N2) = 
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     (not(priKey(A) \in' ltkLeaked(S)) or
+      not(N2 > timeLeak(priKey(A), ltkLeaked(S)))) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and
+     ckexM(A1,A,B,PK2,encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+	   ccertM(A1,A,B,CERT) \in nw(S) and
+     sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+	   certVerM(A1,A,B,CI2) \in nw(S) and
+     decAsym?(CI2,pubKey(CERT)) and
+     getClientClKEx(decH(CI2,pubKey(CERT))) = PK2 and
+     getClientPqCiph(decH(CI2,pubKey(CERT))) = encapsCipher(pqPubKeyEn(K'),K2'))
+    implies
+      (pubKey(A) = pubKey(CERT) and
+       ckexM(A,A,B,PK2,encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S)) .
+
+-- 4'
+  op inv36 : Sys Prin Prin Prin PqPriKey PqPriKey Cipher -> Bool
+  eq inv36(S,A,B,A1,K',K2',CI) = 
+    (not (A = intruder or B = intruder or A = B) and
+	   certVerM(A1,A,B,CI) \in nw(S) and
+     decAsym?(CI,pubKey(A)) and
+     getClientPqCiph(decH(CI,pubKey(A))) = encapsCipher(pqPubKeyEn(K'),K2'))
+    implies
+      K2' \in upqk(S) .
+
+-- 11
+  op inv37 : Sys Prin Prin Prin Cert -> Bool
+  eq inv37(S,A,B,A1,CERT) = 
+    (not (A = intruder or B = intruder or A = B) and
+      ccertM(A1,A,B,CERT) \in nw(S) and
+      sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)))
+    implies (owner(CERT) = A and pubKey(CERT) = pubKey(A)) .
+
+-- 36
+  op inv38 : Sys Prin Prin Prin ClPubKeyEx PqPriKey PqPriKey Cipher Nat -> Bool
+  eq inv38(S,A,B,A1,PK,K',K2',CI,N) = 
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     (not(priKey(A) \in' ltkLeaked(S)) or
+      not(N > timeLeak(priKey(A), ltkLeaked(S)))) and
+     ckexM(A1,A,B,PK,encapsCipher(pqPubKeyEn(K'),K2'),N) \in nw(S) and
+	   certVerM(A1,A,B,CI) \in nw(S) and
+     decAsym?(CI,pubKey(A)) and
+     getClientClKEx(decH(CI,pubKey(A))) = PK and
+     getClientPqCiph(decH(CI,pubKey(A))) = encapsCipher(pqPubKeyEn(K'),K2'))
+    implies
+      ckexM(A,A,B,PK,encapsCipher(pqPubKeyEn(K'),K2'),N) \in nw(S) .
+
+-- 4''+9+45
+  op inv39 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Cipher Hash Nat Nat -> Bool
+  eq inv39(S,A,B,A1,K,K',K2,K2',SD,SD2,CI,H,N,N2) = 
+    (not(A = intruder or B = intruder or A = B) and
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(A) \in' ltkLeaked(S)) or
+        not(N2 > timeLeak(priKey(A), ltkLeaked(S)))) and
+      skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'), CI, N) \in nw(S) and
+      ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+      cf2M(A1,A,B,encFin(
+        prf-ckey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-cfin2(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies 
+      cf2M(A,A,B,encFin(
+        prf-ckey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-cfin2(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S) .
+
+-- 35+41, no induction
+  op inv40 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPubKeyEx PqPriKey 
+    Rand Rand Cipher Cert Hash Nat Nat -> Bool
+  eq inv40(S,A,B,A1,K,K',PK2,K2',R,R2,CI,CERT,H,N,N2) = 
+    (not(A = intruder or B = intruder or A = B) and
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(A) \in' ltkLeaked(S)) or
+        not(N2 > timeLeak(priKey(A), ltkLeaked(S)))) and
+      skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
+        encH(priKey(B), hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), N) \in nw(S) and
+      ckexM(A1,A,B,PK2,encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+      ccertM(A1,A,B,CERT) \in nw(S) and
+      sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+      certVerM(A1,A,B,CI) \in nw(S) and
+      decAsym?(CI,pubKey(CERT)) and
+      getClientClKEx(decH(CI,pubKey(CERT))) = PK2 and
+      getClientPqCiph(decH(CI,pubKey(CERT))) = encapsCipher(pqPubKeyEn(K'),K2') and
+      cfM(A1,A,B,encFin(
+        prf-ckey(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), seedHs(R,R2)),
+        prf-cfin(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), H))) \in nw(S))
+    implies 
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), seedHs(R,R2)),
+        prf-cfin(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), H))) \in nw(S) .
+
+-- 4''+9+43
+  op inv41 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Cipher Hash Nat Nat -> Bool
+  eq inv41(S,A,B,A1,K,K',K2,K2',SD,SD2,CI,H,N,N2) = 
+    (not(A = intruder or B = intruder or A = B) and
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(A) \in' ltkLeaked(S)) or
+        not(N2 > timeLeak(priKey(A), ltkLeaked(S)))) and
+      skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'), CI, N) \in nw(S) and
+      ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+      cfM(A1,A,B,encFin(
+        prf-ckey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-cfin(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies 
+      cfM(A,A,B,encFin(
+        prf-ckey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-cfin(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S) .
+
+-- 35+39, no induction
+  op inv42 : Sys Prin Prin Prin Prin ClPriKeyEx PqPriKey ClPubKeyEx PqPriKey 
+    Rand Rand Seed Cipher Cert Hash Nat Nat -> Bool
+  eq inv42(S,A,B,A1,A2,K,K',PK2,K2',R,R2,SD,CI,CERT,H,N,N2) = 
+    (not(A = intruder or B = intruder or A = B) and
+      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+      (not(priKey(A) \in' ltkLeaked(S)) or
+        not(N2 > timeLeak(priKey(A), ltkLeaked(S)))) and
+      skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
+        encH(priKey(B), hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), N) \in nw(S) and
+      ckexM(A1,A,B,PK2,encapsCipher(pqPubKeyEn(K'),K2'),N2) \in nw(S) and
+      ccertM(A1,A,B,CERT) \in nw(S) and
+      sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
+      certVerM(A1,A,B,CI) \in nw(S) and
+      decAsym?(CI,pubKey(CERT)) and
+      getClientClKEx(decH(CI,pubKey(CERT))) = PK2 and
+      getClientPqCiph(decH(CI,pubKey(CERT))) = encapsCipher(pqPubKeyEn(K'),K2') and
+      cf2M(A2,A,B,encFin(
+        prf-ckey(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), SD),
+        prf-cfin2(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), H))) \in nw(S))
+    implies 
+      cf2M(A,A,B,encFin(
+        prf-ckey(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), SD),
+        prf-cfin2(prf-ms(K & priClKey(PK2) || pqKey(K' & K2',N2), 
+          seedMs(R,R2,PK2,encapsCipher(pqPubKeyEn(K'),K2'))), H))) \in nw(S) .
+
+-- 4'+10+44
+  op inv43 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Cipher Hash Nat Nat -> Bool 
+  eq inv43(S,A,B,A1,K,K',K2,K2',SD,SD2,CI,H,N,N2) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and 
+     cfM(A1,A,B,encFin(
+        prf-ckey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-cfin(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies K2' \in upqk(S) .
+
+-- 4'+5+21
+  op inv44 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
+  eq inv44(S,KC,K',K2',SD,SD2,N,M) = 
+    (M \in nw(S) and (cfM?(M) or cf2M?(M)) and 
+     not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     decSym?(getCipher(M),prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2)))
+    implies 
+      (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 4'+10+27+44
+  op inv45 : Sys Prin Prin Prin ClPriKeyEx PqPriKey ClPriKeyEx PqPriKey 
+    Seed Seed Cipher Hash Nat Nat -> Bool 
+  eq inv45(S,A,B,A1,K,K',K2,K2',SD,SD2,CI,H,N,N2) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),CI,N) \in nw(S) and 
+     cf2M(A1,A,B,encFin(
+        prf-ckey(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),SD2),
+        prf-cfin2(prf-ms(K & K2 || pqKey(K' & K2',N2),SD),H))) \in nw(S))
+    implies K2' \in upqk(S) .
+}
