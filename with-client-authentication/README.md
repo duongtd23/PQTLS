@@ -1,11 +1,10 @@
-### Contents:
-- `hbtls-ca.cafe`: the specification of the protocol with client authentication.
+## Contents: In this folder, you can find:
+- `hbtls-ca.cafe`: the specification of the protocol with client authentication, which is explained in detail below.
 - `invariants.cafe`: all invariants/lemmas.
 - others: proof scores, for example, `gen30.cafe` is the generated proof score for `inv30`.
 - `inputs`: folder contains all input files for IPSG tool.
 
-----
-### CafeOBJ specification: a detail description
+## CafeOBJ specification with client authentication: a detail description
 We first introduce the following module, where `intruder` and `ca` represent the intruder and the certificate authority:
 
 ```
@@ -37,7 +36,7 @@ mod! PRIVATE-KEY {
 }
 ```
 
-Next, we model random numbers, cipher suites, session IDs, protocol versions, and PQ KEM parameters used in the `ClientHello` message (note that comments in CafeOBJ are started with `--` and finished at the end of that line):
+Next, we model random numbers, cipher suites, PQ KEMs parameters (), session IDs, protocol versions, and PQ KEM parameters used in the `ClientHello` message (note that comments in CafeOBJ are started with `--` and finished at the end of that line):
 
 ```
 mod! RANDOM {
@@ -45,6 +44,10 @@ mod! RANDOM {
 }
 mod! CIPHER-SUITE {
   [CipherSuite]
+}
+mod! PQ-KEM-PARAM {
+  [PqKemParam]
+-- for example, a PqKemParam can receive as value "KYBER-512-R3" - indicating that it supports Kyber with parameters defined in Kyber, the round 3 candidate to NIST PQC.
 }
 mod! SID {
   [Sid]
@@ -99,6 +102,17 @@ mod! CERTIFICATE {
 }
 ```
 For example, `cert(A,K,sign(CA,A,K))` denotes the certificate of principal `A` with its public key `K` signed by certificate authority `CA`.
+
+Two modules `CERTIFICATE-TYPE` and `SIGNATURE-ALGORITHM` model two corresponding kinds of parameters sent in `CertificateRequest` messages:
+
+```
+mod! CERTIFICATE-TYPE {
+  [CertType]
+}
+mod! SIGNATURE-ALGORITHM {
+  [SignAlg]
+}
+```
 
 We then model ECDH. Please check the paper for its description. Because we describe it in detail in the paper, we do not do it again here.
 ```
@@ -274,10 +288,18 @@ view TRIV2CIPHER-SUITE from TRIV to CIPHER-SUITE {
 view TRIV2PQ-KEM-PARAM from TRIV to PQ-KEM-PARAM {
   sort Elt -> PqKemParam
 }
+view TRIV2CERTTYPE from TRIV to CERTIFICATE-TYPE {
+  sort Elt -> CertType
+}
+view TRIV2SIGNALG from TRIV to SIGNATURE-ALGORITHM {
+  sort Elt -> SignAlg
+}
 mod! ENCRYPTION {
   pr(HANDSHAKE-KEY + CERTIFICATE + SID + PROTOCOL-VERSION)
   pr(LIST(D <= TRIV2CIPHER-SUITE)*{sort List -> CipherSuites})
   pr(LIST(D <= TRIV2PQ-KEM-PARAM)*{sort List -> PqKemParams})
+  pr(LIST(D <= TRIV2CERTTYPE)*{sort List -> CertTypes})
+  pr(LIST(D <= TRIV2SIGNALG)*{sort List -> SignAlgs})
   [Cipher] [Hash] [FinVD]
 
 -- for verify_datas
@@ -287,11 +309,15 @@ mod! ENCRYPTION {
   op prf-sfin2 : Ms Hash -> FinVD {constr}
 
 -- for hash functions
-  op hFullHs : Prin Prin Version Rand CipherSuites PqKemParams Rand 
-    CipherSuite Sid Cert ClPubKeyEx PqPubKey Cipher ClPubKeyEx PqCipher 
-    -> Hash {constr}
-  op hAbbrHs : Prin Prin Version Rand Sid CipherSuites Rand CipherSuite 
-    -> Hash {constr}
+  op hFullHs : Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid
+    Cert
+    ClPubKeyEx PqPubKey Cipher
+    CertTypes SignAlgs
+    Cert
+    ClPubKeyEx PqCipher -> Hash {constr}
+  op hAbbrHs : Prin Prin Version Rand Sid CipherSuites
+    Rand CipherSuite -> Hash {constr}
   op hParams : Rand Rand ClPubKeyEx PqPubKey -> Hash {constr}
 
 -- for encryption
@@ -323,40 +349,49 @@ mod! ENCRYPTION {
   vars CSs CSs2 : CipherSuites
   vars CS CS2 : CipherSuite
   vars I I2 : Sid
-  vars CERT CERT2 : Cert 
+  vars CERT CERT2 CERT3 CERT4 : Cert 
   vars KEMs KEMs2 : PqKemParams
   vars FVD FVD' FVD2 : FinVD
   vars V V2 : Version
   vars EN EN2 : PqCipher
+  vars CRTs CRTs2 : CertTypes
+  vars SGAs SGAs2 : SignAlgs
 
-  eq (hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,PK2,EN) =
-      hFullHs(A2,B2,V2,R3,CSs2,KEMs2,R4,CS2,I2,CERT2,PK3,PK3',CI2,PK4,EN2)) =
+  eq (hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,CRTs,SGAs,CERT3,PK2,EN) =
+      hFullHs(A2,B2,V2,R3,CSs2,KEMs2,R4,CS2,I2,CERT2,PK3,PK3',CI2,CRTs2,SGAs2,CERT4,PK4,EN2)) =
     (A = A2 and B = B2 and R = R3 and CSs = CSs2 and 
      KEMs = KEMs2 and R2 = R4 and CS = CS2 and I = I2 and 
      CERT = CERT2 and PK = PK3 and PK' = PK3' and 
-     CI = CI2 and PK2 = PK4 and EN = EN2 and V = V2) .   
+     CI = CI2 and PK2 = PK4 and EN = EN2 and V = V2 and
+     CRTs = CRTs2 and SGAs = SGAs2 and CERT3 = CERT4) .   
   eq (hAbbrHs(A,B,V,R,I,CSs,R2,CS) =
       hAbbrHs(A2,B2,V2,R3,I2,CSs2,R4,CS2)) =
     (A = A2 and B = B2 and R = R3 and CSs = CSs2 and 
      R2 = R4 and CS = CS2 and I = I2 and V = V2) . 
   eq (hParams(R,R2,PK,PK') = hParams(R3,R4,PK2,PK2')) =
     (R = R3 and R2 = R4 and PK = PK2 and PK' = PK2') .
-  eq (hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,PK2,EN) =
-      hAbbrHs(A2,B2,V2,R3,I2,CSs2,R4,CS2)) = false .
-  eq (hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,PK2,EN) =
-      hParams(R3,R4,PK3,PK3')) = false .
-  eq (hAbbrHs(A,B,V,R,I,CSs,R2,CS) = hParams(R3,R4,PK2,PK2')) = false .
+  eq (hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,CRTs,SGAs,CERT3,PK2,EN) =
+    hAbbrHs(A2,B2,V2,R3,I2,CSs2,R4,CS2)) = false .
+  eq (hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,CRTs,SGAs,CERT3,PK2,EN) =
+    hParams(R3,R4,PK3,PK3')) = false .
+  eq (hAbbrHs(A,B,V,R,I,CSs,R2,CS) = hParams(R3,R4,PK3,PK3')) = false .
   eq (encH(KE, H) = encH(KE2, H2)) = (KE = KE2 and H = H2) .
   eq (encFin(KR,FVD) = encFin(KR2,FVD2)) = (KR = KR2 and FVD = FVD2) .  
   eq (prf-cfin(MS,H) = prf-cfin(MS2,H2)) = (MS = MS2 and H = H2) .
   eq (prf-sfin(MS,H) = prf-sfin(MS2,H2)) = (MS = MS2 and H = H2) .
   eq (prf-cfin2(MS,H) = prf-cfin2(MS2,H2)) = (MS = MS2 and H = H2) .
   eq (prf-sfin2(MS,H) = prf-sfin2(MS2,H2)) = (MS = MS2 and H = H2) .
+  op getClientClKEx : Hash -> ClPubKeyEx
+  op getClientPqCiph : Hash -> PqCipher
+  eq getClientClKEx(hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,CRTs,SGAs,CERT3,PK2,EN))
+    = PK2 .
+  eq getClientPqCiph(hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,CRTs,SGAs,CERT3,PK2,EN))
+    = EN .
 }
 ```
 <!-- Note that -->
 
-We then introduce module `MESSAGE` modeling messages exchanged in the protocol. The module first declares sort `Msg` with 14 constructors where their explanations are given in the code comments:
+We then introduce module `MESSAGE` modeling messages exchanged in the protocol. The module first declares sort `Msg` with 17 constructors where their explanations are given in the code comments:
 ```
 mod! MESSAGE {
   pr(ENCRYPTION)
@@ -377,6 +412,15 @@ mod! MESSAGE {
   op shDnM : Prin Prin Prin -> Msg {constr}
 -- change cipher spec
   op ccsM : Prin Prin Prin -> Msg {constr}
+
+-- client authentication messages, certificate request
+  op certReqM : Prin Prin Prin CertTypes SignAlgs -> Msg {constr}
+
+-- client certificate
+  op ccertM : Prin Prin Prin Cert -> Msg {constr}
+
+-- certificate verify
+  op certVerM : Prin Prin Prin Cipher -> Msg {constr}
 
 -- client finished, server finished messages (for the full handshake)
   op cfM : Prin Prin Prin Cipher -> Msg {constr}
@@ -407,6 +451,8 @@ The module then declares some predicates `x?` checking a given message is a `x` 
   op sh2M?   : Msg -> Bool
   op cf2M?   : Msg -> Bool
   op sf2M?   : Msg -> Bool
+  op ccertM? : Msg -> Bool
+  op certVerM? : Msg -> Bool
 ```
 For example, `chM?` checks if a given message is a `ClientHello` message.
 
@@ -642,23 +688,45 @@ mod HB-TLS12 {
   op skeyex : Sys ClPriKeyEx PqPriKey
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid -> Sys {constr}
+-- sending certification request 
+  op certReq : Sys CertTypes SignAlgs 
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid 
+    ClPriKeyEx PqPriKey Nat -> Sys {constr}
 -- sending server hello done 
   op shelloDone : Sys 
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid 
     ClPriKeyEx PqPriKey Nat -> Sys {constr}
+-- sending client certificate
+  op ccert : Sys
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Prin Rand CipherSuite Sid 
+    Cert
+    ClPubKeyEx PqPubKey Cipher Nat
+    CertTypes SignAlgs -> Sys {constr}
 -- sending client key exchange 
   op ckeyex : Sys ClPriKeyEx PqPriKey
     Prin Prin Version Rand CipherSuites PqKemParams
     Prin Rand CipherSuite Sid 
     Cert
-    ClPubKeyEx PqPubKey Cipher Nat -> Sys {constr}
+    ClPubKeyEx PqPubKey Cipher Nat 
+    CertTypes SignAlgs -> Sys {constr}
+-- sending certificate verify
+  op certVerify : Sys
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Prin Rand CipherSuite Sid 
+    Cert
+    ClPubKeyEx PqPubKey Cipher Nat
+    CertTypes SignAlgs
+    ClPriKeyEx PqPriKey Nat -> Sys {constr}
 -- sending client change cipher spec
   op cChangeCS : Sys
     Prin Prin Version Rand CipherSuites PqKemParams
     Prin Rand CipherSuite Sid 
     Cert
     ClPubKeyEx PqPubKey Cipher Nat 
+    CertTypes SignAlgs
     ClPriKeyEx PqPriKey Nat -> Sys {constr}
 -- sending client finished
   op cfinish : Sys 
@@ -666,19 +734,26 @@ mod HB-TLS12 {
     Prin Rand CipherSuite Sid
     Cert
     ClPubKeyEx PqPubKey Cipher Nat 
+    CertTypes SignAlgs
     ClPriKeyEx PqPriKey Nat -> Sys {constr}
 -- sending server change cipher spec
   op sChangeCS : Sys
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid
     ClPriKeyEx PqPriKey Nat
-    Prin ClPubKeyEx PqCipher Nat -> Sys {constr}
+    CertTypes SignAlgs
+    Prin Cert
+    ClPubKeyEx PqCipher Nat
+    Cipher -> Sys {constr}
 -- sending server finished
   op sfinish : Sys 
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid
     ClPriKeyEx PqPriKey Nat
-    Prin ClPubKeyEx PqCipher Nat -> Sys {constr}
+    CertTypes SignAlgs
+    Prin Cert
+    ClPubKeyEx PqCipher Nat
+    Cipher -> Sys {constr}
 ```
 
 The module then declares transitions for the abbreviated handshake and for sending server hello request messages:
@@ -733,17 +808,30 @@ Then, transitions for the intruder capabilities are declared as follows:
   op fkCkeyex : Sys Prin Prin ClPriKeyEx PqPriKey PqPubKey -> Sys {constr}
   op fkCkeyex2 : Sys Prin Prin ClPriKeyEx PqPriKey PqPubKey -> Sys {constr}
 -- faking client finished
-  op fkCfinish : Sys Pms PubKey Sign
+  op fkCfinish : Sys Pms PubKey Sign PubKey Sign
     Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid
     ClPubKeyEx PqPubKey Cipher
-    ClPubKeyEx PqCipher -> Sys {constr}
+    ClPubKeyEx PqCipher 
+    CertTypes SignAlgs -> Sys {constr}
 -- faking server finished
-  op fkSfinish : Sys Pms PubKey Sign
+  op fkSfinish : Sys Pms PubKey Sign PubKey Sign
     Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid
     ClPubKeyEx PqPubKey Cipher
-    ClPubKeyEx PqCipher -> Sys {constr}
+    ClPubKeyEx PqCipher 
+    CertTypes SignAlgs -> Sys {constr}
+-- faking cerificate request
+  op fkCertReq : Sys Prin Prin CertTypes SignAlgs -> Sys {constr}
+-- faking client cerificate
+  op fkCCert : Sys Prin Prin PubKey Sign -> Sys {constr}
+-- faking cerificate verify
+  op fkCertVerify : Sys PubKey Sign PubKey Sign
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid
+    ClPubKeyEx PqPubKey Cipher
+    ClPubKeyEx PqCipher 
+    CertTypes SignAlgs -> Sys {constr}
 -- faking client hello 2
   op fkChello2 : Sys Prin Prin Version Rand Sid CipherSuites -> Sys {constr}
 -- faking server hello 2
@@ -973,7 +1061,40 @@ Next, we define transition `skeyex` specifying a server sends a `ServerKeyExchan
 The server uses two secret keys (ECDH and PQ KEM) `K` and `K'` to derive two correspond public keys `clPubKeyEx(K)` and `pqPubKeyEn(K')` to send them to the client.
 In that message, time of the system, i.e., `time(S)`, is embedded at the end, and the time of the system is increment in the successor state, i.e., `s(time(S))`, where `s(N)` is `N + 1` (the successor of `N`).
 
-A server sends a `ServerHelloDone` message can be simply specified as follows:
+A server sends a `CertificateRequest` message is specified by the following transition:
+```
+  op c-certReq : Sys 
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid 
+    ClPriKeyEx PqPriKey Nat -> Bool
+  eq c-certReq(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) = 
+    (c-skeyex'(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
+      encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),N) \in nw(S)) .
+  ceq nw(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) 
+    = (certReqM(B,B,A,CRTs,SGAs) , nw(S)) 
+  if c-certReq(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) .
+  eq ur(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = ur(S) .
+  eq uclk(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = uclk(S) .
+  eq upqk(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = upqk(S) .
+  eq ui(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = ui(S) .
+  eq ss(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N),A9,B9,I9) 
+    = ss(S,A9,B9,I9) .
+  eq clkLeaked(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) 
+    = clkLeaked(S) .
+  eq pqkLeaked(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) 
+    = pqkLeaked(S) .
+  eq hskLeaked(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N))
+    = hskLeaked(S) .
+  eq ltkLeaked(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N))
+    = ltkLeaked(S) .
+  eq time(certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N))
+    = time(S) .
+  ceq certReq(S,CRTs,SGAs,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) = S
+  if not c-certReq(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) .
+```
+
+A server sends a `ServerHelloDone` message is specified as follows:
 ```
   op c-shelloDone : Sys 
     Prin Prin Prin Version Rand CipherSuites PqKemParams
@@ -1007,25 +1128,17 @@ A server sends a `ServerHelloDone` message can be simply specified as follows:
   if not c-shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) .
 ```
 
-A client sends a `ClientKeyExchange` message can be specified as follows:
+Upon receiving those messages from the server, the client first sends a `Certificate` message to the server as follows:
+
 ```
-  op c-ckeyex : Sys ClPriKeyEx PqPriKey
+  op c-ccert : Sys
     Prin Prin Version Rand CipherSuites PqKemParams
     Prin Rand CipherSuite Sid 
     Cert
-    ClPubKeyEx PqPubKey Cipher Nat -> Bool
-  op c-ckeyex' : Sys
-    Prin Prin Version Rand CipherSuites PqKemParams
-    Prin Rand CipherSuite Sid 
-    Cert
-    ClPubKeyEx PqPubKey Cipher Nat -> Bool
-  eq c-ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) 
-    = (c-ckeyex'(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-        CERT,PK,PK',CI,N) 
-       and not (K2 \in uclk(S) or K2' \in upqk(S))) .
-  eq c-ckeyex'(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) 
+    ClPubKeyEx PqPubKey Cipher Nat
+    CertTypes SignAlgs -> Bool
+  eq c-ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs) 
     = (chM(A,A,B,V,R,CSs,KEMs) \in nw(S) and
      shM(B2,B,A,V,R2,CS,I) \in nw(S) and
      scertM(B2,B,A,CERT) \in nw(S) and
@@ -1033,50 +1146,160 @@ A client sends a `ClientKeyExchange` message can be specified as follows:
      skexM(B2,B,A,PK,PK',CI,N) \in nw(S) and
       decAsym?(CI,pubKey(CERT)) and
       decH(CI,pubKey(CERT)) = hParams(R,R2,PK,PK') and
+     certReqM(B2,B,A,CRTs,SGAs) \in nw(S) and
      shDnM(B2,B,A) \in nw(S)) .
+  ceq nw(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs))
+    = (ccertM(A,A,B,cert(A,pubKey(A),sign(ca,A,pubKey(A)))) , nw(S))
+    if c-ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs) .
+  eq ur(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = ur(S) . 
+  eq uclk(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs)) = uclk(S) .
+  eq upqk(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs)) = upqk(S) .
+  eq ui(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = ui(S) . 
+  eq ss(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs),A9,B9,I9) 
+    = ss(S,A9,B9,I9) .
+  eq clkLeaked(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = clkLeaked(S) .
+  eq pqkLeaked(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = pqkLeaked(S) .
+  eq hskLeaked(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = hskLeaked(S) . 
+  eq ltkLeaked(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = ltkLeaked(S) . 
+  eq time(ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = time(S) . 
+  ceq ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs) = S 
+    if not c-ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs) .
+```
+
+The effective condition states that client `A` must received valid `ServerHello`, `Certificate`, `ServerKeyExchange`, and `CertificateRequest` messages.
+
+A client sends a `ClientKeyExchange` message is specified as follows:
+```
+  op c-ckeyex : Sys ClPriKeyEx PqPriKey
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Prin Rand CipherSuite Sid 
+    Cert
+    ClPubKeyEx PqPubKey Cipher Nat 
+    CertTypes SignAlgs -> Bool
+  op c-ckeyex' : Sys
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Prin Rand CipherSuite Sid 
+    Cert
+    ClPubKeyEx PqPubKey Cipher Nat 
+    CertTypes SignAlgs -> Bool
+  eq c-ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs) 
+    = (c-ckeyex'(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+        CERT,PK,PK',CI,N,CRTs,SGAs) 
+       and not (K2 \in uclk(S) or K2' \in upqk(S))) .
+  eq c-ckeyex'(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs) 
+    = (c-ccert(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+        CERT,PK,PK',CI,N,CRTs,SGAs) and
+      ccertM(A,A,B,cert(A,pubKey(A),sign(ca,A,pubKey(A)))) \in nw(S)) .
 
   ceq nw(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N))
+      CERT,PK,PK',CI,N,CRTs,SGAs))
     = (ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'), time(S)) , nw(S)) 
     if c-ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) .
+      CERT,PK,PK',CI,N,CRTs,SGAs) .
   eq ur(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N)) = ur(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = ur(S) . 
   ceq uclk(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N)) 
+      CERT,PK,PK',CI,N,CRTs,SGAs)) 
     = (K2 uclk(S))
     if c-ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) .
+      CERT,PK,PK',CI,N,CRTs,SGAs) .
   ceq upqk(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N)) 
+      CERT,PK,PK',CI,N,CRTs,SGAs)) 
     = (K2' upqk(S))
     if c-ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) .
+      CERT,PK,PK',CI,N,CRTs,SGAs) .
   eq ui(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N)) = ui(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = ui(S) . 
   eq ss(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N),A9,B9,I9) 
+      CERT,PK,PK',CI,N,CRTs,SGAs),A9,B9,I9) 
     = ss(S,A9,B9,I9) .
   eq clkLeaked(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N)) = clkLeaked(S) .
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = clkLeaked(S) .
   eq pqkLeaked(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N)) = pqkLeaked(S) .
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = pqkLeaked(S) .
   eq hskLeaked(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N)) = hskLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = hskLeaked(S) . 
   eq ltkLeaked(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N)) = ltkLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = ltkLeaked(S) . 
   ceq time(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N)) = s(time(S))
+    CERT,PK,PK',CI,N,CRTs,SGAs)) = s(time(S))
     if c-ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) .
+      CERT,PK,PK',CI,N,CRTs,SGAs) .
   ceq ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) = S 
+      CERT,PK,PK',CI,N,CRTs,SGAs) = S 
     if not c-ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N) .
+      CERT,PK,PK',CI,N,CRTs,SGAs) .
 ```
 
 The effective condition states that client `A` must received valid `ServerHello`, `Certificate`, and `ServerKeyExchange` messages.
 The definition of the transition can be understood likewise `skeyex`.
+
+After that, the following transition specifies the client sends a `CertificateVerify` message, which is a signature of all handshake messages exchanged so far signed by the long-term private key of the client.
+
+```
+-- certificate verify
+  op c-certVerify : Sys
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Prin Rand CipherSuite Sid 
+    Cert
+    ClPubKeyEx PqPubKey Cipher Nat
+    CertTypes SignAlgs
+    ClPriKeyEx PqPriKey Nat -> Bool
+  eq c-certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)
+    = (c-ckeyex'(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+         CERT,PK,PK',CI,N,CRTs,SGAs) and
+       ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
+       N2 > N) .
+  ceq nw(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = 
+    (certVerM(A,A,B,encH(priKey(A),
+      hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,
+            CRTs,SGAs,cert(A,pubKey(A),sign(ca,A,pubKey(A))),
+            clPubKeyEx(K2),encapsCipher(PK',K2')))) , nw(S)) 
+    if c-certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) .
+  eq ur(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ur(S) . 
+  eq uclk(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = uclk(S) .
+  eq upqk(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = upqk(S) .
+  eq ui(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ui(S) . 
+  eq ss(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = clkLeaked(S) . 
+  eq pqkLeaked(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = pqkLeaked(S) . 
+  eq hskLeaked(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = hskLeaked(S) . 
+  eq ltkLeaked(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ltkLeaked(S) . 
+  eq time(certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = time(S) . 
+  ceq certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) = S 
+    if not c-certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) .
+```
 
 A client sends a `ChangeCipherSpec` message is specified as follows:
 ```
@@ -1085,42 +1308,45 @@ A client sends a `ChangeCipherSpec` message is specified as follows:
     Prin Rand CipherSuite Sid 
     Cert
     ClPubKeyEx PqPubKey Cipher Nat 
+    CertTypes SignAlgs
     ClPriKeyEx PqPriKey Nat -> Bool
   eq c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2)
-    = (c-ckeyex'(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-         CERT,PK,PK',CI,N) and
-       ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
-       N2 > N) .
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)
+    = (c-certVerify(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+         CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) and
+       certVerM(A,A,B,encH(priKey(A),
+        hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,
+            CRTs,SGAs,cert(A,pubKey(A),sign(ca,A,pubKey(A))),
+            clPubKeyEx(K2),encapsCipher(PK',K2')))) \in nw(S)) .
   ceq nw(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2)) = 
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = 
     (ccsM(A,A,B) , nw(S)) 
     if c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2) .
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) .
   eq ur(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = ur(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ur(S) . 
   eq uclk(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = uclk(S) .
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = uclk(S) .
   eq upqk(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = upqk(S) .
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = upqk(S) .
   eq ui(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = ui(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ui(S) . 
   eq ss(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2),A9,B9,I9) = ss(S,A9,B9,I9) .
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2),A9,B9,I9) = ss(S,A9,B9,I9) .
   eq clkLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = clkLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = clkLeaked(S) . 
   eq pqkLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = pqkLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = pqkLeaked(S) . 
   eq hskLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = hskLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = hskLeaked(S) . 
   eq ltkLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = ltkLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ltkLeaked(S) . 
   eq time(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = time(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = time(S) . 
   ceq cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2) = S 
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) = S 
     if not c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2) .
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) .
 ```
 
 After that, a client sends a `Finished` message by the following transition:
@@ -1131,14 +1357,15 @@ After that, a client sends a `Finished` message by the following transition:
     Prin Rand CipherSuite Sid 
     Cert
     ClPubKeyEx PqPubKey Cipher Nat 
+    CertTypes SignAlgs
     ClPriKeyEx PqPriKey Nat -> Bool
   eq c-cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2)
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)
     = (c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-        CERT,PK,PK',CI,N,K2,K2',N2) and
+        CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) and
        ccsM(A,A,B) \in nw(S)) .
   ceq nw(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2)) = 
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = 
     (cfM(A,A,B, encFin(
         prf-ckey(prf-ms(classicKey(PK,K2) || pqKey(encapsKey(PK',K2'),N2), 
             seedMs(R,R2,clPubKeyEx(K2),encapsCipher(PK',K2'))), 
@@ -1146,34 +1373,35 @@ After that, a client sends a `Finished` message by the following transition:
         prf-cfin(prf-ms(classicKey(PK,K2) || pqKey(encapsKey(PK',K2'),N2), 
             seedMs(R,R2,clPubKeyEx(K2),encapsCipher(PK',K2'))), 
           hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,CERT,PK,PK',CI,
+            CRTs,SGAs,cert(A,pubKey(A),sign(ca,A,pubKey(A))),
             clPubKeyEx(K2),encapsCipher(PK',K2')))
       )) , nw(S)) 
     if c-cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2) .
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) .
   eq ur(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = ur(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ur(S) . 
   eq uclk(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = uclk(S) .
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = uclk(S) .
   eq upqk(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = upqk(S) .
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = upqk(S) .
   eq ui(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = ui(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ui(S) . 
   eq ss(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2),A9,B9,I9) = ss(S,A9,B9,I9) .
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2),A9,B9,I9) = ss(S,A9,B9,I9) .
   eq clkLeaked(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = clkLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = clkLeaked(S) . 
   eq pqkLeaked(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = pqkLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = pqkLeaked(S) . 
   eq hskLeaked(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = hskLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = hskLeaked(S) . 
   eq ltkLeaked(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = ltkLeaked(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = ltkLeaked(S) . 
   eq time(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-    CERT,PK,PK',CI,N,K2,K2',N2)) = time(S) . 
+    CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2)) = time(S) . 
   ceq cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2) = S 
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) = S 
     if not c-cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
-      CERT,PK,PK',CI,N,K2,K2',N2) .
+      CERT,PK,PK',CI,N,CRTs,SGAs,K2,K2',N2) .
 ```
 
 `PK` and `PK'` are ECDH and PQ KEM public keys that the client received from the server, while `K2` and `K2'` are the two secret keys used by the client. 
@@ -1189,12 +1417,24 @@ A server sends a `ChangeCipherSpec` message is specified as follows:
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid 
     ClPriKeyEx PqPriKey Nat
-    Prin ClPubKeyEx PqCipher Nat -> Bool
-  eq c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) = 
+    CertTypes SignAlgs
+    Prin Cert
+    ClPubKeyEx PqCipher Nat
+    Cipher -> Bool
+  eq c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) = 
     (c-shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) and
      shDnM(B,B,A) \in nw(S) and
+     ccertM(A3,A,B,CERT) \in nw(S) and
+      sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
      ckexM(A3,A,B,PK2,EN,N2) \in nw(S) and
+     certVerM(A3,A,B,CI) \in nw(S) and
+      decAsym?(CI, pubKey(CERT)) and 
+      decH(CI,pubKey(CERT)) =
+        hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,cert(B,pubKey(B),sign(ca,B,pubKey(B))),
+          clPubKeyEx(K),pqPubKeyEn(K'),
+          encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),
+          CRTs,SGAs,CERT, PK2,EN) and
      cfM(A3,A,B,encFin(
         prf-ckey(prf-ms(classicKey(PK2,K) || pqKey(decaps(EN,K'),N2), 
           seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
@@ -1202,38 +1442,39 @@ A server sends a `ChangeCipherSpec` message is specified as follows:
           seedMs(R,R2,PK2,EN)),
           hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I, cert(B,pubKey(B),sign(ca,B,pubKey(B))),
             clPubKeyEx(K),pqPubKeyEn(K'),
-            encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),PK2,EN)))) 
+            encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),
+            CRTs,SGAs,CERT,PK2,EN)))) 
       \in nw(S) and
      ccsM(A3,A,B) \in nw(S)) .
-  ceq nw(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2)) 
+  ceq nw(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI)) 
     = (ccsM(B,B,A) , nw(S))
-    if c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) .
-  eq ur(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = ur(S) . 
-  eq uclk(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = uclk(S) .
-  eq upqk(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = upqk(S) .
-  eq ui(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = ui(S) . 
-  eq ss(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2),A9,B9,I9) = ss(S,A9,B9,I9) .
-  eq clkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = clkLeaked(S) . 
-  eq pqkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = pqkLeaked(S) . 
-  eq hskLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = hskLeaked(S) . 
-  eq ltkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = ltkLeaked(S) . 
-  eq time(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = time(S) . 
-  ceq sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) = S 
-    if not c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) .
+    if c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) .
+  eq ur(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = ur(S) . 
+  eq uclk(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = uclk(S) .
+  eq upqk(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = upqk(S) .
+  eq ui(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = ui(S) . 
+  eq ss(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = clkLeaked(S) . 
+  eq pqkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = pqkLeaked(S) . 
+  eq hskLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = hskLeaked(S) . 
+  eq ltkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = ltkLeaked(S) . 
+  eq time(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = time(S) . 
+  ceq sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) = S 
+    if not c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) .
 ```
 
 After that, a server sends a `Finished` message by the following transition:
@@ -1242,14 +1483,17 @@ After that, a server sends a `Finished` message by the following transition:
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid 
     ClPriKeyEx PqPriKey Nat
-    Prin ClPubKeyEx PqCipher Nat -> Bool
-  eq c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) = 
-    (c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) and
+    CertTypes SignAlgs
+    Prin Cert
+    ClPubKeyEx PqCipher Nat
+    Cipher -> Bool
+  eq c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) = 
+    (c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) and
      ccsM(B,B,A) \in nw(S)) .
-  ceq nw(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2)) 
+  ceq nw(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI)) 
     = (sfM(B,B,A, encFin(
         prf-skey(prf-ms(classicKey(PK2,K) || pqKey(decaps(EN,K'),N2),
             seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
@@ -1257,41 +1501,42 @@ After that, a server sends a `Finished` message by the following transition:
             seedMs(R,R2,PK2,EN)),
           hFullHs(A,B,V,R,CSs,KEMs, R2,CS,I, cert(B,pubKey(B),sign(ca,B,pubKey(B))),
             clPubKeyEx(K),pqPubKeyEn(K'),
-            encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),PK2,EN))
+            encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),
+            CRTs,SGAs,CERT,PK2,EN))
       )) , nw(S)) 
-    if c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) .
-  eq ur(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = ur(S) . 
-  eq uclk(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = uclk(S) .
-  eq upqk(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = upqk(S) .
-  eq ui(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = ui(S) . 
-  ceq ss(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2),A9,B9,I9) = 
+    if c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) .
+  eq ur(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = ur(S) . 
+  eq uclk(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = uclk(S) .
+  eq upqk(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = upqk(S) .
+  eq ui(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = ui(S) . 
+  ceq ss(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI),A9,B9,I9) = 
     (if A9 = A and B9 = B and I9 = I 
      then session(I,CS,prf-ms(classicKey(PK2,K) || pqKey(decaps(EN,K'),N2), 
           seedMs(R,R2,PK2,EN)))
      else ss(S,A9,B9,I9) 
      fi) 
-    if c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) .
-  eq clkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = clkLeaked(S) . 
-  eq pqkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = pqkLeaked(S) . 
-  eq hskLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = hskLeaked(S) . 
-  eq ltkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = ltkLeaked(S) . 
-  eq time(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    A3,PK2,EN,N2)) = time(S) . 
-  ceq sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) = S 
-    if not c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      A3,PK2,EN,N2) .
+    if c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) .
+  eq clkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = clkLeaked(S) . 
+  eq pqkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = pqkLeaked(S) . 
+  eq hskLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = hskLeaked(S) . 
+  eq ltkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = ltkLeaked(S) . 
+  eq time(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+    A3,CERT,PK2,EN,N2,CI)) = time(S) . 
+  ceq sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) = S 
+    if not c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,CRTs,SGAs,
+      A3,CERT,PK2,EN,N2,CI) .
 ```
 
 For the effective condition, the server must validate the `Finished` message received from the client.
@@ -1659,44 +1904,45 @@ Similarly, we define two transitions on faking a `ClientKeyExchange` message:
 The following transition specifies how intruder can impersonate client `A` to send a `Finished` message to server `B`:
 
 ```
-  op c-fkCfinish : Sys Pms Sign -> Bool
-  eq c-fkCfinish(S,PMS,G) 
-    = (PMS \in cpms(S) and G \in csign(nw(S))) .
-  ceq nw(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-      R2,CS,I,PK,PK',CI,PK2,EN)) 
+  op c-fkCfinish : Sys Pms Sign Sign -> Bool
+  eq c-fkCfinish(S,PMS,G,G2) 
+    = (PMS \in cpms(S) and 
+       G \in csign(nw(S)) and G2 \in csign(nw(S))) .
+  ceq nw(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) 
     = (cfM(intruder,A,B,encFin(
         prf-ckey(prf-ms(PMS, seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
         prf-cfin(prf-ms(PMS, seedMs(R,R2,PK2,EN)),
           hFullHs(A,B,V,R,CSs,KEMs, R2,CS,I, cert(B,PKE,G),
-            PK,PK',CI,PK2,EN))
+            PK,PK',CI,CRTs,SGAs,cert(A,PKE2,G2),PK2,EN))
         )) , nw(S)) 
-    if c-fkCfinish(S,PMS,G) .
-  eq ur(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = ur(S) .
-  eq uclk(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = uclk(S) .
-  eq upqk(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = upqk(S) .
-  eq ui(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = ui(S) .
-  eq ss(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN), A9,B9,I9) = ss(S,A9,B9,I9) .
-  eq clkLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = clkLeaked(S) .
-  eq pqkLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = pqkLeaked(S) .
-  eq hskLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = hskLeaked(S) .
-  eq ltkLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = ltkLeaked(S) .
-  eq time(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = time(S) .
-  ceq fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-      R2,CS,I,PK,PK',CI,PK2,EN) = S 
-    if not c-fkCfinish(S,PMS,G) .
+    if c-fkCfinish(S,PMS,G,G2) .
+  eq ur(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ur(S) .
+  eq uclk(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = uclk(S) .
+  eq upqk(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = upqk(S) .
+  eq ui(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ui(S) .
+  eq ss(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs), A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = clkLeaked(S) .
+  eq pqkLeaked(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = pqkLeaked(S) .
+  eq hskLeaked(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = hskLeaked(S) .
+  eq ltkLeaked(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ltkLeaked(S) .
+  eq time(fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = time(S) .
+  ceq fkCfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs) = S 
+    if not c-fkCfinish(S,PMS,G,G2) .
 ```
 
-The effective condition state that the intruder must have learned pre-master secret `PMS` and signature `G`.
+The effective condition states that the intruder must have learned pre-master secret `PMS` and two signatures `G` and `G2`.
 In that case, the intruder can use the pre-master secret to derive the master secret and the handshake key on the client side, and then construct a `Finished` message to send to some other.
 Here, `PKE`, `V`, `R`, `CSs`, `KEMs`, `R2`, `CS`, `I`, `PK`, `PK'`, `CI`, `PK2`, and `EN` can receive arbitrary values of their sorts.
 Those values can be grasped from some messages in the network since they are all sent in plaintext.
@@ -1705,40 +1951,40 @@ For example, `CI` can be grasped from the `ServerKeyExchange` message created an
 Similarly, we can specify how the intruder can impersonate a server to send a `Finished` message:
 
 ```
-  op c-fkSfinish : Sys Pms Sign -> Bool
-  eq c-fkSfinish(S,PMS,G) = c-fkCfinish(S,PMS,G) .
-  ceq nw(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) 
+  op c-fkSfinish : Sys Pms Sign Sign -> Bool
+  eq c-fkSfinish(S,PMS,G,G2) = c-fkCfinish(S,PMS,G,G2) .
+  ceq nw(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) 
     = (sfM(intruder,B,A,encFin(
         prf-skey(prf-ms(PMS, seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
         prf-sfin(prf-ms(PMS, seedMs(R,R2,PK2,EN)),
           hFullHs(A,B,V,R,CSs,KEMs, R2,CS,I, cert(B,PKE,G),
-            PK,PK',CI,PK2,EN))
+            PK,PK',CI,CRTs,SGAs,cert(A,PKE2,G2),PK2,EN))
         )) , nw(S)) 
-    if c-fkSfinish(S,PMS,G) .
-  eq ur(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = ur(S) .
-  eq uclk(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = uclk(S) .
-  eq upqk(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = upqk(S) .
-  eq ui(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = ui(S) .
-  eq ss(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN), A9,B9,I9) = ss(S,A9,B9,I9) .
-  eq clkLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = clkLeaked(S) .
-  eq pqkLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = pqkLeaked(S) .
-  eq hskLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = hskLeaked(S) .
-  eq ltkLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = ltkLeaked(S) .
-  eq time(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-    R2,CS,I,PK,PK',CI,PK2,EN)) = time(S) .
-  ceq fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
-      R2,CS,I,PK,PK',CI,PK2,EN) = S 
-    if not c-fkSfinish(S,PMS,G) .
+    if c-fkSfinish(S,PMS,G,G2) .
+  eq ur(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ur(S) .
+  eq uclk(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = uclk(S) .
+  eq upqk(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = upqk(S) .
+  eq ui(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ui(S) .
+  eq ss(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs), A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = clkLeaked(S) .
+  eq pqkLeaked(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = pqkLeaked(S) .
+  eq hskLeaked(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = hskLeaked(S) .
+  eq ltkLeaked(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ltkLeaked(S) .
+  eq time(fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = time(S) .
+  ceq fkSfinish(S,PMS,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs) = S 
+    if not c-fkSfinish(S,PMS,G,G2) .
 ```
 
 Faking `ServerHelloDone`, `ChangeCipherSpec`, are specified by the following two transitions:
@@ -1770,6 +2016,82 @@ Faking `ServerHelloDone`, `ChangeCipherSpec`, are specified by the following two
   eq ltkLeaked(fkChangeCS(S,A,B)) = ltkLeaked(S) .
   eq time(fkChangeCS(S,A,B)) = time(S) .
 ```
+
+In this case, when client authentication is requested, three more transitions are defined, specifying the intruder fakes `CertificateRequest`, client `Certificate` and `CertificateVerify` messages.
+The first and second ones are modeled by the following two transitions:
+
+```
+  eq nw(fkCertReq(S,B,A,CRTs,SGAs)) = 
+    (certReqM(intruder,B,A,CRTs,SGAs) , nw(S)) .
+  eq ur(fkCertReq(S,B,A,CRTs,SGAs)) = ur(S) .
+  eq uclk(fkCertReq(S,B,A,CRTs,SGAs)) = uclk(S) .
+  eq upqk(fkCertReq(S,B,A,CRTs,SGAs)) = upqk(S) .
+  eq ui(fkCertReq(S,B,A,CRTs,SGAs)) = ui(S) .
+  eq ss(fkCertReq(S,B,A,CRTs,SGAs),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCertReq(S,B,A,CRTs,SGAs)) = clkLeaked(S) .
+  eq pqkLeaked(fkCertReq(S,B,A,CRTs,SGAs)) = pqkLeaked(S) .
+  eq hskLeaked(fkCertReq(S,B,A,CRTs,SGAs)) = hskLeaked(S) .
+  eq ltkLeaked(fkCertReq(S,B,A,CRTs,SGAs)) = ltkLeaked(S) .
+  eq time(fkCertReq(S,B,A,CRTs,SGAs)) = time(S) .
+
+  op c-fkCCert : Sys Prin Prin PubKey Sign -> Bool
+  eq c-fkCCert(S,B,A,PKE,G) = G \in csign(nw(S)) .
+  ceq nw(fkCCert(S,B,A,PKE,G)) 
+      = (ccertM(intruder,B,A,cert(B,PKE,G)) , nw(S))
+    if c-fkCCert(S,B,A,PKE,G) .
+  eq ur(fkCCert(S,B,A,PKE,G)) = ur(S) .
+  eq uclk(fkCCert(S,B,A,PKE,G)) = uclk(S) .
+  eq upqk(fkCCert(S,B,A,PKE,G)) = upqk(S) .
+  eq ui(fkCCert(S,B,A,PKE,G)) = ui(S) .
+  eq ss(fkCCert(S,B,A,PKE,G),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCCert(S,B,A,PKE,G)) = clkLeaked(S) .
+  eq pqkLeaked(fkCCert(S,B,A,PKE,G)) = pqkLeaked(S) .
+  eq hskLeaked(fkCCert(S,B,A,PKE,G)) = hskLeaked(S) .
+  eq ltkLeaked(fkCCert(S,B,A,PKE,G)) = ltkLeaked(S) .
+  eq time(fkCCert(S,B,A,PKE,G)) = time(S) .
+  ceq fkCCert(S,B,A,PKE,G) = S 
+    if not c-fkCCert(S,B,A,PKE,G) .
+```
+
+The third one is specified as follows:
+
+```
+  op c-fkCertVerify : Sys Sign Sign -> Bool
+  eq c-fkCertVerify(S,G,G2) 
+    = (G \in csign(nw(S)) and G2 \in csign(nw(S))) .
+  ceq nw(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) 
+    = (certVerM(intruder,A,B,encH(priKey(intruder),
+        hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I,cert(B,PKE,G),
+          PK,PK',CI,CRTs,SGAs,cert(A,PKE2,G2),PK2,EN))) , nw(S)) 
+    if c-fkCertVerify(S,G,G2) .
+  eq ur(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ur(S) .
+  eq uclk(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = uclk(S) .
+  eq upqk(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = upqk(S) .
+  eq ui(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ui(S) .
+  eq ss(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs), A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = clkLeaked(S) .
+  eq pqkLeaked(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = pqkLeaked(S) .
+  eq hskLeaked(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = hskLeaked(S) .
+  eq ltkLeaked(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = ltkLeaked(S) .
+  ceq time(fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs)) = s(time(S))
+    if c-fkCertVerify(S,G,G2) .
+  ceq fkCertVerify(S,PKE,G,PKE2,G2,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN,CRTs,SGAs) = S 
+    if not c-fkCertVerify(S,G,G2) .
+```
+
+The effective condition states that the intruder must have learned two signatures `G` and `G2`, from which the intruder can build a `CertificateVerify` message.
 
 For the abbreviated handshake mode, we can specify the intruder capabilities in a similar way.
 First, let us define two transitions specifying the intruder fakes `ClientHello` and `ServerHello` messages in the abbreviated handshake mode:

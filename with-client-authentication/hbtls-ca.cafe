@@ -50,7 +50,7 @@ mod! PROTOCOL-VERSION {
 }
 
 -- signature of a certificate, sign(CA,A,K) denotes the signature 
--- signed by the certificate authority CA for the principal A, 
+-- signed by the certificate authority CA for principal A, 
 -- where K is A's public key
 mod! SIGNATURE {
   pr(PRINCIPAL + PUBLIC-KEY + PRIVATE-KEY)
@@ -76,8 +76,6 @@ mod! SIGNATURE {
 -- cert(A,K,sign(CA,A,K)) denotes the certificate of the principal A 
 --  with its public key K 
 -- signed by the certificate authority CA
--- other principal can verify this certificate by using 
---  the public key of CA
 mod! CERTIFICATE {
   pr(SIGNATURE)
   [Cert]
@@ -87,7 +85,6 @@ mod! CERTIFICATE {
   op pubKey : Cert -> PubKey
   op sign   : Cert -> Sign
   
-  var C : Cert 
   vars A A1 A2 : Prin
   vars PK PK1 PK2 : PubKey
   vars G G1 G2 : Sign
@@ -117,7 +114,6 @@ mod! CLASSICAL-KEY-EXCHANGE {
 -- C (or S) randomly choose a private key, and then
 -- calculate the share key to send to S (or C)
   op clPubKeyEx : ClPriKeyEx -> ClPubKeyEx {constr}
-  -- op $clKey : ClPriKeyEx ClPriKeyEx -> ClassicKey {constr comm}
   op _&_ : ClPriKeyEx ClPriKeyEx -> ClassicKey {constr comm}
   op priClKey : ClPubKeyEx -> ClPriKeyEx
   op classicKey : ClPubKeyEx ClPriKeyEx -> ClassicKey
