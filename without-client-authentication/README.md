@@ -900,6 +900,7 @@ The equations say that if principal `B` has received a `ClientHello` message see
 Note that the actual creator of the `ClientHello` message is `A2`, which may or may not equal `A`.
 
 Similarly, we define transition `scert` specifying a server sends its certificate:
+
 ```
   op c-scert : Sys 
     Prin Prin Prin Version Rand CipherSuites PqKemParams
@@ -929,6 +930,7 @@ The effective condition now is a server got a `ClientHello` message seemingly se
 
 
 Next, we define transition `skeyex` specifying a server sends a `ServerKeyExchange` message:
+
 ```
   op c-skeyex : Sys ClPriKeyEx PqPriKey
     Prin Prin Prin Version Rand CipherSuites PqKemParams
@@ -1175,7 +1177,8 @@ After that, a client sends a `Finished` message by the following transition:
 ```
 
 `PK` and `PK'` are ECDH and PQ KEM public keys that the client received from the server, while `K2` and `K2'` are the two secret keys used by the client. 
-Note that the master secret is computed from the pre-master secret by the PRF function with the seed is tuple of the two randoms used in the two `Hello` messages, the ECDH public key and the PQ KEM ciphertext sent by the client in the `ClientKeyExchange` message.
+Note that the master secret is computed from the pre-master secret by the PRF function with the seed is tuple of the two randoms used in the two `Hello` messages, 
+the ECDH public key and the PQ KEM ciphertext sent by the client in the `ClientKeyExchange` message.
 While the handshake key is computed from the master secret with the seed is tuple of the two randoms used in the two `Hello` messages.
 Note that handshake key used by the client is different from the handshake key used by the server (by using different label value in the PRF function).
 
@@ -1485,3 +1488,515 @@ A server can send a `HelloRequest` message at any time to request the client sen
   eq time(helloReq(S,A,B)) = time(S) .
 ```
 
+We now specify the intruder capabilities.
+Firstly, the intruder can impersonate `A` to send a `ClientHello` message to `B` as follows:
+```
+  eq nw(fkChello(S,A,B,V,R,CSs,KEMs)) = 
+    (chM(intruder,A,B,V,R,CSs,KEMs) , nw(S)) .
+  eq ur(fkChello(S,A,B,V,R,CSs,KEMs)) = ur(S) .
+  eq uclk(fkChello(S,A,B,V,R,CSs,KEMs)) = uclk(S) .
+  eq upqk(fkChello(S,A,B,V,R,CSs,KEMs)) = upqk(S) .
+  eq ui(fkChello(S,A,B,V,R,CSs,KEMs)) = ui(S) .
+  eq ss(fkChello(S,A,B,V,R,CSs,KEMs),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkChello(S,A,B,V,R,CSs,KEMs)) = clkLeaked(S) .
+  eq pqkLeaked(fkChello(S,A,B,V,R,CSs,KEMs)) = pqkLeaked(S) .
+  eq hskLeaked(fkChello(S,A,B,V,R,CSs,KEMs)) = hskLeaked(S) .
+  eq ltkLeaked(fkChello(S,A,B,V,R,CSs,KEMs)) = ltkLeaked(S) .
+  eq time(fkChello(S,A,B,V,R,CSs,KEMs)) = time(S) .
+```
+
+where `A` and `B` denote arbitrary principals;
+`V`, `R`, `CSs`, and `KEMs` can be arbitrary protocol version, random number, cipher suites list, and PQ KEM parameters.
+The `ClientHello` message, as we can see now the first argument is `intruder` but not `A`. Recall that the first, second, and third arguments respectively denote the actual creator, the seeming sender, and the receiver of that message.
+So with `chM(intruder,A,B,V,R,CSs,KEMs)`, the intruder is impersonating `A` to send that message to `B`.
+
+Similarly, the intruder can fake a `ServerHello` message:
+```
+  eq nw(fkShello(S,B,A,V,R,CS,I)) = 
+    (shM(intruder,B,A,V,R,CS,I) , nw(S)) .
+  eq ur(fkShello(S,B,A,V,R,CS,I)) = ur(S) .
+  eq uclk(fkShello(S,B,A,V,R,CS,I)) = uclk(S) .
+  eq upqk(fkShello(S,B,A,V,R,CS,I)) = upqk(S) .
+  eq ui(fkShello(S,B,A,V,R,CS,I)) = ui(S) .
+  eq ss(fkShello(S,B,A,V,R,CS,I),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkShello(S,B,A,V,R,CS,I)) = clkLeaked(S) .
+  eq pqkLeaked(fkShello(S,B,A,V,R,CS,I)) = pqkLeaked(S) .
+  eq hskLeaked(fkShello(S,B,A,V,R,CS,I)) = hskLeaked(S) .
+  eq ltkLeaked(fkShello(S,B,A,V,R,CS,I)) = ltkLeaked(S) .
+  eq time(fkShello(S,B,A,V,R,CS,I)) = time(S) .
+```
+
+The intruder can fake a `Certificate` message, which is specified by the following transition:
+```
+  op c-fkCert : Sys Prin Prin PubKey Sign -> Bool
+  eq c-fkCert(S,B,A,PKE,G) = G \in csign(nw(S)) .
+  ceq nw(fkCert(S,B,A,PKE,G)) 
+      = (scertM(intruder,B,A,cert(B,PKE,G)) , nw(S))
+    if c-fkCert(S,B,A,PKE,G) .
+  eq ur(fkCert(S,B,A,PKE,G)) = ur(S) .
+  eq uclk(fkCert(S,B,A,PKE,G)) = uclk(S) .
+  eq upqk(fkCert(S,B,A,PKE,G)) = upqk(S) .
+  eq ui(fkCert(S,B,A,PKE,G)) = ui(S) .
+  eq ss(fkCert(S,B,A,PKE,G),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCert(S,B,A,PKE,G)) = clkLeaked(S) .
+  eq pqkLeaked(fkCert(S,B,A,PKE,G)) = pqkLeaked(S) .
+  eq hskLeaked(fkCert(S,B,A,PKE,G)) = hskLeaked(S) .
+  eq ltkLeaked(fkCert(S,B,A,PKE,G)) = ltkLeaked(S) .
+  eq time(fkCert(S,B,A,PKE,G)) = time(S) .
+  ceq fkCert(S,B,A,PKE,G) = S 
+    if not c-fkCert(S,B,A,PKE,G) .
+```
+
+The effective condition states that a signature `G` must be learned by the intruder.
+Based on such a `G`, the intruder can fake a certificate, and use it to construct a `Certificate` message and send the message to some other.
+
+The following transition specifies the intruder fakes a `ServerKeyExchange` message:
+```
+  op c-fkSkeyex : Sys Prin ClPriKeyEx PqPriKey -> Bool
+  eq c-fkSkeyex(S,B,K,K') 
+    = not (K \in uclk(S) or K' \in upqk(S))
+      and priKey(B) \in' ltkLeaked(S) .
+  ceq nw(fkSkeyex(S,B,A,K,K',R,R2)) = 
+    (skexM(intruder,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
+      encH(priKey(B), hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), time(S)) , 
+     nw(S)) 
+  if c-fkSkeyex(S,B,K,K') .
+  eq ur(fkSkeyex(S,B,A,K,K',R,R2)) = ur(S) .
+  ceq uclk(fkSkeyex(S,B,A,K,K',R,R2)) = (K uclk(S))
+  if c-fkSkeyex(S,B,K,K') .
+  ceq upqk(fkSkeyex(S,B,A,K,K',R,R2)) = (K' upqk(S))
+  if c-fkSkeyex(S,B,K,K') .
+  eq ui(fkSkeyex(S,B,A,K,K',R,R2)) = ui(S) .
+  eq ss(fkSkeyex(S,B,A,K,K',R,R2),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkSkeyex(S,B,A,K,K',R,R2)) = clkLeaked(S) .
+  eq pqkLeaked(fkSkeyex(S,B,A,K,K',R,R2)) = pqkLeaked(S) .
+  eq hskLeaked(fkSkeyex(S,B,A,K,K',R,R2)) = hskLeaked(S) .
+  eq ltkLeaked(fkSkeyex(S,B,A,K,K',R,R2)) = ltkLeaked(S) .
+  ceq time(fkSkeyex(S,B,A,K,K',R,R2)) = s(time(S)) 
+  if c-fkSkeyex(S,B,K,K') .
+  ceq fkSkeyex(S,B,A,K,K',R,R2) = S 
+  if not c-fkSkeyex(S,B,K,K') .
+```
+
+The equations say that if the long-term private key of `B` has been compromised and two secret keys `K` and `K'` have not been used before (can be arbitrary),
+then the intruder constructs a `ServerKeyExchange` message from the two secret keys, sign them with the compromised key, and impersonate `B` to send the message to `A`.
+Together with that, the current time is embedded at the end of the message and the time of the system is incremented. 
+
+Moreover, we also define another transition on faking a `ServerKeyExchange` message:
+
+```
+  op c-fkSkeyex2 : Sys Prin Prin ClPriKeyEx PqPriKey Rand Rand -> Bool
+  eq c-fkSkeyex2(S,B,A,K,K',R,R2) 
+    = (K \in clkLeaked(S) and K' \in pqkLeaked(S)) .
+  ceq nw(fkSkeyex2(S,B,A,K,K',R,R2)) = 
+    (skexM(intruder,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
+      encH(priKey(intruder), hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), time(S)) , nw(S)) 
+  if c-fkSkeyex2(S,B,A,K,K',R,R2) .
+  eq ur(fkSkeyex2(S,B,A,K,K',R,R2)) = ur(S) .
+  eq uclk(fkSkeyex2(S,B,A,K,K',R,R2)) = uclk(S) .
+  eq upqk(fkSkeyex2(S,B,A,K,K',R,R2)) = upqk(S) .
+  eq ui(fkSkeyex2(S,B,A,K,K',R,R2)) = ui(S) .
+  eq ss(fkSkeyex2(S,B,A,K,K',R,R2),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkSkeyex2(S,B,A,K,K',R,R2)) = clkLeaked(S) .
+  eq pqkLeaked(fkSkeyex2(S,B,A,K,K',R,R2)) = pqkLeaked(S) .
+  eq hskLeaked(fkSkeyex2(S,B,A,K,K',R,R2)) = hskLeaked(S) .
+  eq ltkLeaked(fkSkeyex2(S,B,A,K,K',R,R2)) = ltkLeaked(S) .
+  ceq time(fkSkeyex2(S,B,A,K,K',R,R2)) = s(time(S)) 
+  if c-fkSkeyex2(S,B,A,K,K',R,R2) .
+  ceq fkSkeyex2(S,B,A,K,K',R,R2) = S 
+    if not c-fkSkeyex2(S,B,A,K,K',R,R2) .
+```
+
+The effective condition states that the two secret keys `K` and `K'` are compromised.
+Besides,
+`fkSkeyex2` is different from `fkSkeyex` in the signature over the two public keys.
+Here, the intruder does not know the long-term private of `B`, so the intruder can only use his/her private key to sign the two public keys.
+
+Similarly, we define two transitions on faking a `ClientKeyExchange` message:
+```
+  op c-fkCkeyex : Sys ClPriKeyEx PqPriKey -> Bool
+  eq c-fkCkeyex(S,K,K') = not (K \in uclk(S) or K' \in upqk(S)) .
+  ceq nw(fkCkeyex(S,A,B,K,K',PK')) = 
+    (ckexM(intruder,A,B,clPubKeyEx(K),encapsCipher(PK',K'), time(S)) , nw(S)) 
+  if c-fkCkeyex(S,K,K') .
+  eq ur(fkCkeyex(S,A,B,K,K',PK')) = ur(S) .
+  ceq uclk(fkCkeyex(S,A,B,K,K',PK')) = (K uclk(S))
+  if c-fkCkeyex(S,K,K') .
+  ceq upqk(fkCkeyex(S,A,B,K,K',PK')) = (K' upqk(S))
+  if c-fkCkeyex(S,K,K') .
+  eq ui(fkCkeyex(S,A,B,K,K',PK')) = ui(S) .
+  eq ss(fkCkeyex(S,A,B,K,K',PK'),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCkeyex(S,A,B,K,K',PK')) = clkLeaked(S) .
+  eq pqkLeaked(fkCkeyex(S,A,B,K,K',PK')) = pqkLeaked(S) .
+  eq hskLeaked(fkCkeyex(S,A,B,K,K',PK')) = hskLeaked(S) .
+  eq ltkLeaked(fkCkeyex(S,A,B,K,K',PK')) = ltkLeaked(S) .
+  ceq time(fkCkeyex(S,A,B,K,K',PK')) = s(time(S))
+  if c-fkCkeyex(S,K,K') .
+  ceq fkCkeyex(S,A,B,K,K',PK') = S 
+    if not c-fkCkeyex(S,K,K') .
+
+  op c-fkCkeyex2 : Sys Prin Prin ClPriKeyEx PqPriKey -> Bool
+  eq c-fkCkeyex2(S,A,B,K,K') 
+    = (K \in clkLeaked(S) and K' \in pqkLeaked(S)) .
+  ceq nw(fkCkeyex2(S,A,B,K,K',PK')) = 
+    (ckexM(intruder,A,B,clPubKeyEx(K),encapsCipher(PK',K'), time(S)) , nw(S)) 
+  if c-fkCkeyex2(S,A,B,K,K') .
+  eq ur(fkCkeyex2(S,A,B,K,K',PK')) = ur(S) .
+  eq uclk(fkCkeyex2(S,A,B,K,K',PK')) = uclk(S) .
+  eq upqk(fkCkeyex2(S,A,B,K,K',PK')) = upqk(S) .
+  eq ui(fkCkeyex2(S,A,B,K,K',PK')) = ui(S) .
+  eq ss(fkCkeyex2(S,A,B,K,K',PK'),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCkeyex2(S,A,B,K,K',PK')) = clkLeaked(S) .
+  eq pqkLeaked(fkCkeyex2(S,A,B,K,K',PK')) = pqkLeaked(S) .
+  eq hskLeaked(fkCkeyex2(S,A,B,K,K',PK')) = hskLeaked(S) .
+  eq ltkLeaked(fkCkeyex2(S,A,B,K,K',PK')) = ltkLeaked(S) .
+  ceq time(fkCkeyex2(S,A,B,K,K',PK')) = s(time(S))
+  if c-fkCkeyex2(S,A,B,K,K') .
+  ceq fkCkeyex2(S,A,B,K,K',PK') = S
+    if not c-fkCkeyex2(S,A,B,K,K') .
+```
+
+The following transition specifies how intruder can impersonate client `A` to send a `Finished` message to server `B`:
+
+```
+  op c-fkCfinish : Sys Pms Sign -> Bool
+  eq c-fkCfinish(S,PMS,G) 
+    = (PMS \in cpms(S) and G \in csign(nw(S))) .
+  ceq nw(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN)) 
+    = (cfM(intruder,A,B,encFin(
+        prf-ckey(prf-ms(PMS, seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
+        prf-cfin(prf-ms(PMS, seedMs(R,R2,PK2,EN)),
+          hFullHs(A,B,V,R,CSs,KEMs, R2,CS,I, cert(B,PKE,G),
+            PK,PK',CI,PK2,EN))
+        )) , nw(S)) 
+    if c-fkCfinish(S,PMS,G) .
+  eq ur(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = ur(S) .
+  eq uclk(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = uclk(S) .
+  eq upqk(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = upqk(S) .
+  eq ui(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = ui(S) .
+  eq ss(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN), A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = clkLeaked(S) .
+  eq pqkLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = pqkLeaked(S) .
+  eq hskLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = hskLeaked(S) .
+  eq ltkLeaked(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = ltkLeaked(S) .
+  eq time(fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = time(S) .
+  ceq fkCfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN) = S 
+    if not c-fkCfinish(S,PMS,G) .
+```
+
+The effective condition state that the intruder must have learned pre-master secret `PMS` and signature `G`.
+In that case, the intruder can use the pre-master secret to derive the master secret and the handshake key on the client side, and then construct a `Finished` message to send to some other.
+Here, `PKE`, `V`, `R`, `CSs`, `KEMs`, `R2`, `CS`, `I`, `PK`, `PK'`, `CI`, `PK2`, and `EN` can receive arbitrary values of their sorts.
+Those values can be grasped from some messages in the network since they are all sent in plaintext.
+For example, `CI` can be grasped from the `ServerKeyExchange` message created and sent by `B` to `A`, which is the valid ciphertext obtained by encrypting two public keys sent in that message and the two random numbers sent in the same session under the long-term private key of `B`.
+
+Similarly, we can specify how the intruder can impersonate a server to send a `Finished` message:
+
+```
+  op c-fkSfinish : Sys Pms Sign -> Bool
+  eq c-fkSfinish(S,PMS,G) = c-fkCfinish(S,PMS,G) .
+  ceq nw(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) 
+    = (sfM(intruder,B,A,encFin(
+        prf-skey(prf-ms(PMS, seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
+        prf-sfin(prf-ms(PMS, seedMs(R,R2,PK2,EN)),
+          hFullHs(A,B,V,R,CSs,KEMs, R2,CS,I, cert(B,PKE,G),
+            PK,PK',CI,PK2,EN))
+        )) , nw(S)) 
+    if c-fkSfinish(S,PMS,G) .
+  eq ur(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = ur(S) .
+  eq uclk(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = uclk(S) .
+  eq upqk(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = upqk(S) .
+  eq ui(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = ui(S) .
+  eq ss(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN), A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = clkLeaked(S) .
+  eq pqkLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = pqkLeaked(S) .
+  eq hskLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = hskLeaked(S) .
+  eq ltkLeaked(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = ltkLeaked(S) .
+  eq time(fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+    R2,CS,I,PK,PK',CI,PK2,EN)) = time(S) .
+  ceq fkSfinish(S,PMS,PKE,G,A,B,V,R,CSs,KEMs,
+      R2,CS,I,PK,PK',CI,PK2,EN) = S 
+    if not c-fkSfinish(S,PMS,G) .
+```
+
+Faking `ServerHelloDone`, `ChangeCipherSpec`, are specified by the following two transitions:
+
+```
+  eq nw(fkShelloDone(S,B,A)) = 
+    (shDnM(intruder,B,A) , nw(S)) .
+  eq ur(fkShelloDone(S,B,A)) = ur(S) .
+  eq uclk(fkShelloDone(S,B,A)) = uclk(S) .
+  eq upqk(fkShelloDone(S,B,A)) = upqk(S) .
+  eq ui(fkShelloDone(S,B,A)) = ui(S) .
+  eq ss(fkShelloDone(S,B,A),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkShelloDone(S,B,A)) = clkLeaked(S) .
+  eq pqkLeaked(fkShelloDone(S,B,A)) = pqkLeaked(S) .
+  eq hskLeaked(fkShelloDone(S,B,A)) = hskLeaked(S) .
+  eq ltkLeaked(fkShelloDone(S,B,A)) = ltkLeaked(S) .
+  eq time(fkShelloDone(S,B,A)) = time(S) .
+
+  eq nw(fkChangeCS(S,A,B)) = 
+    (ccsM(intruder,A,B) , nw(S)) .
+  eq ur(fkChangeCS(S,A,B)) = ur(S) .
+  eq uclk(fkChangeCS(S,A,B)) = uclk(S) .
+  eq upqk(fkChangeCS(S,A,B)) = upqk(S) .
+  eq ui(fkChangeCS(S,A,B)) = ui(S) .
+  eq ss(fkChangeCS(S,A,B),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkChangeCS(S,A,B)) = clkLeaked(S) .
+  eq pqkLeaked(fkChangeCS(S,A,B)) = pqkLeaked(S) .
+  eq hskLeaked(fkChangeCS(S,A,B)) = hskLeaked(S) .
+  eq ltkLeaked(fkChangeCS(S,A,B)) = ltkLeaked(S) .
+  eq time(fkChangeCS(S,A,B)) = time(S) .
+```
+
+For the abbreviated handshake mode, we can specify the intruder capabilities in a similar way.
+First, let us define two transitions specifying the intruder fakes `ClientHello` and `ServerHello` messages in the abbreviated handshake mode:
+
+```
+  eq nw(fkChello2(S,A,B,V,R,I,CSs)) = 
+    (ch2M(intruder,A,B,V,R,I,CSs) , nw(S)) .
+  eq ur(fkChello2(S,A,B,V,R,I,CSs)) = ur(S) .
+  eq uclk(fkChello2(S,A,B,V,R,I,CSs)) = uclk(S) .
+  eq upqk(fkChello2(S,A,B,V,R,I,CSs)) = upqk(S) .
+  eq ui(fkChello2(S,A,B,V,R,I,CSs)) = ui(S) .
+  eq ss(fkChello2(S,A,B,V,R,I,CSs),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkChello2(S,A,B,V,R,I,CSs)) = clkLeaked(S) .
+  eq pqkLeaked(fkChello2(S,A,B,V,R,I,CSs)) = pqkLeaked(S) .
+  eq hskLeaked(fkChello2(S,A,B,V,R,I,CSs)) = hskLeaked(S) .
+  eq ltkLeaked(fkChello2(S,A,B,V,R,I,CSs)) = ltkLeaked(S) .
+  eq time(fkChello2(S,A,B,V,R,I,CSs)) = time(S) .
+
+  eq nw(fkShello2(S,B,A,V,R,I,CS)) = 
+    (sh2M(intruder,B,A,V,R,I,CS) , nw(S)) .
+  eq ur(fkShello2(S,B,A,V,R,I,CS)) = ur(S) .
+  eq uclk(fkShello2(S,B,A,V,R,I,CS)) = uclk(S) .
+  eq upqk(fkShello2(S,B,A,V,R,I,CS)) = upqk(S) .
+  eq ui(fkShello2(S,B,A,V,R,I,CS)) = ui(S) .
+  eq ss(fkShello2(S,B,A,V,R,I,CS),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkShello2(S,B,A,V,R,I,CS)) = clkLeaked(S) .
+  eq pqkLeaked(fkShello2(S,B,A,V,R,I,CS)) = pqkLeaked(S) .
+  eq hskLeaked(fkShello2(S,B,A,V,R,I,CS)) = hskLeaked(S) .
+  eq ltkLeaked(fkShello2(S,B,A,V,R,I,CS)) = ltkLeaked(S) .
+  eq time(fkShello2(S,B,A,V,R,I,CS)) = time(S) .
+```
+
+Faking `Finished` messages in the abbreviated handshake mode is specified as follows:
+
+```
+  op c-fkCfinish2 : Sys Pms -> Bool
+  eq c-fkCfinish2(S,PMS) = PMS \in cpms(S) .
+  ceq nw(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) =
+      (cf2M(intruder,A,B,encFin(
+          prf-ckey(prf-ms(PMS, seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
+          prf-cfin2(prf-ms(PMS, seedMs(R,R2,PK2,EN)),
+            hAbbrHs(A,B,V,R,I,CSs,R2,CS))
+        )) , nw(S)) 
+    if c-fkCfinish2(S,PMS) .
+  eq ur(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = ur(S) .
+  eq uclk(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = uclk(S) .
+  eq upqk(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = upqk(S) .
+  eq ui(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = ui(S) .
+  eq ss(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN),A9,B9,I9) 
+    = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = clkLeaked(S) .
+  eq pqkLeaked(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = pqkLeaked(S) .
+  eq hskLeaked(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = hskLeaked(S) .
+  eq ltkLeaked(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = ltkLeaked(S) .
+  eq time(fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = time(S) .
+  ceq fkCfinish2(S,A,B,V,R,I,CSs,R2,PMS,CS,PK2,EN) = S 
+    if not c-fkCfinish2(S,PMS) .
+
+  op c-fkSfinish2 : Sys Pms -> Bool
+  eq c-fkSfinish2(S,PMS) = PMS \in cpms(S) .
+  ceq nw(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) =
+      (sf2M(intruder,B,A,encFin(
+          prf-skey(prf-ms(PMS, seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
+          prf-sfin2(prf-ms(PMS, seedMs(R,R2,PK2,EN)),
+            hAbbrHs(A,B,V,R,I,CSs,R2,CS))
+        )) , nw(S)) 
+    if c-fkSfinish2(S,PMS) .
+  eq ur(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = ur(S) .
+  eq uclk(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = uclk(S) .
+  eq upqk(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = upqk(S) .
+  eq ui(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) = ui(S) .
+  eq ss(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN),A9,B9,I9) 
+    = ss(S,A9,B9,I9) .
+  eq clkLeaked(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = clkLeaked(S) .
+  eq pqkLeaked(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = pqkLeaked(S) .
+  eq hskLeaked(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = hskLeaked(S) .
+  eq ltkLeaked(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = ltkLeaked(S) .
+  eq time(fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN)) 
+    = time(S) .
+  ceq fkSfinish2(S,B,A,V,R,I,CSs,R2,PMS,CS,PK2,EN) = S 
+    if not c-fkSfinish2(S,PMS) .
+```
+
+Our threat model allows the compromises of (1) symmetric handshake keys, (2) ECDHE secret keys, (3) PQ KEM secret keys, and (4) long-term private keys of honest principals. 
+The definitions of two transitions modeling the compromise of ECDH secret keys are as follows:
+
+```
+  op c-leakPKE1 : Sys Prin Prin Prin ClPubKeyEx PqPubKey Cipher Nat -> Bool
+  eq c-leakPKE1(S,A,A2,A3,PK,PK',CI,N) = 
+    skexM(A,A2,A3,PK,PK',CI,N) \in nw(S) .
+  eq nw(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = nw(S) .
+  eq ur(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = ur(S) .
+  eq uclk(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = uclk(S) .
+  eq upqk(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = upqk(S) .
+  eq ui(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = ui(S) .
+  eq ss(leakPKE1(S,A,A2,A3,PK,PK',CI,N),A9,B9,I9) = ss(S,A9,B9,I9) .
+  ceq clkLeaked(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) 
+      = (clkLeaked(S) priClKey(PK)) 
+    if c-leakPKE1(S,A,A2,A3,PK,PK',CI,N) .
+  eq pqkLeaked(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = pqkLeaked(S) .
+  eq hskLeaked(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = hskLeaked(S) .
+  eq ltkLeaked(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = ltkLeaked(S) .
+  eq time(leakPKE1(S,A,A2,A3,PK,PK',CI,N)) = time(S) .
+  ceq leakPKE1(S,A,A2,A3,PK,PK',CI,N) = S 
+    if not c-leakPKE1(S,A,A2,A3,PK,PK',CI,N) .
+
+  op c-leakPKE3 : Sys Prin Prin Prin ClPubKeyEx PqCipher Nat -> Bool
+  eq c-leakPKE3(S,A,A2,A3,PK,EN,N) = 
+    ckexM(A,A2,A3,PK,EN,N) \in nw(S) .
+  eq nw(leakPKE3(S,A,A2,A3,PK,EN,N)) = nw(S) .
+  eq ur(leakPKE3(S,A,A2,A3,PK,EN,N)) = ur(S) .
+  eq uclk(leakPKE3(S,A,A2,A3,PK,EN,N)) = uclk(S) .
+  eq upqk(leakPKE3(S,A,A2,A3,PK,EN,N)) = upqk(S) .
+  eq ui(leakPKE3(S,A,A2,A3,PK,EN,N)) = ui(S) .
+  eq ss(leakPKE3(S,A,A2,A3,PK,EN,N),A9,B9,I9) = ss(S,A9,B9,I9) .
+  ceq clkLeaked(leakPKE3(S,A,A2,A3,PK,EN,N)) 
+      = (clkLeaked(S) priClKey(PK)) 
+    if c-leakPKE3(S,A,A2,A3,PK,EN,N) .
+  eq pqkLeaked(leakPKE3(S,A,A2,A3,PK,EN,N)) = pqkLeaked(S) .
+  eq hskLeaked(leakPKE3(S,A,A2,A3,PK,EN,N)) = hskLeaked(S) .
+  eq ltkLeaked(leakPKE3(S,A,A2,A3,PK,EN,N)) = ltkLeaked(S) .
+  eq time(leakPKE3(S,A,A2,A3,PK,EN,N)) = time(S) .
+  ceq leakPKE3(S,A,A2,A3,PK,EN,N) = S 
+    if not c-leakPKE3(S,A,A2,A3,PK,EN,N) .
+```
+
+The two transitions say that when there exists a `ServerKeyExchange` message or a `ClientKeyExchange` message in the network where the ECDH public key `PK` is sent,
+then the associated secret key of `PK` is compromised and added to the set of compromised ECDH secret keys in the successor state.
+
+
+Similarly, we define two transitions modeling the compromise of PQ KEM secret keys:
+
+```
+  op c-leakPKE2 : Sys Prin Prin Prin ClPubKeyEx PqPubKey Cipher Nat -> Bool
+  eq c-leakPKE2(S,A,A2,A3,PK,PK',CI,N) = 
+    c-leakPKE1(S,A,A2,A3,PK,PK',CI,N) .
+  eq nw(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = nw(S) .
+  eq ur(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = ur(S) .
+  eq uclk(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = uclk(S) .
+  eq upqk(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = upqk(S) .
+  eq ui(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = ui(S) .
+  eq ss(leakPKE2(S,A,A2,A3,PK,PK',CI,N),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = clkLeaked(S) .
+  ceq pqkLeaked(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) 
+    = (pqkLeaked(S) priPqKey(PK')) 
+    if c-leakPKE2(S,A,A2,A3,PK,PK',CI,N) .
+  eq hskLeaked(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = hskLeaked(S) .
+  eq ltkLeaked(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = ltkLeaked(S) .
+  eq time(leakPKE2(S,A,A2,A3,PK,PK',CI,N)) = time(S) .
+  ceq leakPKE2(S,A,A2,A3,PK,PK',CI,N) = S 
+    if not c-leakPKE2(S,A,A2,A3,PK,PK',CI,N) .
+
+  op c-leakPKE4 : Sys Prin Prin Prin ClPubKeyEx PqCipher Nat -> Bool
+  eq c-leakPKE4(S,A,A2,A3,PK,EN,N) = 
+    c-leakPKE3(S,A,A2,A3,PK,EN,N) .
+  eq nw(leakPKE4(S,A,A2,A3,PK,EN,N)) = nw(S) .
+  eq ur(leakPKE4(S,A,A2,A3,PK,EN,N)) = ur(S) .
+  eq uclk(leakPKE4(S,A,A2,A3,PK,EN,N)) = uclk(S) .
+  eq upqk(leakPKE4(S,A,A2,A3,PK,EN,N)) = upqk(S) .
+  eq ui(leakPKE4(S,A,A2,A3,PK,EN,N)) = ui(S) .
+  eq ss(leakPKE4(S,A,A2,A3,PK,EN,N),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(leakPKE4(S,A,A2,A3,PK,EN,N)) = clkLeaked(S) .
+  ceq pqkLeaked(leakPKE4(S,A,A2,A3,PK,EN,N)) 
+    = (pqkLeaked(S) priPqKey(EN)) 
+    if c-leakPKE4(S,A,A2,A3,PK,EN,N) .
+  eq hskLeaked(leakPKE4(S,A,A2,A3,PK,EN,N)) = hskLeaked(S) .
+  eq ltkLeaked(leakPKE4(S,A,A2,A3,PK,EN,N)) = ltkLeaked(S) .
+  eq time(leakPKE4(S,A,A2,A3,PK,EN,N)) = time(S) .
+  ceq leakPKE4(S,A,A2,A3,PK,EN,N) = S 
+    if not c-leakPKE4(S,A,A2,A3,PK,EN,N) .
+```
+
+Compromise of symmetric handshake keys are modeled as follows:
+
+```
+  op c-leakHsK : Sys Prin Prin Key FinVD -> Bool
+  eq c-leakHsK(S,A,B,HSK,FVD) = 
+    (cfM(A,A,B,encFin(HSK,FVD)) \in nw(S) or
+     sfM(A,A,B,encFin(HSK,FVD)) \in nw(S))  .
+  eq nw(leakHsK(S,A,B,HSK,FVD)) = nw(S) .
+  eq ur(leakHsK(S,A,B,HSK,FVD)) = ur(S) .
+  eq uclk(leakHsK(S,A,B,HSK,FVD)) = uclk(S) .
+  eq upqk(leakHsK(S,A,B,HSK,FVD)) = upqk(S) .
+  eq ui(leakHsK(S,A,B,HSK,FVD)) = ui(S) .
+  eq ss(leakHsK(S,A,B,HSK,FVD),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(leakHsK(S,A,B,HSK,FVD)) = clkLeaked(S) .
+  eq pqkLeaked(leakHsK(S,A,B,HSK,FVD)) = pqkLeaked(S) .
+  ceq hskLeaked(leakHsK(S,A,B,HSK,FVD)) 
+      = (hskLeaked(S) HSK)
+    if c-leakHsK(S,A,B,HSK,FVD) .
+  eq ltkLeaked(leakHsK(S,A,B,HSK,FVD)) = ltkLeaked(S) .
+  eq time(leakHsK(S,A,B,HSK,FVD)) = time(S) .
+  ceq leakHsK(S,A,B,HSK,FVD) = S 
+    if not c-leakHsK(S,A,B,HSK,FVD) .
+```
+
+The equations say that when there exists a `Finished` message in the network where its ciphertext is encrypted by the handshake key `HSK`, then `HSK` is compromised and added to the set of compromised handshake keys.
+
+Finally, the compromise of long-term private keys of some principals is modeled by the following transition:
+
+```
+  op c-leakLtK : Sys Prin -> Bool
+  eq c-leakLtK(S,A) = not (priKey(A) \in' ltkLeaked(S)) .
+  eq nw(leakLtK(S,A)) = nw(S) .
+  eq ur(leakLtK(S,A)) = ur(S) .
+  eq uclk(leakLtK(S,A)) = uclk(S) .
+  eq upqk(leakLtK(S,A)) = upqk(S) .
+  eq ui(leakLtK(S,A)) = ui(S) .
+  eq ss(leakLtK(S,A),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(leakLtK(S,A)) = clkLeaked(S) .
+  eq pqkLeaked(leakLtK(S,A)) = pqkLeaked(S) .
+  eq hskLeaked(leakLtK(S,A)) = hskLeaked(S) .
+  ceq ltkLeaked(leakLtK(S,A)) = (pkNPair(priKey(A), time(S)) ltkLeaked(S)) 
+  if c-leakLtK(S,A) .
+  ceq time(leakLtK(S,A)) = s(time(S)) 
+  if c-leakLtK(S,A) .
+  ceq leakLtK(S,A) = S 
+    if not c-leakLtK(S,A) .
+```
+
+The equations straightforwardly say that a long-term private key of any principal can be compromised.
