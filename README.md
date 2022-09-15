@@ -1,6 +1,4 @@
 ## Symbolic verification of Hybrid Post-Quantum TLS 1.2.
----
-
 In this repository, you can find:
 
 1) IFF: IFF protocol specification in CafeOBJ, and its formal verification of the  *identifiable property* with proof scores.
@@ -14,13 +12,11 @@ Similarly, you will find the description of the contents of this folder and a de
 
 
 ## Tools installation
----
 Our verification requires the use of CafeInMaude, which can be downloaded from here: https://github.com/ariesco/CafeInMaude.
 To execute CafeInMaude, we first need to intall Maude, which we can download its version 3.2 from here: http://maude.cs.illinois.edu/w/index.php/Maude_download_and_installation.
 After installing Maude, please follow the guide on CafeInMaude webpage to install it.
 
 ## Executing proof scores
----
 Proof scores are executable (CafeOBJ code).
 Once intalled CafeInMaude, you can try to run the proof score of `inv1` of IFF protocol, which is a small example, by the following commands:
 
