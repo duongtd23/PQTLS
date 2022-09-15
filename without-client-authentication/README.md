@@ -2,7 +2,7 @@
 - `hbtls-wtca.cafe`: the specification of the protocol without client authentication, which is explained in detail below.
 - `invariants.cafe`: all invariants/lemmas.
 - others: proof scores, for example, `gen2.cafe` is the generated proof score for `inv2`.
-- `inputs`: folder contains all input files for IPSG tool.
+- `inputs`: in case you want to re-generate the proof scores, this folder contains all input files that are necessary for that purpose. See README in this folder to find detailed guidance on how to reproduce the proof scores.
 
 ## CafeOBJ specification without client authentication: a detail description
 We first introduce the following module, where `intruder` and `ca` represent the intruder and the certificate authority:

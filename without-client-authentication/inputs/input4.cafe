@@ -1,0 +1,15 @@
+ipsgopen INV .
+  inv inv6(S:Sys, K':PqPriKey) .
+  generate inv4(S:Sys, M:Msg) induction on S:Sys .
+  generate inv4'(S:Sys, M:Msg) induction on S:Sys .
+close
+
+set-output without-client-authentication/gen4.cafe .
+:save-proof .
+
+eof
+
+load without-client-authentication/inputs/input4.cafe .
+
+load without-client-authentication/hb-tls12-v24.cafe .
+load without-client-authentication/invariants.cafe .

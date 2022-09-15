@@ -1,0 +1,13 @@
+ipsgopen INV .
+  generate inv16(S:Sys, SK:PriKey) induction on S:Sys .
+close
+
+set-output without-client-authentication/gen16.cafe .
+:save-proof .
+
+eof
+
+load without-client-authentication/inputs/input16.cafe .
+
+load without-client-authentication/hb-tls12-v24.cafe .
+load without-client-authentication/invariants.cafe .

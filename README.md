@@ -45,10 +45,18 @@ Moving to the Hybrid TLS protocol, similarly, you can run the proof score of
 maude -allow-files path-to-CafeInMaude/src/cafeInMaude.maude
 load without-client-authentication/hbtls-wtca.cafe .
 load without-client-authentication/invariants.cafe .
+load without-client-authentication/proof-inv0.cafe .
+```
+
+Note that CafeInMaude may take 2-3 minutes to load the specification and the invariants (the second and third commands) due to they are large.
+After that, you can continuously, for example, run the proof score of `inv2` by the following command:
+
+```
 load without-client-authentication/gen2.cafe .
 ```
 
-CafeInMaude may take 2-3 minutes to load the specification due to it is large.
-It also may take 1-2 minute(s) to parse a proof score file since that file is also large, so to reduce the time taken, a wise way is to split the file into some small sub-files and play with each of them. It will significantly reduce the time taken in total.
+In this case, because the file is large, 
+CafeInMaude may take around 1 minute to parse a proof score file before reducing the `red` commands.
+Therefore, to reduce the time taken, a wise way is to split the file into some small sub-files and play with each of them. It will significantly reduce the time taken in total.
 
 *Note also that* we can use CafeOBJ (https://cafeobj.org/) to execute the proof score (instead of CafeInMaude). But it may take a longer time since the rewriting system of the original CafeOBJ normally takes a longer amount of time to reduce a given term than that of CafeInMaude.

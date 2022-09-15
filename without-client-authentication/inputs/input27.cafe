@@ -1,0 +1,18 @@
+ipsgopen INV .
+  inv inv4'(S:Sys, M:Msg) .
+  inv inv21(S:Sys, A:Prin, B:Prin, KC:ClassicKey, 
+    K':PqPriKey, K2':PqPriKey, SD:Seed, N:Nat, I:Sid) .
+  generate inv27(S:Sys, A:Prin, B:Prin, K:ClPriKeyEx, K':PqPriKey,
+    K2:ClPriKeyEx, K2':PqPriKey, I:Sid, N:Nat, SD:Seed, M:Msg)
+  induction on S:Sys .
+close
+
+set-output without-client-authentication/gen27.cafe .
+:save-proof .
+
+eof
+
+load without-client-authentication/inputs/input27.cafe .
+
+load without-client-authentication/hb-tls12-v24.cafe .
+load without-client-authentication/invariants.cafe .

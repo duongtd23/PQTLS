@@ -2,7 +2,7 @@
 - `hbtls-ca.cafe`: the specification of the protocol with client authentication, which is explained in detail below.
 - `invariants.cafe`: all invariants/lemmas.
 - others: proof scores, for example, `gen30.cafe` is the generated proof score for `inv30`.
-- `inputs`: folder contains all input files for IPSG tool.
+- `inputs`: in case you want to re-generate the proof scores, this folder contains all input files that are necessary for that purpose. See README in the folder `without-client-authentication/inputs` for more detail.
 
 ## CafeOBJ specification with client authentication: a detail description
 We first introduce the following module, where `intruder` and `ca` represent the intruder and the certificate authority:
