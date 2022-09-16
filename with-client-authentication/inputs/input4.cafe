@@ -1,0 +1,15 @@
+ipsgopen INV .
+  inv inv6(S:Sys, K':PqPriKey) .
+  generate inv4(S:Sys, M:Msg) induction on S:Sys .
+  generate inv4'(S:Sys, M:Msg) induction on S:Sys .
+close
+
+set-output with-client-authentication/gen4.cafe .
+:save-proof .
+
+eof
+
+load with-client-authentication/inputs/input4.cafe .
+
+load with-client-authentication/hb-tls12-v25.cafe .
+load with-client-authentication/invariants.cafe .

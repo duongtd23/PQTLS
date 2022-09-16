@@ -1,0 +1,17 @@
+ipsgopen INV .
+  inv inv4(S:Sys, M:Msg) .
+  inv inv4''(S:Sys, A:Prin, B:Prin, K2:ClPriKeyEx, K':PqPriKey, K2':PqPriKey, N2:Nat) .
+  generate inv18(S:Sys, A:Prin, B:Prin, B1:Prin, K:ClPriKeyEx, K':PqPriKey,
+    K2:ClPriKeyEx, K2':PqPriKey, SD:Seed, SD2:Seed, H:Hash, N:Nat)
+  induction on S:Sys .
+close
+
+set-output with-client-authentication/gen18.cafe .
+:save-proof .
+
+eof
+
+load with-client-authentication/inputs/input18.cafe .
+
+load with-client-authentication/hb-tls12-v25.cafe .
+load with-client-authentication/invariants.cafe .

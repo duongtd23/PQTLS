@@ -18,7 +18,7 @@ The last command loads the input file `input2.cafe`, which asks the tool to gene
 Note that, for the second and third commands, CafeInMaude may take 2-3 minutes to load the specification and the invariants.
 Recall that IPSG is implemented on top of CafeInMaude.
 After that, you do not need to load the specification or the invariants again, but you can continuously ask the tool to generate proof scores for the other invariants.
-For example, you can continuously ask the tool to generate the proof score for `inv3`
+For example, you can continuously ask the tool to generate the proof score for `inv3`:
 
 ```
 load without-client-authentication/inputs/invput3.cafe .

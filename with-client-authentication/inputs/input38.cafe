@@ -1,0 +1,17 @@
+ipsgopen INV .
+  inv inv36(S:Sys, A:Prin, B:Prin, A1:Prin, 
+    K':PqPriKey, K2':PqPriKey, CI:Cipher) .
+  generate inv38(S:Sys, A:Prin, B:Prin, A1:Prin, 
+    PK:ClPubKeyEx, K':PqPriKey, K2':PqPriKey, CI:Cipher, N:Nat)
+  induction on S:Sys .
+close
+
+set-output with-client-authentication/gen38.cafe .
+:save-proof .
+
+eof
+
+load with-client-authentication/inputs/input38.cafe .
+
+load with-client-authentication/hb-tls12-v25.cafe .
+load with-client-authentication/invariants.cafe .

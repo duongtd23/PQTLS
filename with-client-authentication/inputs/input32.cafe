@@ -1,0 +1,20 @@
+ipsgopen INV .
+  inv inv33(S:Sys,KC:ClassicKey,K':PqPriKey,K2':PqPriKey,
+    SD:Seed,SD2:Seed,N:Nat,M:Msg) . 
+  inv inv34(S:Sys, A:Prin, B:Prin, A1:Prin, K:ClPriKeyEx, K':PqPriKey,
+    PK2:ClPubKeyEx, K2':PqPriKey, R:Rand, R2:Rand, CI:Cipher, CERT:Cert,
+    N:Nat, N2:Nat) . 
+  generate inv32(S:Sys,A:Prin,B:Prin,KC:ClassicKey,K':PqPriKey,
+    K2':PqPriKey,SD:Seed,SD2:Seed,H:Hash,N:Nat)
+  induction on S:Sys .
+close
+
+set-output with-client-authentication/gen32.cafe .
+:save-proof .
+
+eof
+
+load with-client-authentication/inputs/input32.cafe .
+
+load with-client-authentication/hb-tls12-v25.cafe .
+load with-client-authentication/invariants.cafe .

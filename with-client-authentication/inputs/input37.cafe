@@ -1,0 +1,15 @@
+ipsgopen INV .
+  inv inv11(S:Sys, B:Prin, PKE:PubKey, SIGN:Sign) .
+  generate inv37(S:Sys, A:Prin, B:Prin, A1:Prin, CERT:Cert)
+  induction on S:Sys .
+close
+
+set-output with-client-authentication/gen37.cafe .
+:save-proof .
+
+eof
+
+load with-client-authentication/inputs/input37.cafe .
+
+load with-client-authentication/hb-tls12-v25.cafe .
+load with-client-authentication/invariants.cafe .
