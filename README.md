@@ -1,12 +1,12 @@
-## Symbolic verification of Hybrid Post-Quantum TLS 1.2.
+## Symbolic verification of Hybrid Post-Quantum TLS 1.2
 In this repository, you can find:
 
-1) IFF: IFF protocol specification in CafeOBJ, and its formal verification of the  *identifiable property* with proof scores.
+1) `IFF`: IFF protocol specification in CafeOBJ, and its formal verification of the  *identifiable property* with proof scores.
 
-2) without-client-authentication: The specification and verification of the Hybrid PQ TLS in case client authentication is **not** requested.
+2) `without-client-authentication`: The specification and verification of the Hybrid PQ TLS in case client authentication is **not** requested.
 You will find the description of the contents of this folder and a detailed explanation of the formal specification in the readme file in this folder.
 
-3) with-client-authentication: The specification and verification of the Hybrid PQ TLS in case client authentication is requested.
+3) `with-client-authentication`: The specification and verification of the Hybrid PQ TLS in case client authentication is requested.
 Similarly, you will find the description of the contents of this folder and a detailed explanation of the formal specification in the readme file in this folder.
 
 
