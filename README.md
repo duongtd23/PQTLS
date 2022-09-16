@@ -4,17 +4,18 @@ In this repository, you can find:
 1) `IFF`: IFF protocol specification in CafeOBJ, and its formal verification of the  *identifiable property* with proof scores.
 
 2) `without-client-authentication`: The specification and verification of the Hybrid PQ TLS in case client authentication is **not** requested.
-You will find the description of the contents of this folder and a detailed explanation of the formal specification in the readme file in this folder.
+You will find the description of the contents of this folder and a detailed explanation of the formal specification in the README file in this folder.
 
 3) `with-client-authentication`: The specification and verification of the Hybrid PQ TLS in case client authentication is requested.
-Similarly, you will find the description of the contents of this folder and a detailed explanation of the formal specification in the readme file in this folder.
+Similarly, you will find the description of the contents of this folder and a detailed explanation of the formal specification in the README file in this folder.
 
 
 
 ## Tools installation
 Our verification requires the use of CafeInMaude, which can be downloaded from here: https://github.com/ariesco/CafeInMaude.
-To execute CafeInMaude, we first need to intall Maude, which we can download its version 3.2 from here: http://maude.cs.illinois.edu/w/index.php/Maude_download_and_installation.
-After installing Maude, please follow the guide on CafeInMaude webpage to install it.
+To install CafeInMaude, we first need to intall Maude, which we can download its version 3.2 from here: http://maude.cs.illinois.edu/w/index.php/Maude_download_and_installation.
+Both installations are simple, with Maude, you just need to download the binary file (and perhaps add the tool to the PATH environment variable to execute the tool from everywhere), while with CafeInMaude, you just need to clone its repo.
+After that, move to the next step to execute proof scores.
 
 ## Executing proof scores
 Proof scores are executable (CafeOBJ code).
@@ -29,7 +30,7 @@ load IFF/inv1.cafe .
 where the first command starts the CafeInMaude environment (`path-to-CafeInMaude` is the path of the CafeInMaude folder),
 the second command load the specification and the invariants, respectively,
 and the last command loads the proof score.
-If nothing is wrong, you will get the output results containing `Result: true : Bool`. 
+If nothing is wrong, you will get the output result containing `Result: true : Bool`. 
 Note that you need to make sure that the paths are correct. You may need to use the absolute paths instead of the relative paths as above.
 
 After that, you do not need to load the specification again, but can continue loading the proof score of `inv2`:
@@ -38,8 +39,8 @@ After that, you do not need to load the specification again, but can continue lo
 load IFF/inv2.cafe .
 ```
 
-Moving to the Hybrid TLS protocol, similarly, you can run the proof score of 
-`inv2` in the case client authentication is not requested by the following commands:
+Moving to the Hybrid TLS protocol, similarly, you can run the proof of 
+`inv0` in the case client authentication is not requested by the following commands:
 
 ```
 maude -allow-files path-to-CafeInMaude/src/cafeInMaude.maude
@@ -48,7 +49,7 @@ load without-client-authentication/invariants.cafe .
 load without-client-authentication/proof-inv0.cafe .
 ```
 
-Note that CafeInMaude may take 2-3 minutes to load the specification and the invariants (the second and third commands) due to they are large.
+Note that CafeInMaude may take 2-3 minutes to load the specification and the invariants (the second and third commands) due to their being large.
 After that, you can continuously, for example, run the proof score of `inv2` by the following command:
 
 ```
