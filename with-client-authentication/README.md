@@ -1,6 +1,6 @@
 ## Contents: In this folder, you can find:
-- `hbtls-ca.cafe`: the specification of the protocol with client authentication, which is explained in detail below.
-- `invariants.cafe`: all invariants/lemmas.
+- `hbtls-ca.cafe`: the specification of the protocol in case client authentication is requested. See the section below for a detailed explanation.
+- `invariants.cafe`: all invariants/lemmas that are needed for the formal verification.
 - others: proof scores, for example, `gen30.cafe` is the generated proof score for `inv30`.
 - `inputs`: in case you want to re-generate the proof scores, this folder contains all input files that are necessary for that purpose. See README in the folder `without-client-authentication/inputs` for more detail.
 
