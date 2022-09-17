@@ -4111,7 +4111,7 @@ open INV .
 	eq (timeLeak(priKey(r1),ltkLeaked(s)) > n) = true .
 	eq (skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(r1),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),n) \in nw(s)) = false .
 	eq (skexM(r1,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(r1),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),n) \in nw(s)) = false .
-	red inv16(s,priKey(r1) ) implies inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,b1,pk,pk',ci,n) .
+	red inv16(s,priKey(r1)) implies inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,b1,pk,pk',ci,n) .
 close
 
 --> true
@@ -6405,4 +6405,4 @@ open INV .
 	red inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,pk,pk',ci,n) .
 close
 
---> Time taken is 12522ms
+--> Time taken is 9723ms

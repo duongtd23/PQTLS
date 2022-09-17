@@ -6446,7 +6446,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((r2 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -6638,7 +6638,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r2 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -7665,7 +7665,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((k' & r2),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -7860,7 +7860,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r2),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -10494,7 +10494,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((r4 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -10590,7 +10590,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r4 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -10885,7 +10885,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((k' & r4),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -10984,7 +10984,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r4),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -12620,7 +12620,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((r4 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -12722,7 +12722,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r4 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r4&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r4,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r4 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r4 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -13037,7 +13037,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((k' & r4),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -13142,7 +13142,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r4),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r4) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r4,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r4),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r4),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -16084,7 +16084,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((r2 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -16222,7 +16222,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r2 & k2'),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((r2&k2') ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,r2,k2',sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((r2 & k2'),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((r2 & k2'),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -16799,7 +16799,7 @@ open INV .
 	eq (n > timeLeak(priKey(b),ltkLeaked(s))) = false .
 	eq existPqPriKexM(pqKey((k' & r2),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -16940,7 +16940,7 @@ open INV .
 	eq (priKey(b) \in' ltkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r2),n),nw(s)) = false .
 	eq (cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h))) \in nw(s)) = true .
-	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,sd2) ,prf-cfin(prf-ms((kc||pqKey((k'&r2) ,n) ) ,sd) ,h) ) ) ) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
+	red inv3(s,kc,k',r2,sd,sd2,n,cfM(a,a,b,encFin(prf-ckey(prf-ms((kc || pqKey((k' & r2),n)),sd),sd2),prf-cfin(prf-ms((kc || pqKey((k' & r2),n)),sd),h)))) implies inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
 --> true
@@ -17305,4 +17305,4 @@ open INV .
 	red inv2(s,a,b,kc,k',k2',sd,sd2,h,n) implies inv2(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,sd2,h,n) .
 close
 
---> Time taken is 34792ms
+--> Time taken is 26919ms

@@ -2441,7 +2441,7 @@ open INV .
 	eq (skexM(r9,r4,r3,r14,pqPubKeyEn(k'),r16,r17) \in nw(s)) = true .
 	eq (k' \in upqk(s)) = false .
 	eq (ckexM(r3,r3,r4,clPubKeyEx(r1),encapsCipher(pqPubKeyEn(k'),r2),n2) \in nw(s)) = false .
-	red inv4(s,skexM(r9,r4,r3,r14,pqPubKeyEn(k') ,r16,r17) ) implies inv4''(s,a,b,k2,k',k2',n2) implies inv4''(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k2,k',k2',n2) .
+	red inv4(s,skexM(r9,r4,r3,r14,pqPubKeyEn(k'),r16,r17)) implies inv4''(s,a,b,k2,k',k2',n2) implies inv4''(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k2,k',k2',n2) .
 close
 
 --> true
@@ -6920,4 +6920,4 @@ open INV .
 	red inv4''(s,a,b,k2,k',k2',n2) implies inv4''(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k2,k',k2',n2) .
 close
 
---> Time taken is 12620ms
+--> Time taken is 10320ms

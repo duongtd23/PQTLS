@@ -5095,7 +5095,7 @@ open INV .
 	eq ss(s,r2,r3,r10) = none .
 	eq (k2' \in upqk(s)) = false .
 	eq (r12 \in upqk(s)) = false .
-	red inv4(s,skexM(r3,r3,r2,clPubKeyEx(r11) ,pqPubKeyEn(r12) ,encH(priKey(r3) ,hParams(r5,r8,clPubKeyEx(r11) ,pqPubKeyEn(r12) ) ) ,r13) ) implies inv21(s,a,b,kc,k',k2',sd,n,i) implies inv21(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,kc,k',k2',sd,n,i) .
+	red inv4(s,skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13)) implies inv21(s,a,b,kc,k',k2',sd,n,i) implies inv21(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,kc,k',k2',sd,n,i) .
 close
 
 --> true
@@ -5312,7 +5312,7 @@ open INV .
 	eq (k2' \in upqk(s)) = false .
 	eq (r12 \in upqk(s)) = false .
 	eq (ms(ss(s,r2,r3,r10)) = prf-ms(((r11 & priClKey(r15)) || pqKey((r12 & k2'),r17)),seedMs(r5,r8,r15,encapsCipher(pqPubKeyEn(r12),k2')))) = false .
-	red inv4(s,skexM(r3,r3,r2,clPubKeyEx(r11) ,pqPubKeyEn(r12) ,encH(priKey(r3) ,hParams(r5,r8,clPubKeyEx(r11) ,pqPubKeyEn(r12) ) ) ,r13) ) implies inv21(s,a,b,kc,k',k2',sd,n,i) implies inv21(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,kc,k',k2',sd,n,i) .
+	red inv4(s,skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13)) implies inv21(s,a,b,kc,k',k2',sd,n,i) implies inv21(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,kc,k',k2',sd,n,i) .
 close
 
 --> true
@@ -6801,4 +6801,4 @@ open INV .
 	red inv21(s,a,b,kc,k',k2',sd,n,i) implies inv21(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,kc,k',k2',sd,n,i) .
 close
 
---> Time taken is 11730ms
+--> Time taken is 10375ms

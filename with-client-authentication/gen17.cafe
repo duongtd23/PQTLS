@@ -46811,4 +46811,4 @@ open INV .
 	red inv17(s,a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) implies inv17(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) .
 close
 
---> Time taken is 73781ms
+--> Time taken is 63173ms

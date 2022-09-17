@@ -7013,4 +7013,4 @@ open INV .
 	red inv16(s,sk) implies inv16(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),sk) .
 close
 
---> Time taken is 19418ms
+--> Time taken is 15798ms

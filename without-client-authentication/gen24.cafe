@@ -37097,4 +37097,4 @@ open INV .
 	red inv24(s,a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) implies inv24(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) .
 close
 
---> Time taken is 60030ms
+--> Time taken is 52058ms

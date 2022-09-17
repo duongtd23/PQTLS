@@ -7201,4 +7201,4 @@ open INV .
 	red inv11(s,b,pke,sign) implies inv11(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),b,pke,sign) .
 close
 
---> Time taken is 16363ms
+--> Time taken is 15695ms

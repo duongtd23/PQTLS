@@ -33739,7 +33739,7 @@ open INV .
 	eq (r12 \in pqkLeaked(s)) = false .
 	eq (r12 \in upqk(s)) = false .
 	eq (sfM(r3,r3,r2,encFin(prf-skey(prf-ms(((r11 & priClKey(r15)) || pqKey((r12 & k2'),r17)),seedMs(r5,r8,r15,encapsCipher(pqPubKeyEn(r12),k2'))),seedHs(r5,r8)),prf-sfin(prf-ms(((r11 & priClKey(r15)) || pqKey((r12 & k2'),r17)),seedMs(r5,r8,r15,encapsCipher(pqPubKeyEn(r12),k2'))),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,encapsCipher(pqPubKeyEn(r12),k2'))))) \in nw(s)) = false .
-	red inv4(s,skexM(r3,r3,r2,clPubKeyEx(r11) ,pqPubKeyEn(r12) ,encH(priKey(r3) ,hParams(r5,r8,clPubKeyEx(r11) ,pqPubKeyEn(r12) ) ) ,r13) ) implies inv20(s,kc,k',k2',sd,sd2,n,m) implies inv20(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),kc,k',k2',sd,sd2,n,m) .
+	red inv4(s,skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13)) implies inv20(s,kc,k',k2',sd,sd2,n,m) implies inv20(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),kc,k',k2',sd,sd2,n,m) .
 close
 
 --> true
@@ -36069,4 +36069,4 @@ open INV .
 	red inv20(s,kc,k',k2',sd,sd2,n,m) implies inv20(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),kc,k',k2',sd,sd2,n,m) .
 close
 
---> Time taken is 153084ms
+--> Time taken is 129422ms

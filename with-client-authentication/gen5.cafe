@@ -7547,4 +7547,4 @@ open INV .
 	red inv5(s,k',k2',n) implies inv5(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),k',k2',n) .
 close
 
---> Time taken is 20202ms
+--> Time taken is 17512ms

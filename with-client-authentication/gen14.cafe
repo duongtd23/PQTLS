@@ -40155,4 +40155,4 @@ open INV .
 	red inv14(s,a,b,b1,kc,k',k2',sd,sd2,h,n) implies inv14(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,kc,k',k2',sd,sd2,h,n) .
 close
 
---> Time taken is 59043ms
+--> Time taken is 49485ms

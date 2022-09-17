@@ -2829,7 +2829,7 @@ open INV .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r18),encapsCipher(pqPubKeyEn(k'),r19),r20) \in nw(s)) = true .
 	eq (r19 \in upqk(s)) = false .
 	eq (certVerM(r1,r1,r2,encH(priKey(r1),hFullHs(r1,r2,r3,r4,r5,r6,r8,r9,r10,r11,r12,pqPubKeyEn(k'),r14,r16,r17,cert(r1,pubKey(r1),sign(ca,r1,pubKey(r1))),clPubKeyEx(r18),encapsCipher(pqPubKeyEn(k'),r19)))) \in nw(s)) = false .
-	red inv4'(s,ckexM(r1,r1,r2,clPubKeyEx(r18) ,encapsCipher(pqPubKeyEn(k') ,r19) ,r20) ) implies inv36(s,a,b,a1,k',k2',ci) implies inv36(certVerify(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19,r20),a,b,a1,k',k2',ci) .
+	red inv4'(s,ckexM(r1,r1,r2,clPubKeyEx(r18),encapsCipher(pqPubKeyEn(k'),r19),r20)) implies inv36(s,a,b,a1,k',k2',ci) implies inv36(certVerify(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19,r20),a,b,a1,k',k2',ci) .
 close
 
 --> true
@@ -10143,4 +10143,4 @@ open INV .
 	red inv36(s,a,b,a1,k',k2',ci) implies inv36(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,a1,k',k2',ci) .
 close
 
---> Time taken is 17305ms
+--> Time taken is 16843ms

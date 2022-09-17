@@ -4900,7 +4900,7 @@ open INV .
 	eq priPqKey(r5) = k' .
 	eq (k' \in pqkLeaked(s)) = false .
 	eq (k' \in upqk(s)) = false .
-	red inv4(s,skexM(r1,r2,r3,r4,r5,r6,r7) ) implies inv6(s,k') implies inv6(leakPKE2(s,r1,r2,r3,r4,r5,r6,r7),k') .
+	red inv4(s,skexM(r1,r2,r3,r4,r5,r6,r7)) implies inv6(s,k') implies inv6(leakPKE2(s,r1,r2,r3,r4,r5,r6,r7),k') .
 close
 
 --> true
@@ -5009,7 +5009,7 @@ open INV .
 	eq priPqKey(r5) = k' .
 	eq (k' \in pqkLeaked(s)) = false .
 	eq (k' \in upqk(s)) = false .
-	red inv4'(s,ckexM(r1,r2,r3,r4,r5,r6) ) implies inv6(s,k') implies inv6(leakPKE4(s,r1,r2,r3,r4,r5,r6),k') .
+	red inv4'(s,ckexM(r1,r2,r3,r4,r5,r6)) implies inv6(s,k') implies inv6(leakPKE4(s,r1,r2,r3,r4,r5,r6),k') .
 close
 
 --> true
@@ -6726,4 +6726,4 @@ open INV .
 	red inv6(s,k') implies inv6(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),k') .
 close
 
---> Time taken is 19585ms
+--> Time taken is 16956ms

@@ -7988,4 +7988,4 @@ open INV .
 	red inv12(s,a,b,b1,cert) implies inv12(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,cert) .
 close
 
---> Time taken is 19461ms
+--> Time taken is 17201ms

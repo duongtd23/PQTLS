@@ -3370,7 +3370,7 @@ open INV .
 	eq (r2 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r2 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r2) ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -3435,7 +3435,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r2 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r2),k2'),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(r2) ,k2') ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r2),k2'),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -4444,7 +4444,7 @@ open INV .
 	eq (r2 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r2),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(k') ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -4509,7 +4509,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r2),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r2),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(k') ,r2) ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r2),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -8696,7 +8696,7 @@ open INV .
 	eq (r4 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r4 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r4) ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -8729,7 +8729,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r4 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r4),k2'),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(r4) ,k2') ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r4),k2'),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -9014,7 +9014,7 @@ open INV .
 	eq (r4 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r4),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(k') ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -9047,7 +9047,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r4),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r4),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(k') ,r4) ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r4),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -10663,7 +10663,7 @@ open INV .
 	eq (r4 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r4 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r4) ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -10698,7 +10698,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r4 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r4),k2'),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(r4) ,k2') ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r4),k2'),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -11003,7 +11003,7 @@ open INV .
 	eq (r4 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r4),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(k') ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -11038,7 +11038,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r4),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r4),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(k') ,r4) ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r4),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -13915,7 +13915,7 @@ open INV .
 	eq (r2 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((r2 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r2) ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -13962,7 +13962,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r2 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r2),k2'),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(r2) ,k2') ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(r2),k2'),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -15355,7 +15355,7 @@ open INV .
 	eq (r2 \in pqkLeaked(s)) = false .
 	eq existPqPriKexM(pqKey((k' & r2),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(k') ,ci,n) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true, use inv4' as a lemma
@@ -15402,7 +15402,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r2),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = false .
 	eq (ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r2),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k) ,encapsCipher(pqPubKeyEn(k') ,r2) ,n2) ) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k),encapsCipher(pqPubKeyEn(k'),r2),n2)) implies inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
 close
 
 --> true
@@ -15758,4 +15758,4 @@ open INV .
 	red inv10(s,a,b,k,k',k2',ci,n,n2) implies inv10(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2',ci,n,n2) .
 close
 
---> Time taken is 44762ms
+--> Time taken is 39065ms

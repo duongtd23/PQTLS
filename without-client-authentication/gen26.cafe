@@ -23324,7 +23324,7 @@ open INV .
 	eq (skexM(r3,r3,r2,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
 	eq ms(ss(s,r2,r3,r6)) = prf-ms(((k & k2) || pqKey((k' & k2'),n2)),sd) .
 	eq (sf2M(r3,r3,r2,encFin(prf-skey(prf-ms(((k & k2) || pqKey((k' & k2'),n2)),sd),seedHs(r5,r8)),prf-sfin2(prf-ms(((k & k2) || pqKey((k' & k2'),n2)),sd),hAbbrHs(r2,r3,r4,r5,r6,r7,r8,cs(ss(s,r2,r3,r6)))))) \in nw(s)) = false .
-	red inv27(s,r2,r3,k,k',k2,k2',r6,n2,sd,skexM(r3,r3,r2,clPubKeyEx(k) ,pqPubKeyEn(k') ,ci,n) ) implies inv26(s,a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) implies inv26(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) .
+	red inv27(s,r2,r3,k,k',k2,k2',r6,n2,sd,skexM(r3,r3,r2,clPubKeyEx(k),pqPubKeyEn(k'),ci,n)) implies inv26(s,a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) implies inv26(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) .
 close
 
 --> true
@@ -25053,7 +25053,7 @@ open INV .
 	eq (r2 \in pqkLeaked(s)) = false .
 	eq (skexM(r5,r5,r4,clPubKeyEx(r1),pqPubKeyEn(r2),encH(priKey(r5),hParams(r7,r10,clPubKeyEx(r1),pqPubKeyEn(r2))),n) \in nw(s)) = false .
 	eq (sf2M(b1,r5,r4,encFin(prf-skey(prf-ms(((k2 & r1) || pqKey((r2 & k2'),n2)),sd),sd2),prf-sfin2(prf-ms(((k2 & r1) || pqKey((r2 & k2'),n2)),sd),h))) \in nw(s)) = true .
-	red inv20(s,(k2&r1) ,r2,k2',sd,sd2,n2,sf2M(b1,r5,r4,encFin(prf-skey(prf-ms(((k2&r1) ||pqKey((r2&k2') ,n2) ) ,sd) ,sd2) ,prf-sfin2(prf-ms(((k2&r1) ||pqKey((r2&k2') ,n2) ) ,sd) ,h) ) ) ) implies inv26(s,a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) implies inv26(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) .
+	red inv20(s,(k2 & r1),r2,k2',sd,sd2,n2,sf2M(b1,r5,r4,encFin(prf-skey(prf-ms(((k2 & r1) || pqKey((r2 & k2'),n2)),sd),sd2),prf-sfin2(prf-ms(((k2 & r1) || pqKey((r2 & k2'),n2)),sd),h)))) implies inv26(s,a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) implies inv26(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) .
 close
 
 --> true
@@ -25457,4 +25457,4 @@ open INV .
 	red inv26(s,a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) implies inv26(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,k,k',k2,k2',sd,sd2,h,ci,n,n2) .
 close
 
---> Time taken is 56340ms
+--> Time taken is 40028ms

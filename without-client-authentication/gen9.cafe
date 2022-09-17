@@ -1865,7 +1865,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r2 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(r2),k2'),n2) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r2) ,ci,n) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -3070,7 +3070,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r2 & r2),n2),nw(s)) = true .
 	eq (skexM(r4,r4,r3,clPubKeyEx(k),pqPubKeyEn(r2),ci,n) \in nw(s)) = true .
 	eq (ckexM(r3,r3,r4,clPubKeyEx(r1),encapsCipher(pqPubKeyEn(r2),r2),n2) \in nw(s)) = false .
-	red inv4(s,skexM(r4,r4,r3,clPubKeyEx(k) ,pqPubKeyEn(r2) ,ci,n) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4(s,skexM(r4,r4,r3,clPubKeyEx(k),pqPubKeyEn(r2),ci,n)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -3906,7 +3906,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r2),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r2),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2) ,encapsCipher(pqPubKeyEn(k') ,r2) ,n2) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r2),n2)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -7249,7 +7249,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r4 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(r4),k2'),n2) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r4) ,ci,n) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -7540,7 +7540,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r4),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r4),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2) ,encapsCipher(pqPubKeyEn(k') ,r4) ,n2) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r4),n2)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkCkeyex(s,r1,r2,r3,r4,r5),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -9060,7 +9060,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r4 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(r4),k2'),n2) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r4) ,ci,n) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r4),ci,n)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -9371,7 +9371,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r4),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r4),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2) ,encapsCipher(pqPubKeyEn(k') ,r4) ,n2) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r4),n2)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(fkSkeyex(s,r1,r2,r3,r4,r5,r6),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -11719,7 +11719,7 @@ open INV .
 	eq existPqPriKexM(pqKey((r2 & k2'),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(r2),k2'),n2) \in nw(s)) = true .
-	red inv4(s,skexM(b,b,a,clPubKeyEx(k) ,pqPubKeyEn(r2) ,ci,n) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4(s,skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(r2),ci,n)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -13039,7 +13039,7 @@ open INV .
 	eq existPqPriKexM(pqKey((k' & r2),n2),nw(s)) = false .
 	eq (skexM(b,b,a,clPubKeyEx(k),pqPubKeyEn(k'),ci,n) \in nw(s)) = true .
 	eq (ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r2),n2) \in nw(s)) = true .
-	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2) ,encapsCipher(pqPubKeyEn(k') ,r2) ,n2) ) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2,k2',ci,n,n2) .
+	red inv4'(s,ckexM(a,a,b,clPubKeyEx(k2),encapsCipher(pqPubKeyEn(k'),r2),n2)) implies inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
 --> true
@@ -13450,4 +13450,4 @@ open INV .
 	red inv9(s,a,b,k,k',k2,k2',ci,n,n2) implies inv9(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,k,k',k2,k2',ci,n,n2) .
 close
 
---> Time taken is 22730ms
+--> Time taken is 17680ms

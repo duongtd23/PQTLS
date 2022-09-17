@@ -40331,4 +40331,4 @@ open INV .
 	red inv39(s,a,b,a1,k,k',k2,k2',sd,sd2,ci,h,n,n2) implies inv39(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,a1,k,k',k2,k2',sd,sd2,ci,h,n,n2) .
 close
 
---> Time taken is 66083ms
+--> Time taken is 52749ms
