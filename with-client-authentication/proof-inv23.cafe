@@ -1,5 +1,5 @@
 open INV .
-	ops a b b1 b2 b3 : -> Prin .
+	ops a b b1 b2 : -> Prin .
 	op cert : -> Cert .
 	op ci : -> Cipher .
 	op pk : -> ClPubKeyEx .
@@ -17,7 +17,7 @@ open INV .
 close
 
 open INV .
-	ops a b b1 b2 b3 : -> Prin .
+	ops a b b1 b2 : -> Prin .
 	op cert : -> Cert .
 	op ci : -> Cipher .
 	op pk : -> ClPubKeyEx .
@@ -35,7 +35,7 @@ open INV .
 close
 
 open INV .
-	ops a b b1 b2 b3 : -> Prin .
+	ops a b b1 b2 : -> Prin .
 	op cert : -> Cert .
 	op ci : -> Cipher .
 	op pk : -> ClPubKeyEx .
@@ -54,7 +54,7 @@ open INV .
 close
 
 open INV .
-	ops a b b1 b2 b3 : -> Prin .
+	ops a b b1 b2 : -> Prin .
 	op cert : -> Cert .
 	op ci : -> Cipher .
 	op pk : -> ClPubKeyEx .
@@ -73,7 +73,7 @@ open INV .
 close
 
 open INV .
-	ops a b b1 b2 b3 : -> Prin .
+	ops a b b1 b2 : -> Prin .
 	op cert : -> Cert .
 	op ci : -> Cipher .
 	op pk : -> ClPubKeyEx .
