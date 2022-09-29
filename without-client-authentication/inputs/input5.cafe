@@ -11,5 +11,5 @@ eof
 
 load without-client-authentication/inputs/input5.cafe .
 
-load without-client-authentication/hb-tls12-v24.cafe .
+load without-client-authentication/hbtls-wtca.cafe .
 load without-client-authentication/invariants.cafe .

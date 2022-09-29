@@ -1,20 +1,20 @@
 ipsgopen INV .
-  inv inv2(S:Sys,A:Prin,B:Prin,KC:ClassicKey,K':PqPriKey,
+  inv pqKeySe(S:Sys,A:Prin,B:Prin,KC:ClassicKey,K':PqPriKey,
     K2':PqPriKey,SD:Seed,SD2:Seed,H:Hash,N:Nat) . 
   inv inv15(S:Sys, A:Prin, B:Prin, B1:Prin, B2:Prin,
     PK:ClPubKeyEx, PK':PqPubKey, K2:ClPriKeyEx, K2':PqPriKey, 
     SD:Seed, SD2:Seed, H:Hash, CI:Cipher, CERT:Cert, N:Nat, N2:Nat) . 
-  generate inv14(S:Sys, A:Prin, B:Prin, B1:Prin, KC:ClassicKey, 
+  generate authent(S:Sys, A:Prin, B:Prin, B1:Prin, KC:ClassicKey, 
     K':PqPriKey, K2':PqPriKey, SD:Seed, SD2:Seed, H:Hash, N:Nat)
   induction on S:Sys .
 close
 
-set-output without-client-authentication/gen14.cafe .
+set-output with-client-authentication/gen-authent.cafe .
 :save-proof .
 
 eof
 
-load without-client-authentication/inputs/input14.cafe .
+load with-client-authentication/inputs/input-authent.cafe .
 
-load without-client-authentication/hb-tls12-v24.cafe .
-load without-client-authentication/invariants.cafe .
+load with-client-authentication/hbtls-ca.cafe .
+load with-client-authentication/invariants.cafe .

@@ -7,6 +7,6 @@ open INV .
 	op n : -> Nat .
 	ops sd sd2 : -> Seed .
 	op s : -> Sys .
-  red inv2(s,a,b,kc,k',k2',sd,sd2,h,n)
-  implies inv0(s,a,b,kc,k',k2',sd,sd2,h,n) .
+  red pqKeySe(s,a,b,kc,k',k2',sd,sd2,h,n)
+  implies forwardSe(s,a,b,kc,k',k2',sd,sd2,h,n) .
 close

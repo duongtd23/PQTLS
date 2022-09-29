@@ -13,5 +13,5 @@ eof
 
 load with-client-authentication/inputs/input38.cafe .
 
-load with-client-authentication/hb-tls12-v25.cafe .
+load with-client-authentication/hbtls-ca.cafe .
 load with-client-authentication/invariants.cafe .
