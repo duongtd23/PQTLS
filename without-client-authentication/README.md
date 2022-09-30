@@ -1,7 +1,7 @@
 ## Contents: In this folder, you can find:
 - `hbtls-wtca.cafe`: the specification of the protocol in case client authentication is not requested. See the section below for a detailed explanation.
 - `invariants.cafe`: all invariants/lemmas that are needed for the formal verification.
-- others: proof scores, for example, `gen2.cafe` is the generated proof score for `inv2`.
+- others: proof scores, for example, `gen-pqKeySe.cafe` is the generated proof score for `pqKeySe`.
 - `inputs`: in case you want to re-generate the proof scores, this folder contains all input files that are necessary for that purpose. See README in this folder to find detailed guidance on how to reproduce the proof scores.
 
 ## CafeOBJ specification without client authentication: a detail description

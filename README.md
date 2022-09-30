@@ -40,20 +40,20 @@ load IFF/inv2.cafe .
 ```
 
 Moving to the Hybrid TLS protocol, similarly, you can run the proof of 
-`inv0` in the case client authentication is not requested by the following commands:
+`ssKeySe` (the *session key secrecy* property) in the case client authentication is not requested by the following commands:
 
 ```
 maude -allow-files path-to-CafeInMaude/src/cafeInMaude.maude
 load without-client-authentication/hbtls-wtca.cafe .
 load without-client-authentication/invariants.cafe .
-load without-client-authentication/proof-inv0.cafe .
+load without-client-authentication/proof-ssKeySe.cafe .
 ```
 
 Note that CafeInMaude may take 2-3 minutes to load the specification and the invariants (the second and third commands) due to their being large.
-After that, you can continuously, for example, run the proof score of `inv2` by the following command:
+After that, you can continuously, for example, run the proof score of `pqKeySe` by the following command:
 
 ```
-load without-client-authentication/gen2.cafe .
+load without-client-authentication/gen-pqKeySe.cafe .
 ```
 
 In this case, because the file is large, 
