@@ -2,7 +2,7 @@
 open INV .
 	op m : -> Msg .
 	op s : -> Sys .
-	red inv4(init,m) .
+	red inv4'(init,m) .
 close
 
 --> true
@@ -38,7 +38,7 @@ open INV .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = true .
 	eq sign(r11) = sign(ca,owner(r11),pubKey(r11)) .
 	eq m = ccsM(r1,r1,r2) .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -74,7 +74,7 @@ open INV .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = true .
 	eq sign(r11) = sign(ca,owner(r11),pubKey(r11)) .
 	eq (m = ccsM(r1,r1,r2)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -109,7 +109,7 @@ open INV .
 	eq decH(r14,pubKey(r11)) = hParams(r4,r8,r12,r13) .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = true .
 	eq (sign(r11) = sign(ca,owner(r11),pubKey(r11))) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -143,7 +143,7 @@ open INV .
 	eq (skexM(r7,r2,r1,r12,r13,r14,r15) \in nw(s)) = true .
 	eq decH(r14,pubKey(r11)) = hParams(r4,r8,r12,r13) .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -176,7 +176,7 @@ open INV .
 	eq (shM(r7,r2,r1,r3,r8,r9,r10) \in nw(s)) = true .
 	eq (skexM(r7,r2,r1,r12,r13,r14,r15) \in nw(s)) = true .
 	eq (decH(r14,pubKey(r11)) = hParams(r4,r8,r12,r13)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -208,7 +208,7 @@ open INV .
 	eq (chM(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (shM(r7,r2,r1,r3,r8,r9,r10) \in nw(s)) = true .
 	eq (skexM(r7,r2,r1,r12,r13,r14,r15) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -239,7 +239,7 @@ open INV .
 	eq (scertM(r7,r2,r1,r11) \in nw(s)) = true .
 	eq (chM(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (shM(r7,r2,r1,r3,r8,r9,r10) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -269,7 +269,7 @@ open INV .
 	eq (shDnM(r7,r2,r1) \in nw(s)) = true .
 	eq (scertM(r7,r2,r1,r11) \in nw(s)) = true .
 	eq (chM(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -298,7 +298,7 @@ open INV .
 	eq decAsym?(r14,pubKey(r11)) = true .
 	eq (shDnM(r7,r2,r1) \in nw(s)) = true .
 	eq (scertM(r7,r2,r1,r11) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -326,7 +326,7 @@ open INV .
 	eq (r18 > r15) = true .
 	eq decAsym?(r14,pubKey(r11)) = true .
 	eq (shDnM(r7,r2,r1) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -353,7 +353,7 @@ open INV .
 	op s : -> Sys .
 	eq (r18 > r15) = true .
 	eq decAsym?(r14,pubKey(r11)) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -379,7 +379,7 @@ open INV .
 	op r9 : -> CipherSuite .
 	op s : -> Sys .
 	eq (r18 > r15) = false .
-	red inv4(s,m) implies inv4(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -397,7 +397,7 @@ open INV .
 	op r9 : -> Prin .
 	op s : -> Sys .
 	eq ss(s,r1,r2,r5) = none .
-	red inv4(s,m) implies inv4(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -420,7 +420,7 @@ open INV .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = true .
 	eq (sf2M(r10,r2,r1,encFin(prf-skey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-sfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5)))))) \in nw(s)) = true .
 	eq m = ccsM(r1,r1,r2) .
-	red inv4(s,m) implies inv4(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -443,7 +443,7 @@ open INV .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = true .
 	eq (sf2M(r10,r2,r1,encFin(prf-skey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-sfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5)))))) \in nw(s)) = true .
 	eq (m = ccsM(r1,r1,r2)) = false .
-	red inv4(s,m) implies inv4(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -465,7 +465,7 @@ open INV .
 	eq (ch2M(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = true .
 	eq (sf2M(r10,r2,r1,encFin(prf-skey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-sfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5)))))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -486,7 +486,7 @@ open INV .
 	eq (ccsM(r9,r2,r1) \in nw(s)) = true .
 	eq (ch2M(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -506,7 +506,7 @@ open INV .
 	eq (ss(s,r1,r2,r5) = none) = false .
 	eq (ccsM(r9,r2,r1) \in nw(s)) = true .
 	eq (ch2M(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -525,7 +525,7 @@ open INV .
 	op s : -> Sys .
 	eq (ss(s,r1,r2,r5) = none) = false .
 	eq (ccsM(r9,r2,r1) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -562,7 +562,7 @@ open INV .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = true .
 	eq sign(r11) = sign(ca,owner(r11),pubKey(r11)) .
 	eq m = cfM(r1,r1,r2,encFin(prf-ckey(prf-ms(((r16 & priClKey(r12)) || pqKey((priPqKey(r13) & r17),r18)),seedMs(r4,r8,clPubKeyEx(r16),encapsCipher(r13,r17))),seedHs(r4,r8)),prf-cfin(prf-ms(((r16 & priClKey(r12)) || pqKey((priPqKey(r13) & r17),r18)),seedMs(r4,r8,clPubKeyEx(r16),encapsCipher(r13,r17))),hFullHs(r1,r2,r3,r4,r5,r6,r8,r9,r10,r11,r12,r13,r14,clPubKeyEx(r16),encapsCipher(r13,r17))))) .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -599,7 +599,7 @@ open INV .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = true .
 	eq sign(r11) = sign(ca,owner(r11),pubKey(r11)) .
 	eq (m = cfM(r1,r1,r2,encFin(prf-ckey(prf-ms(((r16 & priClKey(r12)) || pqKey((priPqKey(r13) & r17),r18)),seedMs(r4,r8,clPubKeyEx(r16),encapsCipher(r13,r17))),seedHs(r4,r8)),prf-cfin(prf-ms(((r16 & priClKey(r12)) || pqKey((priPqKey(r13) & r17),r18)),seedMs(r4,r8,clPubKeyEx(r16),encapsCipher(r13,r17))),hFullHs(r1,r2,r3,r4,r5,r6,r8,r9,r10,r11,r12,r13,r14,clPubKeyEx(r16),encapsCipher(r13,r17)))))) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -635,7 +635,7 @@ open INV .
 	eq decH(r14,pubKey(r11)) = hParams(r4,r8,r12,r13) .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = true .
 	eq (sign(r11) = sign(ca,owner(r11),pubKey(r11))) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -670,7 +670,7 @@ open INV .
 	eq (skexM(r7,r2,r1,r12,r13,r14,r15) \in nw(s)) = true .
 	eq decH(r14,pubKey(r11)) = hParams(r4,r8,r12,r13) .
 	eq (ckexM(r1,r1,r2,clPubKeyEx(r16),encapsCipher(r13,r17),r18) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -704,7 +704,7 @@ open INV .
 	eq (shM(r7,r2,r1,r3,r8,r9,r10) \in nw(s)) = true .
 	eq (skexM(r7,r2,r1,r12,r13,r14,r15) \in nw(s)) = true .
 	eq (decH(r14,pubKey(r11)) = hParams(r4,r8,r12,r13)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -737,7 +737,7 @@ open INV .
 	eq (chM(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (shM(r7,r2,r1,r3,r8,r9,r10) \in nw(s)) = true .
 	eq (skexM(r7,r2,r1,r12,r13,r14,r15) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -769,7 +769,7 @@ open INV .
 	eq (scertM(r7,r2,r1,r11) \in nw(s)) = true .
 	eq (chM(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (shM(r7,r2,r1,r3,r8,r9,r10) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -800,7 +800,7 @@ open INV .
 	eq (shDnM(r7,r2,r1) \in nw(s)) = true .
 	eq (scertM(r7,r2,r1,r11) \in nw(s)) = true .
 	eq (chM(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -830,7 +830,7 @@ open INV .
 	eq (ccsM(r1,r1,r2) \in nw(s)) = true .
 	eq (shDnM(r7,r2,r1) \in nw(s)) = true .
 	eq (scertM(r7,r2,r1,r11) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -859,7 +859,7 @@ open INV .
 	eq decAsym?(r14,pubKey(r11)) = true .
 	eq (ccsM(r1,r1,r2) \in nw(s)) = true .
 	eq (shDnM(r7,r2,r1) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -887,7 +887,7 @@ open INV .
 	eq (r18 > r15) = true .
 	eq decAsym?(r14,pubKey(r11)) = true .
 	eq (ccsM(r1,r1,r2) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -914,7 +914,7 @@ open INV .
 	op s : -> Sys .
 	eq (r18 > r15) = true .
 	eq decAsym?(r14,pubKey(r11)) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -940,7 +940,7 @@ open INV .
 	op r9 : -> CipherSuite .
 	op s : -> Sys .
 	eq (r18 > r15) = false .
-	red inv4(s,m) implies inv4(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
+	red inv4'(s,m) implies inv4'(cfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18),m) .
 close
 
 --> true
@@ -958,7 +958,7 @@ open INV .
 	op r9 : -> Prin .
 	op s : -> Sys .
 	eq ss(s,r1,r2,r5) = none .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -982,7 +982,7 @@ open INV .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = true .
 	eq (sf2M(r10,r2,r1,encFin(prf-skey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-sfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5)))))) \in nw(s)) = true .
 	eq m = cf2M(r1,r1,r2,encFin(prf-ckey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-cfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5)))))) .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -1006,7 +1006,7 @@ open INV .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = true .
 	eq (sf2M(r10,r2,r1,encFin(prf-skey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-sfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5)))))) \in nw(s)) = true .
 	eq (m = cf2M(r1,r1,r2,encFin(prf-ckey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-cfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5))))))) = false .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -1029,7 +1029,7 @@ open INV .
 	eq (ch2M(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = true .
 	eq (sf2M(r10,r2,r1,encFin(prf-skey(ms(ss(s,r1,r2,r5)),seedHs(r4,r8)),prf-sfin2(ms(ss(s,r1,r2,r5)),hAbbrHs(r1,r2,r3,r4,r5,r6,r8,cs(ss(s,r1,r2,r5)))))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -1051,7 +1051,7 @@ open INV .
 	eq (ccsM(r9,r2,r1) \in nw(s)) = true .
 	eq (ch2M(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
 	eq (sh2M(r7,r2,r1,r3,r8,r5,cs(ss(s,r1,r2,r5))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -1072,7 +1072,7 @@ open INV .
 	eq (ccsM(r1,r1,r2) \in nw(s)) = true .
 	eq (ccsM(r9,r2,r1) \in nw(s)) = true .
 	eq (ch2M(r1,r1,r2,r3,r4,r5,r6) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -1092,7 +1092,7 @@ open INV .
 	eq (ss(s,r1,r2,r5) = none) = false .
 	eq (ccsM(r1,r1,r2) \in nw(s)) = true .
 	eq (ccsM(r9,r2,r1) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -1111,7 +1111,7 @@ open INV .
 	op s : -> Sys .
 	eq (ss(s,r1,r2,r5) = none) = false .
 	eq (ccsM(r1,r1,r2) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(cfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -1125,7 +1125,7 @@ open INV .
 	op r6 : -> PqKemParams .
 	op s : -> Sys .
 	eq (r4 \in ur(s)) = true .
-	red inv4(s,m) implies inv4(chello(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1140,7 +1140,7 @@ open INV .
 	op s : -> Sys .
 	eq (r4 \in ur(s)) = false .
 	eq m = chM(r1,r1,r2,r3,r4,r5,r6) .
-	red inv4(s,m) implies inv4(chello(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1155,7 +1155,7 @@ open INV .
 	op s : -> Sys .
 	eq (r4 \in ur(s)) = false .
 	eq (m = chM(r1,r1,r2,r3,r4,r5,r6)) = false .
-	red inv4(s,m) implies inv4(chello(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1169,7 +1169,7 @@ open INV .
 	op r6 : -> CipherSuites .
 	op s : -> Sys .
 	eq ss(s,r1,r2,r5) = none .
-	red inv4(s,m) implies inv4(chello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1184,7 +1184,7 @@ open INV .
 	op s : -> Sys .
 	eq (ss(s,r1,r2,r5) = none) = false .
 	eq (r4 \in ur(s)) = true .
-	red inv4(s,m) implies inv4(chello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1201,7 +1201,7 @@ open INV .
 	eq (r4 \in ur(s)) = false .
 	eq (cs(ss(s,r1,r2,r5)) \in r6) = true .
 	eq m = ch2M(r1,r1,r2,r3,r4,r5,r6) .
-	red inv4(s,m) implies inv4(chello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1218,7 +1218,7 @@ open INV .
 	eq (r4 \in ur(s)) = false .
 	eq (cs(ss(s,r1,r2,r5)) \in r6) = true .
 	eq (m = ch2M(r1,r1,r2,r3,r4,r5,r6)) = false .
-	red inv4(s,m) implies inv4(chello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1234,7 +1234,7 @@ open INV .
 	eq (ss(s,r1,r2,r5) = none) = false .
 	eq (r4 \in ur(s)) = false .
 	eq (cs(ss(s,r1,r2,r5)) \in r6) = false .
-	red inv4(s,m) implies inv4(chello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(chello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -1260,7 +1260,7 @@ open INV .
 	op s : -> Sys .
 	eq decAsym?(r16,pubKey(r13)) = true .
 	eq (r1 \in uclk(s)) = true .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1287,7 +1287,7 @@ open INV .
 	eq decAsym?(r16,pubKey(r13)) = true .
 	eq (r1 \in uclk(s)) = false .
 	eq (r2 \in upqk(s)) = true .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1322,7 +1322,7 @@ open INV .
 	eq decH(r16,pubKey(r13)) = hParams(r6,r10,r14,r15) .
 	eq sign(r13) = sign(ca,owner(r13),pubKey(r13)) .
 	eq m = ckexM(r3,r3,r4,clPubKeyEx(r1),encapsCipher(r15,r2),time(s)) .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1357,7 +1357,7 @@ open INV .
 	eq decH(r16,pubKey(r13)) = hParams(r6,r10,r14,r15) .
 	eq sign(r13) = sign(ca,owner(r13),pubKey(r13)) .
 	eq (m = ckexM(r3,r3,r4,clPubKeyEx(r1),encapsCipher(r15,r2),time(s))) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1391,7 +1391,7 @@ open INV .
 	eq (skexM(r9,r4,r3,r14,r15,r16,r17) \in nw(s)) = true .
 	eq decH(r16,pubKey(r13)) = hParams(r6,r10,r14,r15) .
 	eq (sign(r13) = sign(ca,owner(r13),pubKey(r13))) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1424,7 +1424,7 @@ open INV .
 	eq (shM(r9,r4,r3,r5,r10,r11,r12) \in nw(s)) = true .
 	eq (skexM(r9,r4,r3,r14,r15,r16,r17) \in nw(s)) = true .
 	eq (decH(r16,pubKey(r13)) = hParams(r6,r10,r14,r15)) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1456,7 +1456,7 @@ open INV .
 	eq (chM(r3,r3,r4,r5,r6,r7,r8) \in nw(s)) = true .
 	eq (shM(r9,r4,r3,r5,r10,r11,r12) \in nw(s)) = true .
 	eq (skexM(r9,r4,r3,r14,r15,r16,r17) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1487,7 +1487,7 @@ open INV .
 	eq (scertM(r9,r4,r3,r13) \in nw(s)) = true .
 	eq (chM(r3,r3,r4,r5,r6,r7,r8) \in nw(s)) = true .
 	eq (shM(r9,r4,r3,r5,r10,r11,r12) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1517,7 +1517,7 @@ open INV .
 	eq (shDnM(r9,r4,r3) \in nw(s)) = true .
 	eq (scertM(r9,r4,r3,r13) \in nw(s)) = true .
 	eq (chM(r3,r3,r4,r5,r6,r7,r8) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1546,7 +1546,7 @@ open INV .
 	eq (r2 \in upqk(s)) = false .
 	eq (shDnM(r9,r4,r3) \in nw(s)) = true .
 	eq (scertM(r9,r4,r3,r13) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1574,7 +1574,7 @@ open INV .
 	eq (r1 \in uclk(s)) = false .
 	eq (r2 \in upqk(s)) = false .
 	eq (shDnM(r9,r4,r3) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1599,7 +1599,7 @@ open INV .
 	op r9 : -> Prin .
 	op s : -> Sys .
 	eq decAsym?(r16,pubKey(r13)) = false .
-	red inv4(s,m) implies inv4(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(ckeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1612,7 +1612,7 @@ open INV .
 	op s : -> Sys .
 	eq (r4 \in csign(nw(s))) = true .
 	eq m = scertM(intruder,r1,r2,cert(r1,r3,r4)) .
-	red inv4(s,m) implies inv4(fkCert(s,r1,r2,r3,r4),m) .
+	red inv4'(s,m) implies inv4'(fkCert(s,r1,r2,r3,r4),m) .
 close
 
 --> true
@@ -1625,7 +1625,7 @@ open INV .
 	op s : -> Sys .
 	eq (r4 \in csign(nw(s))) = true .
 	eq (m = scertM(intruder,r1,r2,cert(r1,r3,r4))) = false .
-	red inv4(s,m) implies inv4(fkCert(s,r1,r2,r3,r4),m) .
+	red inv4'(s,m) implies inv4'(fkCert(s,r1,r2,r3,r4),m) .
 close
 
 --> true
@@ -1637,7 +1637,7 @@ open INV .
 	op r4 : -> Sign .
 	op s : -> Sys .
 	eq (r4 \in csign(nw(s))) = false .
-	red inv4(s,m) implies inv4(fkCert(s,r1,r2,r3,r4),m) .
+	red inv4'(s,m) implies inv4'(fkCert(s,r1,r2,r3,r4),m) .
 close
 
 --> true
@@ -1665,7 +1665,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r1),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1693,7 +1693,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r1),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1722,7 +1722,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1751,7 +1751,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1781,7 +1781,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1811,7 +1811,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1840,7 +1840,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1869,7 +1869,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1898,7 +1898,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1928,7 +1928,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1958,7 +1958,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -1987,7 +1987,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2017,7 +2017,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2047,7 +2047,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2078,7 +2078,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2109,7 +2109,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2139,7 +2139,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2170,7 +2170,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2201,7 +2201,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2233,7 +2233,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2265,7 +2265,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = cfM(intruder,r4,r5,encFin(prf-ckey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-cfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2296,7 +2296,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2325,7 +2325,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2350,7 +2350,7 @@ open INV .
 	op r9 : -> PqKemParams .
 	op s : -> Sys .
 	eq (r3 \in csign(nw(s))) = false .
-	red inv4(s,m) implies inv4(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -2371,7 +2371,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r8),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2392,7 +2392,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r8),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2414,7 +2414,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2436,7 +2436,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2459,7 +2459,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2482,7 +2482,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2504,7 +2504,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2526,7 +2526,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2548,7 +2548,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2571,7 +2571,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2594,7 +2594,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2616,7 +2616,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2639,7 +2639,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2662,7 +2662,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2686,7 +2686,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2710,7 +2710,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2733,7 +2733,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2757,7 +2757,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2781,7 +2781,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2806,7 +2806,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2831,7 +2831,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = cf2M(intruder,r1,r2,encFin(prf-ckey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-cfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r1,r2,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2855,7 +2855,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2877,7 +2877,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkCfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -2887,7 +2887,7 @@ open INV .
 	op r2 : -> Prin .
 	op s : -> Sys .
 	eq m = ccsM(intruder,r1,r2) .
-	red inv4(s,m) implies inv4(fkChangeCS(s,r1,r2),m) .
+	red inv4'(s,m) implies inv4'(fkChangeCS(s,r1,r2),m) .
 close
 
 --> true
@@ -2897,7 +2897,7 @@ open INV .
 	op r2 : -> Prin .
 	op s : -> Sys .
 	eq (m = ccsM(intruder,r1,r2)) = false .
-	red inv4(s,m) implies inv4(fkChangeCS(s,r1,r2),m) .
+	red inv4'(s,m) implies inv4'(fkChangeCS(s,r1,r2),m) .
 close
 
 --> true
@@ -2911,7 +2911,7 @@ open INV .
 	op r6 : -> PqKemParams .
 	op s : -> Sys .
 	eq m = chM(intruder,r1,r2,r3,r4,r5,r6) .
-	red inv4(s,m) implies inv4(fkChello(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkChello(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -2925,7 +2925,7 @@ open INV .
 	op r6 : -> PqKemParams .
 	op s : -> Sys .
 	eq (m = chM(intruder,r1,r2,r3,r4,r5,r6)) = false .
-	red inv4(s,m) implies inv4(fkChello(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkChello(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -2939,7 +2939,7 @@ open INV .
 	op r6 : -> CipherSuites .
 	op s : -> Sys .
 	eq m = ch2M(intruder,r1,r2,r3,r4,r5,r6) .
-	red inv4(s,m) implies inv4(fkChello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkChello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -2953,7 +2953,7 @@ open INV .
 	op r6 : -> CipherSuites .
 	op s : -> Sys .
 	eq (m = ch2M(intruder,r1,r2,r3,r4,r5,r6)) = false .
-	red inv4(s,m) implies inv4(fkChello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkChello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -2966,7 +2966,7 @@ open INV .
 	op r5 : -> PqPubKey .
 	op s : -> Sys .
 	eq (r3 \in uclk(s)) = true .
-	red inv4(s,m) implies inv4(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
+	red inv4'(s,m) implies inv4'(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -2980,7 +2980,7 @@ open INV .
 	op s : -> Sys .
 	eq (r3 \in uclk(s)) = false .
 	eq (r4 \in upqk(s)) = true .
-	red inv4(s,m) implies inv4(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
+	red inv4'(s,m) implies inv4'(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -2995,7 +2995,7 @@ open INV .
 	eq (r3 \in uclk(s)) = false .
 	eq (r4 \in upqk(s)) = false .
 	eq m = ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s)) .
-	red inv4(s,m) implies inv4(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
+	red inv4'(s,m) implies inv4'(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -3010,7 +3010,7 @@ open INV .
 	eq (r3 \in uclk(s)) = false .
 	eq (r4 \in upqk(s)) = false .
 	eq (m = ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s))) = false .
-	red inv4(s,m) implies inv4(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
+	red inv4'(s,m) implies inv4'(fkCkeyex(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -3025,7 +3025,42 @@ open INV .
 	eq (r3 \in clkLeaked(s)) = true .
 	eq (r4 \in pqkLeaked(s)) = true .
 	eq m = ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s)) .
-	red inv4(s,m) implies inv4(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
+	eq (r4 \in upqk(s)) = true .
+	red inv4'(s,m) implies inv4'(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
+close
+
+--> true
+open INV .
+	op m : -> Msg .
+	op r1 : -> Prin .
+	op r2 : -> Prin .
+	op r3 : -> ClPriKeyEx .
+	op r4 : -> PqPriKey .
+	op r5 : -> PqPubKey .
+	op s : -> Sys .
+	eq (r3 \in clkLeaked(s)) = true .
+	eq (r4 \in pqkLeaked(s)) = true .
+	eq m = ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s)) .
+	eq (r4 \in upqk(s)) = false .
+	eq (ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s)) \in nw(s)) = true .
+	red inv4'(s,m) implies inv4'(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
+close
+
+--> true, use inv6 as a lemma
+open INV .
+	op m : -> Msg .
+	op r1 : -> Prin .
+	op r2 : -> Prin .
+	op r3 : -> ClPriKeyEx .
+	op r4 : -> PqPriKey .
+	op r5 : -> PqPubKey .
+	op s : -> Sys .
+	eq (r3 \in clkLeaked(s)) = true .
+	eq (r4 \in pqkLeaked(s)) = true .
+	eq m = ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s)) .
+	eq (r4 \in upqk(s)) = false .
+	eq (ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s)) \in nw(s)) = false .
+	red inv6(s,r4) implies inv4'(s,m) implies inv4'(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -3040,7 +3075,7 @@ open INV .
 	eq (r3 \in clkLeaked(s)) = true .
 	eq (r4 \in pqkLeaked(s)) = true .
 	eq (m = ckexM(intruder,r1,r2,clPubKeyEx(r3),encapsCipher(r5,r4),time(s))) = false .
-	red inv4(s,m) implies inv4(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
+	red inv4'(s,m) implies inv4'(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -3054,7 +3089,7 @@ open INV .
 	op s : -> Sys .
 	eq (r3 \in clkLeaked(s)) = true .
 	eq (r4 \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
+	red inv4'(s,m) implies inv4'(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -3067,7 +3102,7 @@ open INV .
 	op r5 : -> PqPubKey .
 	op s : -> Sys .
 	eq (r3 \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
+	red inv4'(s,m) implies inv4'(fkCkeyex2(s,r1,r2,r3,r4,r5),m) .
 close
 
 --> true
@@ -3095,7 +3130,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r1),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3123,7 +3158,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r1),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3152,7 +3187,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3181,7 +3216,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3211,7 +3246,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3241,7 +3276,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3270,7 +3305,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3299,7 +3334,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3328,7 +3363,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3358,7 +3393,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3388,7 +3423,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3417,7 +3452,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3447,7 +3482,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3477,7 +3512,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3508,7 +3543,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3539,7 +3574,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3569,7 +3604,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3600,7 +3635,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3631,7 +3666,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3663,7 +3698,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17)))) .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3695,7 +3730,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = true .
 	eq (m = sfM(intruder,r5,r4,encFin(prf-skey(prf-ms(r1,seedMs(r7,r10,r16,r17)),seedHs(r7,r10)),prf-sfin(prf-ms(r1,seedMs(r7,r10,r16,r17)),hFullHs(r4,r5,r6,r7,r8,r9,r10,r11,r12,cert(r5,r2,r3),r13,r14,r15,r16,r17))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3726,7 +3761,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r1)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3755,7 +3790,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r1),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r1)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r1)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3780,7 +3815,7 @@ open INV .
 	op r9 : -> PqKemParams .
 	op s : -> Sys .
 	eq (r3 \in csign(nw(s))) = false .
-	red inv4(s,m) implies inv4(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -3801,7 +3836,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r8),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3822,7 +3857,7 @@ open INV .
 	eq existPqPriKexM(pmsPqKey(r8),nw(s)) = true .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3844,7 +3879,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3866,7 +3901,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3889,7 +3924,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3912,7 +3947,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3934,7 +3969,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3956,7 +3991,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -3978,7 +4013,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4001,7 +4036,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4024,7 +4059,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4046,7 +4081,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4069,7 +4104,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4092,7 +4127,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4116,7 +4151,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4140,7 +4175,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4163,7 +4198,7 @@ open INV .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4187,7 +4222,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4211,7 +4246,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4236,7 +4271,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9)))) .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4261,7 +4296,7 @@ open INV .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = true .
 	eq (m = sf2M(intruder,r1,r2,encFin(prf-skey(prf-ms(r8,seedMs(r4,r7,r10,r11)),seedHs(r4,r7)),prf-sfin2(prf-ms(r8,seedMs(r4,r7,r10,r11)),hAbbrHs(r2,r1,r3,r4,r5,r6,r7,r9))))) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4285,7 +4320,7 @@ open INV .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = true .
 	eq ($pqKey1(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
 	eq ($pqKey2(pmsPqKey(r8)) \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4307,7 +4342,7 @@ open INV .
 	eq existClPriKexM(pmsClKey(r8),nw(s)) = false .
 	eq ($clKey1(pmsClKey(r8)) \in clkLeaked(s)) = false .
 	eq ($clKey2(pmsClKey(r8)) \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
+	red inv4'(s,m) implies inv4'(fkSfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11),m) .
 close
 
 --> true
@@ -4321,7 +4356,7 @@ open INV .
 	op r6 : -> Sid .
 	op s : -> Sys .
 	eq m = shM(intruder,r1,r2,r3,r4,r5,r6) .
-	red inv4(s,m) implies inv4(fkShello(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkShello(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4335,7 +4370,7 @@ open INV .
 	op r6 : -> Sid .
 	op s : -> Sys .
 	eq (m = shM(intruder,r1,r2,r3,r4,r5,r6)) = false .
-	red inv4(s,m) implies inv4(fkShello(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkShello(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4349,7 +4384,7 @@ open INV .
 	op r6 : -> CipherSuite .
 	op s : -> Sys .
 	eq m = sh2M(intruder,r1,r2,r3,r4,r5,r6) .
-	red inv4(s,m) implies inv4(fkShello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkShello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4363,7 +4398,7 @@ open INV .
 	op r6 : -> CipherSuite .
 	op s : -> Sys .
 	eq (m = sh2M(intruder,r1,r2,r3,r4,r5,r6)) = false .
-	red inv4(s,m) implies inv4(fkShello2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkShello2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4373,7 +4408,7 @@ open INV .
 	op r2 : -> Prin .
 	op s : -> Sys .
 	eq m = shDnM(intruder,r1,r2) .
-	red inv4(s,m) implies inv4(fkShelloDone(s,r1,r2),m) .
+	red inv4'(s,m) implies inv4'(fkShelloDone(s,r1,r2),m) .
 close
 
 --> true
@@ -4383,7 +4418,7 @@ open INV .
 	op r2 : -> Prin .
 	op s : -> Sys .
 	eq (m = shDnM(intruder,r1,r2)) = false .
-	red inv4(s,m) implies inv4(fkShelloDone(s,r1,r2),m) .
+	red inv4'(s,m) implies inv4'(fkShelloDone(s,r1,r2),m) .
 close
 
 --> true
@@ -4397,7 +4432,7 @@ open INV .
 	op r6 : -> Rand .
 	op s : -> Sys .
 	eq (r3 \in uclk(s)) = true .
-	red inv4(s,m) implies inv4(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4412,7 +4447,7 @@ open INV .
 	op s : -> Sys .
 	eq (r3 \in uclk(s)) = false .
 	eq (r4 \in upqk(s)) = true .
-	red inv4(s,m) implies inv4(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4429,7 +4464,7 @@ open INV .
 	eq (r4 \in upqk(s)) = false .
 	eq (priKey(r1) \in' ltkLeaked(s)) = true .
 	eq m = skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(r1),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s)) .
-	red inv4(s,m) implies inv4(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4446,7 +4481,7 @@ open INV .
 	eq (r4 \in upqk(s)) = false .
 	eq (priKey(r1) \in' ltkLeaked(s)) = true .
 	eq (m = skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(r1),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s))) = false .
-	red inv4(s,m) implies inv4(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4462,7 +4497,7 @@ open INV .
 	eq (r3 \in uclk(s)) = false .
 	eq (r4 \in upqk(s)) = false .
 	eq (priKey(r1) \in' ltkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4478,44 +4513,7 @@ open INV .
 	eq (r3 \in clkLeaked(s)) = true .
 	eq (r4 \in pqkLeaked(s)) = true .
 	eq m = skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(intruder),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s)) .
-	eq (r4 \in upqk(s)) = true .
-	red inv4(s,m) implies inv4(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
-close
-
---> true
-open INV .
-	op m : -> Msg .
-	op r1 : -> Prin .
-	op r2 : -> Prin .
-	op r3 : -> ClPriKeyEx .
-	op r4 : -> PqPriKey .
-	op r5 : -> Rand .
-	op r6 : -> Rand .
-	op s : -> Sys .
-	eq (r3 \in clkLeaked(s)) = true .
-	eq (r4 \in pqkLeaked(s)) = true .
-	eq m = skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(intruder),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s)) .
-	eq (r4 \in upqk(s)) = false .
-	eq (skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(intruder),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s)) \in nw(s)) = true .
-	red inv4(s,m) implies inv4(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
-close
-
---> true, use inv6 as a lemma
-open INV .
-	op m : -> Msg .
-	op r1 : -> Prin .
-	op r2 : -> Prin .
-	op r3 : -> ClPriKeyEx .
-	op r4 : -> PqPriKey .
-	op r5 : -> Rand .
-	op r6 : -> Rand .
-	op s : -> Sys .
-	eq (r3 \in clkLeaked(s)) = true .
-	eq (r4 \in pqkLeaked(s)) = true .
-	eq m = skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(intruder),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s)) .
-	eq (r4 \in upqk(s)) = false .
-	eq (skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(intruder),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s)) \in nw(s)) = false .
-	red inv6(s,r4) implies inv4(s,m) implies inv4(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4531,7 +4529,7 @@ open INV .
 	eq (r3 \in clkLeaked(s)) = true .
 	eq (r4 \in pqkLeaked(s)) = true .
 	eq (m = skexM(intruder,r1,r2,clPubKeyEx(r3),pqPubKeyEn(r4),encH(priKey(intruder),hParams(r5,r6,clPubKeyEx(r3),pqPubKeyEn(r4))),time(s))) = false .
-	red inv4(s,m) implies inv4(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4546,7 +4544,7 @@ open INV .
 	op s : -> Sys .
 	eq (r3 \in clkLeaked(s)) = true .
 	eq (r4 \in pqkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4560,7 +4558,7 @@ open INV .
 	op r6 : -> Rand .
 	op s : -> Sys .
 	eq (r3 \in clkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(fkSkeyex2(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4570,7 +4568,7 @@ open INV .
 	op r2 : -> Prin .
 	op s : -> Sys .
 	eq m = heReM(r2,r2,r1) .
-	red inv4(s,m) implies inv4(helloReq(s,r1,r2),m) .
+	red inv4'(s,m) implies inv4'(helloReq(s,r1,r2),m) .
 close
 
 --> true
@@ -4580,7 +4578,7 @@ open INV .
 	op r2 : -> Prin .
 	op s : -> Sys .
 	eq (m = heReM(r2,r2,r1)) = false .
-	red inv4(s,m) implies inv4(helloReq(s,r1,r2),m) .
+	red inv4'(s,m) implies inv4'(helloReq(s,r1,r2),m) .
 close
 
 --> true
@@ -4592,7 +4590,7 @@ open INV .
 	op r4 : -> FinVD .
 	op s : -> Sys .
 	eq (cfM(r1,r1,r2,encFin(r3,r4)) \in nw(s)) = true .
-	red inv4(s,m) implies inv4(leakHsK(s,r1,r2,r3,r4),m) .
+	red inv4'(s,m) implies inv4'(leakHsK(s,r1,r2,r3,r4),m) .
 close
 
 --> true
@@ -4605,7 +4603,7 @@ open INV .
 	op s : -> Sys .
 	eq (cfM(r1,r1,r2,encFin(r3,r4)) \in nw(s)) = false .
 	eq (sfM(r1,r1,r2,encFin(r3,r4)) \in nw(s)) = true .
-	red inv4(s,m) implies inv4(leakHsK(s,r1,r2,r3,r4),m) .
+	red inv4'(s,m) implies inv4'(leakHsK(s,r1,r2,r3,r4),m) .
 close
 
 --> true
@@ -4618,7 +4616,7 @@ open INV .
 	op s : -> Sys .
 	eq (cfM(r1,r1,r2,encFin(r3,r4)) \in nw(s)) = false .
 	eq (sfM(r1,r1,r2,encFin(r3,r4)) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(leakHsK(s,r1,r2,r3,r4),m) .
+	red inv4'(s,m) implies inv4'(leakHsK(s,r1,r2,r3,r4),m) .
 close
 
 --> true
@@ -4627,7 +4625,7 @@ open INV .
 	op r1 : -> Prin .
 	op s : -> Sys .
 	eq (priKey(r1) \in' ltkLeaked(s)) = true .
-	red inv4(s,m) implies inv4(leakLtK(s,r1),m) .
+	red inv4'(s,m) implies inv4'(leakLtK(s,r1),m) .
 close
 
 --> true
@@ -4636,7 +4634,7 @@ open INV .
 	op r1 : -> Prin .
 	op s : -> Sys .
 	eq (priKey(r1) \in' ltkLeaked(s)) = false .
-	red inv4(s,m) implies inv4(leakLtK(s,r1),m) .
+	red inv4'(s,m) implies inv4'(leakLtK(s,r1),m) .
 close
 
 --> true
@@ -4651,7 +4649,7 @@ open INV .
 	op r7 : -> Nat .
 	op s : -> Sys .
 	eq (skexM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
-	red inv4(s,m) implies inv4(leakPKE1(s,r1,r2,r3,r4,r5,r6,r7),m) .
+	red inv4'(s,m) implies inv4'(leakPKE1(s,r1,r2,r3,r4,r5,r6,r7),m) .
 close
 
 --> true
@@ -4666,7 +4664,7 @@ open INV .
 	op r7 : -> Nat .
 	op s : -> Sys .
 	eq (skexM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(leakPKE1(s,r1,r2,r3,r4,r5,r6,r7),m) .
+	red inv4'(s,m) implies inv4'(leakPKE1(s,r1,r2,r3,r4,r5,r6,r7),m) .
 close
 
 --> true
@@ -4681,7 +4679,7 @@ open INV .
 	op r7 : -> Nat .
 	op s : -> Sys .
 	eq (skexM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
-	red inv4(s,m) implies inv4(leakPKE2(s,r1,r2,r3,r4,r5,r6,r7),m) .
+	red inv4'(s,m) implies inv4'(leakPKE2(s,r1,r2,r3,r4,r5,r6,r7),m) .
 close
 
 --> true
@@ -4696,7 +4694,7 @@ open INV .
 	op r7 : -> Nat .
 	op s : -> Sys .
 	eq (skexM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(leakPKE2(s,r1,r2,r3,r4,r5,r6,r7),m) .
+	red inv4'(s,m) implies inv4'(leakPKE2(s,r1,r2,r3,r4,r5,r6,r7),m) .
 close
 
 --> true
@@ -4710,7 +4708,7 @@ open INV .
 	op r6 : -> Nat .
 	op s : -> Sys .
 	eq (ckexM(r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
-	red inv4(s,m) implies inv4(leakPKE3(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(leakPKE3(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4724,7 +4722,7 @@ open INV .
 	op r6 : -> Nat .
 	op s : -> Sys .
 	eq (ckexM(r1,r2,r3,r4,r5,r6) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(leakPKE3(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(leakPKE3(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4738,7 +4736,7 @@ open INV .
 	op r6 : -> Nat .
 	op s : -> Sys .
 	eq (ckexM(r1,r2,r3,r4,r5,r6) \in nw(s)) = true .
-	red inv4(s,m) implies inv4(leakPKE4(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(leakPKE4(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4752,7 +4750,7 @@ open INV .
 	op r6 : -> Nat .
 	op s : -> Sys .
 	eq (ckexM(r1,r2,r3,r4,r5,r6) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(leakPKE4(s,r1,r2,r3,r4,r5,r6),m) .
+	red inv4'(s,m) implies inv4'(leakPKE4(s,r1,r2,r3,r4,r5,r6),m) .
 close
 
 --> true
@@ -4785,7 +4783,7 @@ open INV .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r14,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16)))) \in nw(s)) = true .
 	eq m = ccsM(r3,r3,r2) .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -4818,7 +4816,7 @@ open INV .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r14,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16)))) \in nw(s)) = true .
 	eq (m = ccsM(r3,r3,r2)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -4850,7 +4848,7 @@ open INV .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r14,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16)))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -4881,7 +4879,7 @@ open INV .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -4911,7 +4909,7 @@ open INV .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -4940,7 +4938,7 @@ open INV .
 	eq (ckexM(r14,r2,r3,r15,r16,r17) \in nw(s)) = true .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -4968,7 +4966,7 @@ open INV .
 	eq (shDnM(r3,r3,r2) \in nw(s)) = true .
 	eq (ckexM(r14,r2,r3,r15,r16,r17) \in nw(s)) = true .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -4995,7 +4993,7 @@ open INV .
 	eq (ccsM(r14,r2,r3) \in nw(s)) = true .
 	eq (shDnM(r3,r3,r2) \in nw(s)) = true .
 	eq (ckexM(r14,r2,r3,r15,r16,r17) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5021,7 +5019,7 @@ open INV .
 	op s : -> Sys .
 	eq (ccsM(r14,r2,r3) \in nw(s)) = true .
 	eq (shDnM(r3,r3,r2) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5046,7 +5044,7 @@ open INV .
 	op r9 : -> CipherSuite .
 	op s : -> Sys .
 	eq (ccsM(r14,r2,r3) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5062,7 +5060,7 @@ open INV .
 	op r8 : -> Rand .
 	op s : -> Sys .
 	eq ss(s,r2,r3,r6) = none .
-	red inv4(s,m) implies inv4(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5081,7 +5079,7 @@ open INV .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (sh2M(r3,r3,r2,r4,r8,r6,cs(ss(s,r2,r3,r6))) \in nw(s)) = true .
 	eq m = ccsM(r3,r3,r2) .
-	red inv4(s,m) implies inv4(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5100,7 +5098,7 @@ open INV .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (sh2M(r3,r3,r2,r4,r8,r6,cs(ss(s,r2,r3,r6))) \in nw(s)) = true .
 	eq (m = ccsM(r3,r3,r2)) = false .
-	red inv4(s,m) implies inv4(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5118,7 +5116,7 @@ open INV .
 	eq (ss(s,r2,r3,r6) = none) = false .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (sh2M(r3,r3,r2,r4,r8,r6,cs(ss(s,r2,r3,r6))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5135,7 +5133,7 @@ open INV .
 	op s : -> Sys .
 	eq (ss(s,r2,r3,r6) = none) = false .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sChangeCS2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5155,7 +5153,7 @@ open INV .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq m = scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) .
-	red inv4(s,m) implies inv4(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5175,7 +5173,7 @@ open INV .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq (m = scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))))) = false .
-	red inv4(s,m) implies inv4(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5194,7 +5192,7 @@ open INV .
 	op s : -> Sys .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5212,7 +5210,7 @@ open INV .
 	op r9 : -> CipherSuite .
 	op s : -> Sys .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(scert(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5246,7 +5244,7 @@ open INV .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r14,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16)))) \in nw(s)) = true .
 	eq m = sfM(r3,r3,r2,encFin(prf-skey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-sfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16)))) .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5280,7 +5278,7 @@ open INV .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r14,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16)))) \in nw(s)) = true .
 	eq (m = sfM(r3,r3,r2,encFin(prf-skey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-sfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16))))) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5313,7 +5311,7 @@ open INV .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r14,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r15)) || pqKey(decaps(r16,r12),r17)),seedMs(r5,r8,r15,r16)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r15,r16)))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5345,7 +5343,7 @@ open INV .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5376,7 +5374,7 @@ open INV .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5406,7 +5404,7 @@ open INV .
 	eq (ckexM(r14,r2,r3,r15,r16,r17) \in nw(s)) = true .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5435,7 +5433,7 @@ open INV .
 	eq (shDnM(r3,r3,r2) \in nw(s)) = true .
 	eq (ckexM(r14,r2,r3,r15,r16,r17) \in nw(s)) = true .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5463,7 +5461,7 @@ open INV .
 	eq (ccsM(r3,r3,r2) \in nw(s)) = true .
 	eq (shDnM(r3,r3,r2) \in nw(s)) = true .
 	eq (ckexM(r14,r2,r3,r15,r16,r17) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5490,7 +5488,7 @@ open INV .
 	eq (ccsM(r14,r2,r3) \in nw(s)) = true .
 	eq (ccsM(r3,r3,r2) \in nw(s)) = true .
 	eq (shDnM(r3,r3,r2) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5516,7 +5514,7 @@ open INV .
 	op s : -> Sys .
 	eq (ccsM(r14,r2,r3) \in nw(s)) = true .
 	eq (ccsM(r3,r3,r2) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5541,7 +5539,7 @@ open INV .
 	op r9 : -> CipherSuite .
 	op s : -> Sys .
 	eq (ccsM(r14,r2,r3) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
+	red inv4'(s,m) implies inv4'(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17),m) .
 close
 
 --> true
@@ -5557,7 +5555,7 @@ open INV .
 	op r8 : -> Rand .
 	op s : -> Sys .
 	eq ss(s,r2,r3,r6) = none .
-	red inv4(s,m) implies inv4(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5577,7 +5575,7 @@ open INV .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (sh2M(r3,r3,r2,r4,r8,r6,cs(ss(s,r2,r3,r6))) \in nw(s)) = true .
 	eq m = sf2M(r3,r3,r2,encFin(prf-skey(ms(ss(s,r2,r3,r6)),seedHs(r5,r8)),prf-sfin2(ms(ss(s,r2,r3,r6)),hAbbrHs(r2,r3,r4,r5,r6,r7,r8,cs(ss(s,r2,r3,r6)))))) .
-	red inv4(s,m) implies inv4(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5597,7 +5595,7 @@ open INV .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (sh2M(r3,r3,r2,r4,r8,r6,cs(ss(s,r2,r3,r6))) \in nw(s)) = true .
 	eq (m = sf2M(r3,r3,r2,encFin(prf-skey(ms(ss(s,r2,r3,r6)),seedHs(r5,r8)),prf-sfin2(ms(ss(s,r2,r3,r6)),hAbbrHs(r2,r3,r4,r5,r6,r7,r8,cs(ss(s,r2,r3,r6))))))) = false .
-	red inv4(s,m) implies inv4(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5616,7 +5614,7 @@ open INV .
 	eq (ccsM(r3,r3,r2) \in nw(s)) = true .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (sh2M(r3,r3,r2,r4,r8,r6,cs(ss(s,r2,r3,r6))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5634,7 +5632,7 @@ open INV .
 	eq (ss(s,r2,r3,r6) = none) = false .
 	eq (ccsM(r3,r3,r2) \in nw(s)) = true .
 	eq (ch2M(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5651,7 +5649,7 @@ open INV .
 	op s : -> Sys .
 	eq (ss(s,r2,r3,r6) = none) = false .
 	eq (ccsM(r3,r3,r2) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(sfinish2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5670,7 +5668,7 @@ open INV .
 	op s : -> Sys .
 	eq (r2 \in r9) = true .
 	eq (r1 \in ur(s)) = true .
-	red inv4(s,m) implies inv4(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5690,7 +5688,7 @@ open INV .
 	eq (r2 \in r9) = true .
 	eq (r1 \in ur(s)) = false .
 	eq (r3 \in ui(s)) = true .
-	red inv4(s,m) implies inv4(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5712,7 +5710,7 @@ open INV .
 	eq (r3 \in ui(s)) = false .
 	eq (chM(r4,r5,r6,r7,r8,r9,r10) \in nw(s)) = true .
 	eq m = shM(r6,r6,r5,r7,r1,r2,r3) .
-	red inv4(s,m) implies inv4(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5734,7 +5732,7 @@ open INV .
 	eq (r3 \in ui(s)) = false .
 	eq (chM(r4,r5,r6,r7,r8,r9,r10) \in nw(s)) = true .
 	eq (m = shM(r6,r6,r5,r7,r1,r2,r3)) = false .
-	red inv4(s,m) implies inv4(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5755,7 +5753,7 @@ open INV .
 	eq (r1 \in ur(s)) = false .
 	eq (r3 \in ui(s)) = false .
 	eq (chM(r4,r5,r6,r7,r8,r9,r10) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5773,7 +5771,7 @@ open INV .
 	op r9 : -> CipherSuites .
 	op s : -> Sys .
 	eq (r2 \in r9) = false .
-	red inv4(s,m) implies inv4(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
+	red inv4'(s,m) implies inv4'(shello(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10),m) .
 close
 
 --> true
@@ -5789,7 +5787,7 @@ open INV .
 	op r8 : -> CipherSuites .
 	op s : -> Sys .
 	eq ss(s,r3,r4,r7) = none .
-	red inv4(s,m) implies inv4(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5806,7 +5804,7 @@ open INV .
 	op s : -> Sys .
 	eq (ss(s,r3,r4,r7) = none) = false .
 	eq (r1 \in ur(s)) = true .
-	red inv4(s,m) implies inv4(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5826,7 +5824,7 @@ open INV .
 	eq (cs(ss(s,r3,r4,r7)) \in r8) = true .
 	eq (ch2M(r2,r3,r4,r5,r6,r7,r8) \in nw(s)) = true .
 	eq m = sh2M(r4,r4,r3,r5,r1,r7,cs(ss(s,r3,r4,r7))) .
-	red inv4(s,m) implies inv4(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5846,7 +5844,7 @@ open INV .
 	eq (cs(ss(s,r3,r4,r7)) \in r8) = true .
 	eq (ch2M(r2,r3,r4,r5,r6,r7,r8) \in nw(s)) = true .
 	eq (m = sh2M(r4,r4,r3,r5,r1,r7,cs(ss(s,r3,r4,r7)))) = false .
-	red inv4(s,m) implies inv4(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5865,7 +5863,7 @@ open INV .
 	eq (r1 \in ur(s)) = false .
 	eq (cs(ss(s,r3,r4,r7)) \in r8) = true .
 	eq (ch2M(r2,r3,r4,r5,r6,r7,r8) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5883,7 +5881,7 @@ open INV .
 	eq (ss(s,r3,r4,r7) = none) = false .
 	eq (r1 \in ur(s)) = false .
 	eq (cs(ss(s,r3,r4,r7)) \in r8) = false .
-	red inv4(s,m) implies inv4(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
+	red inv4'(s,m) implies inv4'(shello2(s,r1,r2,r3,r4,r5,r6,r7,r8),m) .
 close
 
 --> true
@@ -5908,7 +5906,7 @@ open INV .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq m = shDnM(r3,r3,r2) .
-	red inv4(s,m) implies inv4(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
+	red inv4'(s,m) implies inv4'(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
 close
 
 --> true
@@ -5933,7 +5931,7 @@ open INV .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (m = shDnM(r3,r3,r2)) = false .
-	red inv4(s,m) implies inv4(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
+	red inv4'(s,m) implies inv4'(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
 close
 
 --> true
@@ -5957,7 +5955,7 @@ open INV .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
+	red inv4'(s,m) implies inv4'(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
 close
 
 --> true
@@ -5980,7 +5978,7 @@ open INV .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
 	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
+	red inv4'(s,m) implies inv4'(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
 close
 
 --> true
@@ -6002,7 +6000,7 @@ open INV .
 	op s : -> Sys .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
+	red inv4'(s,m) implies inv4'(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
 close
 
 --> true
@@ -6023,7 +6021,7 @@ open INV .
 	op r9 : -> CipherSuite .
 	op s : -> Sys .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
+	red inv4'(s,m) implies inv4'(shelloDone(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13),m) .
 close
 
 --> true
@@ -6043,7 +6041,7 @@ open INV .
 	op r9 : -> PqKemParams .
 	op s : -> Sys .
 	eq (r1 \in uclk(s)) = true .
-	red inv4(s,m) implies inv4(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
+	red inv4'(s,m) implies inv4'(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
 close
 
 --> true
@@ -6064,7 +6062,7 @@ open INV .
 	op s : -> Sys .
 	eq (r1 \in uclk(s)) = false .
 	eq (r2 \in upqk(s)) = true .
-	red inv4(s,m) implies inv4(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
+	red inv4'(s,m) implies inv4'(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
 close
 
 --> true
@@ -6089,7 +6087,7 @@ open INV .
 	eq (shM(r5,r5,r4,r6,r10,r11,r12) \in nw(s)) = true .
 	eq (scertM(r5,r5,r4,cert(r5,pubKey(r5),sign(ca,r5,pubKey(r5)))) \in nw(s)) = true .
 	eq m = skexM(r5,r5,r4,clPubKeyEx(r1),pqPubKeyEn(r2),encH(priKey(r5),hParams(r7,r10,clPubKeyEx(r1),pqPubKeyEn(r2))),time(s)) .
-	red inv4(s,m) implies inv4(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
+	red inv4'(s,m) implies inv4'(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
 close
 
 --> true
@@ -6114,7 +6112,7 @@ open INV .
 	eq (shM(r5,r5,r4,r6,r10,r11,r12) \in nw(s)) = true .
 	eq (scertM(r5,r5,r4,cert(r5,pubKey(r5),sign(ca,r5,pubKey(r5)))) \in nw(s)) = true .
 	eq (m = skexM(r5,r5,r4,clPubKeyEx(r1),pqPubKeyEn(r2),encH(priKey(r5),hParams(r7,r10,clPubKeyEx(r1),pqPubKeyEn(r2))),time(s))) = false .
-	red inv4(s,m) implies inv4(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
+	red inv4'(s,m) implies inv4'(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
 close
 
 --> true
@@ -6138,7 +6136,7 @@ open INV .
 	eq (chM(r3,r4,r5,r6,r7,r8,r9) \in nw(s)) = true .
 	eq (shM(r5,r5,r4,r6,r10,r11,r12) \in nw(s)) = true .
 	eq (scertM(r5,r5,r4,cert(r5,pubKey(r5),sign(ca,r5,pubKey(r5)))) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
+	red inv4'(s,m) implies inv4'(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
 close
 
 --> true
@@ -6161,7 +6159,7 @@ open INV .
 	eq (r2 \in upqk(s)) = false .
 	eq (chM(r3,r4,r5,r6,r7,r8,r9) \in nw(s)) = true .
 	eq (shM(r5,r5,r4,r6,r10,r11,r12) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
+	red inv4'(s,m) implies inv4'(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
 close
 
 --> true
@@ -6183,7 +6181,7 @@ open INV .
 	eq (r1 \in uclk(s)) = false .
 	eq (r2 \in upqk(s)) = false .
 	eq (chM(r3,r4,r5,r6,r7,r8,r9) \in nw(s)) = false .
-	red inv4(s,m) implies inv4(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
+	red inv4'(s,m) implies inv4'(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),m) .
 close
 
---> Time taken is 13935ms
+--> Time taken is 13670ms
