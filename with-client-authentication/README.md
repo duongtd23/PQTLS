@@ -1,7 +1,7 @@
 ## Contents: In this folder, you can find:
 - `hbtls-ca.cafe`: the specification of the protocol in case client authentication is requested. See the section below for a detailed explanation.
 - `invariants.cafe`: all invariants/lemmas that are needed for the formal verification.
-- others: proof scores, for example, `gen-pqKeySeAu.cafe` is the generated proof score for `pqKeySeAu`.
+- others: proof scores, for example, `gen-pqKeySeAu.cafe` is the generated proof score for `pqKeySeAu`. Note that `forwardSe`, `ssKeySe`, `forwardSeAu`, `ssKeySeAu`, `inv7`, `inv8`, `inv15`, `inv23`, `inv34`, `inv35`, `inv40`, and `inv42` are proved without induction, but by using another invariants as lemmas.
 - `inputs`: in case you want to re-generate the proof scores, this folder contains all input files that are necessary for that purpose. See README in the folder `without-client-authentication/inputs` for more detail.
 
 ## CafeOBJ specification with client authentication: a detail description
