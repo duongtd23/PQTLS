@@ -1,4 +1,4 @@
-## Symbolic verification of Hybrid Post-Quantum TLS 1.2
+## Security verification of Hybrid Post-Quantum TLS Handshake Protocol
 In this repository, you can find:
 
 1. `IFF`: IFF protocol specification in CafeOBJ and its proof scores to verify the  *identifiable property*.
