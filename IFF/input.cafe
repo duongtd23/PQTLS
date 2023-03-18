@@ -1,0 +1,16 @@
+load IFF/iff.cafe .
+
+ipsgopen IFF .
+  inv inv1(F:Field, A1:Agent, A2:Agent, A3:Agent, K:Key, R:Rand) .
+  inv inv2(F:Field, K:Key, R:Rand) .
+  
+  generate inv1(F:Field, A1:Agent, A2:Agent, A3:Agent, K:Key, R:Rand) induction on F:Field .
+  generate inv2(F:Field, K:Key, R:Rand) induction on F:Field .
+close
+
+set-output IFF/proof-scores.cafe .
+:save-proof .
+
+eof
+
+load IFF/input.cafe .

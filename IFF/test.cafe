@@ -1,0 +1,40 @@
+--> true
+open IFF .
+	op a1 : -> Agent .
+	op a2 : -> Agent .
+	op a3 : -> Agent .
+	op f : -> Field .
+	op k : -> Key .
+	op r : -> Rand .
+	red inv1(init,a1,a2,a3,k,r) .
+close
+
+--> true
+open IFF .
+	op a1 : -> Agent .
+	op a2 : -> Agent .
+	op a3 : -> Agent .
+	op f : -> Field .
+	op k : -> Key .
+	op r : -> Rand .
+	op r1 : -> Agent .
+	op r2 : -> Agent .
+	op r3 : -> Rand .
+	eq (r3 \in rands(nw(f))) = true .
+	red inv1(f,a1,a2,a3,k,r) implies inv1(fkcm1(f,r1,r2,r3),a1,a2,a3,k,r) .
+close
+
+--> true
+open IFF .
+	op a1 : -> Agent .
+	op a2 : -> Agent .
+	op a3 : -> Agent .
+	op f : -> Field .
+	op k : -> Key .
+	op r : -> Rand .
+	op r1 : -> Agent .
+	op r2 : -> Agent .
+	op r3 : -> Rand .
+	eq (r3 \in rands(nw(f))) = false .
+	red inv1(f,a1,a2,a3,k,r) implies inv1(fkcm1(f,r1,r2,r3),a1,a2,a3,k,r) .
+close

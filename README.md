@@ -19,12 +19,12 @@ After that, move to the next step to execute proof scores.
 
 ## Executing proof scores
 Proof scores are executable (CafeOBJ code).
-Once intalled CafeInMaude, you can try to run the proof score of `inv1` of IFF protocol, which is a small example, by the following commands:
+Once intalled CafeInMaude, you can try to run a part of the proof score of `inv1` of the IFF protocol, which is a small example, by the following commands:
 
 ```
 maude -allow-files path-to-CafeInMaude/src/cafeInMaude.maude
 load IFF/iff.cafe .
-load IFF/inv1.cafe .
+load IFF/test.cafe .
 ```
 
 where the first command starts the CafeInMaude environment (`path-to-CafeInMaude` is the path of the CafeInMaude folder),
@@ -33,10 +33,10 @@ and the last command loads the proof score.
 If nothing is wrong, you will get the output result containing `Result: true : Bool`. 
 Note that you need to make sure that the paths are correct. You may need to use the absolute paths instead of the relative paths as above.
 
-After that, you do not need to load the specification again, but can continue loading the proof score of `inv2`:
+After that, you do not need to load the specification again, but can continue loading the complete proof scores of `inv1` and `inv2`:
 
 ```
-load IFF/inv2.cafe .
+load IFF/proof-scores.cafe .
 ```
 
 Moving to the Hybrid TLS protocol, similarly, you can run the proof of 
