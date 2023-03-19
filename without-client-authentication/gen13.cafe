@@ -4461,7 +4461,6 @@ open INV .
 	eq (ckexM(r1,r2,r3,r14,r15,r16) \in nw(s)) = true .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
-	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r1,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r14)) || pqKey(decaps(r15,r12),r16)),seedMs(r5,r8,r14,r15)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r14)) || pqKey(decaps(r15,r12),r16)),seedMs(r5,r8,r14,r15)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r14,r15)))) \in nw(s)) = true .
 	red inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16),a,b,b1,pk,pk',ci,n) .
@@ -4496,7 +4495,6 @@ open INV .
 	eq (ckexM(r1,r2,r3,r14,r15,r16) \in nw(s)) = true .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
-	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = true .
 	eq (cfM(r1,r2,r3,encFin(prf-ckey(prf-ms(((r11 & priClKey(r14)) || pqKey(decaps(r15,r12),r16)),seedMs(r5,r8,r14,r15)),seedHs(r5,r8)),prf-cfin(prf-ms(((r11 & priClKey(r14)) || pqKey(decaps(r15,r12),r16)),seedMs(r5,r8,r14,r15)),hFullHs(r2,r3,r4,r5,r6,r7,r8,r9,r10,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3))),clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r14,r15)))) \in nw(s)) = false .
 	red inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16),a,b,b1,pk,pk',ci,n) .
@@ -4531,41 +4529,7 @@ open INV .
 	eq (ckexM(r1,r2,r3,r14,r15,r16) \in nw(s)) = true .
 	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
 	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
-	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = true .
 	eq (skexM(r3,r3,r2,clPubKeyEx(r11),pqPubKeyEn(r12),encH(priKey(r3),hParams(r5,r8,clPubKeyEx(r11),pqPubKeyEn(r12))),r13) \in nw(s)) = false .
-	red inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16),a,b,b1,pk,pk',ci,n) .
-close
-
---> true
-open INV .
-	op a : -> Prin .
-	op b : -> Prin .
-	op b1 : -> Prin .
-	op ci : -> Cipher .
-	op n : -> Nat .
-	op pk : -> ClPubKeyEx .
-	op pk' : -> PqPubKey .
-	op r1 : -> Prin .
-	op r10 : -> Sid .
-	op r11 : -> ClPriKeyEx .
-	op r12 : -> PqPriKey .
-	op r13 : -> Nat .
-	op r14 : -> ClPubKeyEx .
-	op r15 : -> PqCipher .
-	op r16 : -> Nat .
-	op r2 : -> Prin .
-	op r3 : -> Prin .
-	op r4 : -> Version .
-	op r5 : -> Rand .
-	op r6 : -> CipherSuites .
-	op r7 : -> PqKemParams .
-	op r8 : -> Rand .
-	op r9 : -> CipherSuite .
-	op s : -> Sys .
-	eq (ckexM(r1,r2,r3,r14,r15,r16) \in nw(s)) = true .
-	eq (chM(r1,r2,r3,r4,r5,r6,r7) \in nw(s)) = true .
-	eq (shM(r3,r3,r2,r4,r8,r9,r10) \in nw(s)) = true .
-	eq (scertM(r3,r3,r2,cert(r3,pubKey(r3),sign(ca,r3,pubKey(r3)))) \in nw(s)) = false .
 	red inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(sfinish(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16),a,b,b1,pk,pk',ci,n) .
 close
 
@@ -5215,4 +5179,4 @@ open INV .
 	red inv13(s,a,b,b1,pk,pk',ci,n) implies inv13(skeyex(s,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12),a,b,b1,pk,pk',ci,n) .
 close
 
---> Time taken is 10413ms
+--> Time taken is 9371ms

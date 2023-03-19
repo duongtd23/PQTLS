@@ -1474,7 +1474,6 @@ mod HB-TLS12 {
       PK2,EN,N2) = 
     (chM(A2,A,B,V,R,CSs,KEMs) \in nw(S) and
      shM(B,B,A,V,R2,CS,I) \in nw(S) and
-     scertM(B,B,A,cert(B,pubKey(B),sign(ca,B,pubKey(B)))) \in nw(S) and
      skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
       encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), N) \in nw(S) and
      ckexM(A2,A,B,PK2,EN,N2) \in nw(S) and
