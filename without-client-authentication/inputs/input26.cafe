@@ -3,8 +3,8 @@ ipsgopen INV .
     K2':PqPriKey, CI:Cipher, N:Nat, N2:Nat) .
   inv inv27(S:Sys, A:Prin, B:Prin, K:ClPriKeyEx, K':PqPriKey,
     K2:ClPriKeyEx, K2':PqPriKey, I:Sid, N:Nat, SD:Seed, M:Msg) .
-  inv inv20(S:Sys, KC:ClassicKey, K':PqPriKey, K2':PqPriKey, 
-    SD:Seed, SD2:Seed, N:Nat, M:Msg) .
+  inv inv20'(S:Sys, A:Prin, B:Prin, B1:Prin, KC:ClassicKey, 
+    K':PqPriKey, K2':PqPriKey, SD:Seed, SD2:Seed, N:Nat, H:Hash) .
   generate inv26(S:Sys, A:Prin, B:Prin, B1:Prin,  K:ClPriKeyEx, K':PqPriKey,
     K2:ClPriKeyEx, K2':PqPriKey, SD:Seed, SD2:Seed, H:Hash, CI:Cipher, N:Nat, N2:Nat)
   induction on S:Sys .

@@ -1,17 +1,18 @@
 ipsgopen INV .
-  inv inv4(S:Sys, M:Msg) .
   inv inv5(S:Sys, K':PqPriKey, K2':PqPriKey, N:Nat) .
-  generate inv20(S:Sys, A:Prin, B:Prin, B1:Prin, KC:ClassicKey, 
+  inv inv21(S:Sys, A:Prin, B:Prin, KC:ClassicKey, 
+    K':PqPriKey, K2':PqPriKey, SD:Seed, N:Nat, I:Sid) .
+  generate inv20'(S:Sys, A:Prin, B:Prin, B1:Prin, KC:ClassicKey, 
     K':PqPriKey, K2':PqPriKey, SD:Seed, SD2:Seed, N:Nat, H:Hash)
   induction on S:Sys .
 close
 
-set-output without-client-authentication/gen20.cafe .
+set-output without-client-authentication/gen20'.cafe .
 :save-proof .
 
 eof
 
-load without-client-authentication/inputs/input20.cafe .
+load without-client-authentication/inputs/input20'.cafe .
 
 load without-client-authentication/hbtls-wtca.cafe .
 load without-client-authentication/invariants.cafe .

@@ -1007,11 +1007,15 @@ mod HB-TLS12 {
     PqKemParams -> Sys {constr}
   op shello : Sys Rand CipherSuite Sid
     Prin Prin Prin Version Rand CipherSuites PqKemParams -> Sys {constr}
-  op scert : Sys Prin Prin Version Rand CipherSuite Sid -> Sys {constr}
+  op scert : Sys
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid -> Sys {constr}
   op skeyex : Sys ClPriKeyEx PqPriKey
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid -> Sys {constr}
-  op shelloDone : Sys Prin Prin Rand Rand 
+  op shelloDone : Sys 
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid 
     ClPriKeyEx PqPriKey Nat -> Sys {constr}
   op ckeyex : Sys ClPriKeyEx PqPriKey
     Prin Prin Version Rand CipherSuites PqKemParams
@@ -1019,7 +1023,11 @@ mod HB-TLS12 {
     Cert
     ClPubKeyEx PqPubKey Cipher Nat -> Sys {constr}
   op cChangeCS : Sys
-    Prin Prin PqPubKey ClPriKeyEx PqPriKey Nat -> Sys {constr}
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Prin Rand CipherSuite Sid 
+    Cert
+    ClPubKeyEx PqPubKey Cipher Nat 
+    ClPriKeyEx PqPriKey Nat -> Sys {constr}
   op cfinish : Sys 
     Prin Prin Version Rand CipherSuites PqKemParams
     Prin Rand CipherSuite Sid
@@ -1027,12 +1035,15 @@ mod HB-TLS12 {
     ClPubKeyEx PqPubKey Cipher Nat 
     ClPriKeyEx PqPriKey Nat -> Sys {constr}
   op sChangeCS : Sys
-    Prin Prin Prin ClPubKeyEx PqCipher Nat Cipher -> Sys {constr}
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid
+    ClPriKeyEx PqPriKey Nat
+    Prin ClPubKeyEx PqCipher Nat -> Sys {constr}
   op sfinish : Sys 
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid
     ClPriKeyEx PqPriKey Nat
-    ClPubKeyEx PqCipher Nat -> Sys {constr}
+    Prin ClPubKeyEx PqCipher Nat -> Sys {constr}
 
 ** session resumption / abbreviated handshake **
   op chello2 : Sys Prin Prin Version Rand Sid CipherSuites 
@@ -1040,16 +1051,21 @@ mod HB-TLS12 {
   op shello2 : Sys Rand
     Prin Prin Prin Version Rand Sid CipherSuites -> Sys {constr}
   op sChangeCS2 : Sys
-    Prin Prin Version Rand Sid Rand -> Sys {constr}
+    Prin Prin Prin Version Rand Sid CipherSuites 
+    Rand -> Sys {constr}
   op sfinish2 : Sys
     Prin Prin Prin Version Rand Sid CipherSuites 
     Rand -> Sys {constr}
   op cChangeCS2 : Sys
     Prin Prin Version Rand Sid CipherSuites 
-    Prin Rand -> Sys {constr}
+    Prin Rand 
+    Prin
+    Prin -> Sys {constr}
   op cfinish2 : Sys
     Prin Prin Version Rand Sid CipherSuites 
-    Prin Rand -> Sys {constr}
+    Prin Rand 
+    Prin
+    Prin -> Sys {constr}
 
 -- server hello request - sending before client hello
   op helloReq : Sys Prin Prin -> Sys {constr}
@@ -1219,35 +1235,42 @@ mod HB-TLS12 {
 
 -- server certificate
   op c-scert : Sys 
-    Prin Prin Version Rand CipherSuite Sid -> Bool
-  eq c-scert(S,A,B,V,R2,CS,I) = 
-    shM(B,B,A,V,R2,CS,I) \in nw(S) .
-  ceq nw(scert(S,A,B,V,R2,CS,I)) = 
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid -> Bool
+  eq c-scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) = 
+    (chM(A2,A,B,V,R,CSs,KEMs) \in nw(S) and
+     shM(B,B,A,V,R2,CS,I) \in nw(S)) .
+  ceq nw(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = 
     (scertM(B,B,A,cert(B,pubKey(B),sign(ca,B,pubKey(B)))) , nw(S)) 
-    if c-scert(S,A,B,V,R2,CS,I) .
-  eq ur(scert(S,A,B,V,R2,CS,I)) = ur(S) . 
-  eq uclk(scert(S,A,B,V,R2,CS,I)) = uclk(S) .
-  eq upqk(scert(S,A,B,V,R2,CS,I)) = upqk(S) .
-  eq ui(scert(S,A,B,V,R2,CS,I)) = ui(S) . 
-  eq ss(scert(S,A,B,V,R2,CS,I),A9,B9,I9) = 
+    if c-scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) .
+  eq ur(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = ur(S) . 
+  eq uclk(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = uclk(S) .
+  eq upqk(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = upqk(S) .
+  eq ui(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = ui(S) . 
+  eq ss(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I),A9,B9,I9) = 
     ss(S,A9,B9,I9) .
-  eq clkLeaked(scert(S,A,B,V,R2,CS,I)) = clkLeaked(S) . 
-  eq pqkLeaked(scert(S,A,B,V,R2,CS,I)) = pqkLeaked(S) . 
-  eq hskLeaked(scert(S,A,B,V,R2,CS,I)) = hskLeaked(S) . 
-  eq ltkLeaked(scert(S,A,B,V,R2,CS,I)) = ltkLeaked(S) . 
-  eq time(scert(S,A,B,V,R2,CS,I)) = time(S) . 
-  ceq scert(S,A,B,V,R2,CS,I) = S 
-    if not c-scert(S,A,B,V,R2,CS,I) .
+  eq clkLeaked(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = clkLeaked(S) . 
+  eq pqkLeaked(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = pqkLeaked(S) . 
+  eq hskLeaked(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = hskLeaked(S) . 
+  eq ltkLeaked(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = ltkLeaked(S) . 
+  eq time(scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = time(S) . 
+  ceq scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) = S 
+    if not c-scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) .
 
 -- server key exchange
   op c-skeyex : Sys ClPriKeyEx PqPriKey
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid -> Bool
+  op c-skeyex' : Sys
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid -> Bool
   eq c-skeyex(S,K,K',A2,A,B,V,R,CSs,KEMs,R2,CS,I) = 
-    (chM(A2,A,B,V,R,CSs,KEMs) \in nw(S) and
-     shM(B,B,A,V,R2,CS,I) \in nw(S) and
-     scertM(B,B,A,cert(B,pubKey(B),sign(ca,B,pubKey(B)))) \in nw(S) and
+    (c-skeyex'(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) and
      not (K \in uclk(S) or K' \in upqk(S)) ) .
+  eq c-skeyex'(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) = 
+    (c-scert(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) and
+     scertM(B,B,A,cert(B,pubKey(B),sign(ca,B,pubKey(B)))) \in nw(S)) .
+
   ceq nw(skeyex(S,K,K',A2,A,B,V,R,CSs,KEMs,R2,CS,I)) = 
     (skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
       encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), time(S)) , nw(S)) 
@@ -1272,32 +1295,35 @@ mod HB-TLS12 {
     if not c-skeyex(S,K,K',A2,A,B,V,R,CSs,KEMs,R2,CS,I) .
 
 -- server hello done
-  op c-shelloDone : Sys Prin Prin Rand Rand
+  op c-shelloDone : Sys 
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid 
     ClPriKeyEx PqPriKey Nat -> Bool
-  eq c-shelloDone(S,A,B,R,R2,K,K',N) = 
-    (skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
+  eq c-shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) = 
+    (c-skeyex'(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I) and
+     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
       encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), N) \in nw(S)) .
-  ceq nw(shelloDone(S,A,B,R,R2,K,K',N)) 
+  ceq nw(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) 
     = (shDnM(B,B,A) , nw(S)) 
-  if c-shelloDone(S,A,B,R,R2,K,K',N) .
-  eq ur(shelloDone(S,A,B,R,R2,K,K',N)) = ur(S) .
-  eq uclk(shelloDone(S,A,B,R,R2,K,K',N)) = uclk(S) .
-  eq upqk(shelloDone(S,A,B,R,R2,K,K',N)) = upqk(S) .
-  eq ui(shelloDone(S,A,B,R,R2,K,K',N)) = ui(S) .
-  eq ss(shelloDone(S,A,B,R,R2,K,K',N),A9,B9,I9) 
+  if c-shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) .
+  eq ur(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = ur(S) .
+  eq uclk(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = uclk(S) .
+  eq upqk(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = upqk(S) .
+  eq ui(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) = ui(S) .
+  eq ss(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N),A9,B9,I9) 
     = ss(S,A9,B9,I9) .
-  eq clkLeaked(shelloDone(S,A,B,R,R2,K,K',N)) 
+  eq clkLeaked(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) 
     = clkLeaked(S) .
-  eq pqkLeaked(shelloDone(S,A,B,R,R2,K,K',N)) 
+  eq pqkLeaked(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N)) 
     = pqkLeaked(S) .
-  eq hskLeaked(shelloDone(S,A,B,R,R2,K,K',N))
+  eq hskLeaked(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N))
     = hskLeaked(S) .
-  eq ltkLeaked(shelloDone(S,A,B,R,R2,K,K',N))
+  eq ltkLeaked(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N))
     = ltkLeaked(S) .
-  eq time(shelloDone(S,A,B,R,R2,K,K',N))
+  eq time(shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N))
     = time(S) .
-  ceq shelloDone(S,A,B,R,R2,K,K',N) = S
-  if not c-shelloDone(S,A,B,R,R2,K,K',N) .
+  ceq shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) = S
+  if not c-shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) .
 
 -- client key exchange
   op c-ckeyex : Sys ClPriKeyEx PqPriKey
@@ -1323,7 +1349,8 @@ mod HB-TLS12 {
       sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
      skexM(B2,B,A,PK,PK',CI,N) \in nw(S) and
       decAsym?(CI,pubKey(CERT)) and
-      decH(CI,pubKey(CERT)) = hParams(R,R2,PK,PK')) .
+      decH(CI,pubKey(CERT)) = hParams(R,R2,PK,PK') and
+     shDnM(B2,B,A) \in nw(S)) .
 
   ceq nw(ckeyex(S,K2,K2',A,B,V,R,CSs,KEMs,B2,R2,CS,I,
       CERT,PK,PK',CI,N))
@@ -1366,24 +1393,46 @@ mod HB-TLS12 {
 
 -- client change cipher spec
   op c-cChangeCS : Sys
-    Prin Prin PqPubKey ClPriKeyEx PqPriKey Nat -> Bool
-  eq c-cChangeCS(S,A,B,PK',K2,K2',N2)
-    = ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) .
-  ceq nw(cChangeCS(S,A,B,PK',K2,K2',N2)) = 
+    Prin Prin Version Rand CipherSuites PqKemParams
+    Prin Rand CipherSuite Sid 
+    Cert
+    ClPubKeyEx PqPubKey Cipher Nat 
+    ClPriKeyEx PqPriKey Nat -> Bool
+  eq c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,K2,K2',N2)
+    = (c-ckeyex'(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+         CERT,PK,PK',CI,N) and
+       ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
+       N2 > N) .
+  ceq nw(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,K2,K2',N2)) = 
     (ccsM(A,A,B) , nw(S)) 
-    if c-cChangeCS(S,A,B,PK',K2,K2',N2) .
-  eq ur(cChangeCS(S,A,B,PK',K2,K2',N2)) = ur(S) . 
-  eq uclk(cChangeCS(S,A,B,PK',K2,K2',N2)) = uclk(S) .
-  eq upqk(cChangeCS(S,A,B,PK',K2,K2',N2)) = upqk(S) .
-  eq ui(cChangeCS(S,A,B,PK',K2,K2',N2)) = ui(S) . 
-  eq ss(cChangeCS(S,A,B,PK',K2,K2',N2),A9,B9,I9) = ss(S,A9,B9,I9) .
-  eq clkLeaked(cChangeCS(S,A,B,PK',K2,K2',N2)) = clkLeaked(S) . 
-  eq pqkLeaked(cChangeCS(S,A,B,PK',K2,K2',N2)) = pqkLeaked(S) . 
-  eq hskLeaked(cChangeCS(S,A,B,PK',K2,K2',N2)) = hskLeaked(S) . 
-  eq ltkLeaked(cChangeCS(S,A,B,PK',K2,K2',N2)) = ltkLeaked(S) . 
-  eq time(cChangeCS(S,A,B,PK',K2,K2',N2)) = time(S) . 
-  ceq cChangeCS(S,A,B,PK',K2,K2',N2) = S 
-    if not c-cChangeCS(S,A,B,PK',K2,K2',N2) .
+    if c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,K2,K2',N2) .
+  eq ur(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = ur(S) . 
+  eq uclk(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = uclk(S) .
+  eq upqk(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = upqk(S) .
+  eq ui(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = ui(S) . 
+  eq ss(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = clkLeaked(S) . 
+  eq pqkLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = pqkLeaked(S) . 
+  eq hskLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = hskLeaked(S) . 
+  eq ltkLeaked(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = ltkLeaked(S) . 
+  eq time(cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+    CERT,PK,PK',CI,N,K2,K2',N2)) = time(S) . 
+  ceq cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,K2,K2',N2) = S 
+    if not c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+      CERT,PK,PK',CI,N,K2,K2',N2) .
 
 -- client finish
   op c-cfinish : Sys
@@ -1394,15 +1443,9 @@ mod HB-TLS12 {
     ClPriKeyEx PqPriKey Nat -> Bool
   eq c-cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
       CERT,PK,PK',CI,N,K2,K2',N2)
-    = (chM(A,A,B,V,R,CSs,KEMs) \in nw(S) and
-       shM(B2,B,A,V,R2,CS,I) \in nw(S) and
-       scertM(B2,B,A,CERT) \in nw(S) and
-        sign(CERT) = sign(ca,owner(CERT),pubKey(CERT)) and
-       skexM(B2,B,A,PK,PK',CI,N) \in nw(S) and
-        decAsym?(CI,pubKey(CERT)) and
-        decH(CI,pubKey(CERT)) = hParams(R,R2,PK,PK') and
-       ckexM(A,A,B,clPubKeyEx(K2),encapsCipher(PK',K2'),N2) \in nw(S) and
-       N2 > N) .
+    = (c-cChangeCS(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
+        CERT,PK,PK',CI,N,K2,K2',N2) and
+       ccsM(A,A,B) \in nw(S)) .
   ceq nw(cfinish(S,A,B,V,R,CSs,KEMs,B2,R2,CS,I,
       CERT,PK,PK',CI,N,K2,K2',N2)) = 
     (cfM(A,A,B, encFin(
@@ -1443,42 +1486,16 @@ mod HB-TLS12 {
 
 -- server change cipher spec
   op c-sChangeCS : Sys
-    Prin Prin Prin ClPubKeyEx PqCipher Nat Cipher -> Bool
-  eq c-sChangeCS(S,A2,A,B,PK2,EN,N2,CI) = 
-    (shDnM(B,B,A) \in nw(S) and
-     ckexM(A2,A,B,PK2,EN,N2) \in nw(S) and
-     cfM(A2,A,B,CI) \in nw(S)) .
-  ceq nw(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) 
-    = (ccsM(B,B,A) , nw(S))
-    if c-sChangeCS(S,A2,A,B,PK2,EN,N2,CI) .
-  eq ur(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = ur(S) . 
-  eq uclk(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = uclk(S) .
-  eq upqk(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = upqk(S) .
-  eq ui(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = ui(S) . 
-  eq ss(sChangeCS(S,A2,A,B,PK2,EN,N2,CI),A9,B9,I9) = ss(S,A9,B9,I9) .
-  eq clkLeaked(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = clkLeaked(S) . 
-  eq pqkLeaked(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = pqkLeaked(S) . 
-  eq hskLeaked(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = hskLeaked(S) . 
-  eq ltkLeaked(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = ltkLeaked(S) . 
-  eq time(sChangeCS(S,A2,A,B,PK2,EN,N2,CI)) = time(S) . 
-  ceq sChangeCS(S,A2,A,B,PK2,EN,N2,CI) = S 
-    if not c-sChangeCS(S,A2,A,B,PK2,EN,N2,CI) .
-
--- server finish
-  op c-sfinish : Sys
     Prin Prin Prin Version Rand CipherSuites PqKemParams
     Rand CipherSuite Sid 
     ClPriKeyEx PqPriKey Nat
-    ClPubKeyEx PqCipher Nat -> Bool
-  eq c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      PK2,EN,N2) = 
-    (chM(A2,A,B,V,R,CSs,KEMs) \in nw(S) and
-     shM(B,B,A,V,R2,CS,I) \in nw(S) and
-     scertM(B,B,A,cert(B,pubKey(B),sign(ca,B,pubKey(B)))) \in nw(S) and
-     skexM(B,B,A,clPubKeyEx(K),pqPubKeyEn(K'),
-      encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))), N) \in nw(S) and
-     ckexM(A2,A,B,PK2,EN,N2) \in nw(S) and
-     cfM(A2,A,B,encFin(
+    Prin ClPubKeyEx PqCipher Nat -> Bool
+  eq c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2) = 
+    (c-shelloDone(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N) and
+     shDnM(B,B,A) \in nw(S) and
+     ckexM(A3,A,B,PK2,EN,N2) \in nw(S) and
+     cfM(A3,A,B,encFin(
         prf-ckey(prf-ms(classicKey(PK2,K) || pqKey(decaps(EN,K'),N2), 
           seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
         prf-cfin(prf-ms(classicKey(PK2,K) || pqKey(decaps(EN,K'),N2), 
@@ -1486,9 +1503,51 @@ mod HB-TLS12 {
           hFullHs(A,B,V,R,CSs,KEMs,R2,CS,I, cert(B,pubKey(B),sign(ca,B,pubKey(B))),
             clPubKeyEx(K),pqPubKeyEn(K'),
             encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),PK2,EN)))) 
-      \in nw(S)) .
+      \in nw(S) and
+     ccsM(A3,A,B) \in nw(S)) .
+  ceq nw(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2)) 
+    = (ccsM(B,B,A) , nw(S))
+    if c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2) .
+  eq ur(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = ur(S) . 
+  eq uclk(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = uclk(S) .
+  eq upqk(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = upqk(S) .
+  eq ui(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = ui(S) . 
+  eq ss(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2),A9,B9,I9) = ss(S,A9,B9,I9) .
+  eq clkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = clkLeaked(S) . 
+  eq pqkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = pqkLeaked(S) . 
+  eq hskLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = hskLeaked(S) . 
+  eq ltkLeaked(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = ltkLeaked(S) . 
+  eq time(sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+    A3,PK2,EN,N2)) = time(S) . 
+  ceq sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2) = S 
+    if not c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2) .
+
+-- server finish
+  op c-sfinish : Sys
+    Prin Prin Prin Version Rand CipherSuites PqKemParams
+    Rand CipherSuite Sid 
+    ClPriKeyEx PqPriKey Nat
+    Prin ClPubKeyEx PqCipher Nat -> Bool
+  eq c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2) = 
+    (c-sChangeCS(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
+      A3,PK2,EN,N2) and
+     ccsM(B,B,A) \in nw(S)) .
   ceq nw(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      PK2,EN,N2)) 
+      A3,PK2,EN,N2)) 
     = (sfM(B,B,A, encFin(
         prf-skey(prf-ms(classicKey(PK2,K) || pqKey(decaps(EN,K'),N2),
             seedMs(R,R2,PK2,EN)), seedHs(R,R2)),
@@ -1499,38 +1558,38 @@ mod HB-TLS12 {
             encH(priKey(B),hParams(R,R2,clPubKeyEx(K),pqPubKeyEn(K'))),PK2,EN))
       )) , nw(S)) 
     if c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      PK2,EN,N2) .
+      A3,PK2,EN,N2) .
   eq ur(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = ur(S) . 
+    A3,PK2,EN,N2)) = ur(S) . 
   eq uclk(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = uclk(S) .
+    A3,PK2,EN,N2)) = uclk(S) .
   eq upqk(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = upqk(S) .
+    A3,PK2,EN,N2)) = upqk(S) .
   eq ui(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = ui(S) . 
+    A3,PK2,EN,N2)) = ui(S) . 
   ceq ss(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      PK2,EN,N2),A9,B9,I9) = 
+      A3,PK2,EN,N2),A9,B9,I9) = 
     (if A9 = A and B9 = B and I9 = I 
      then session(I,CS,prf-ms(classicKey(PK2,K) || pqKey(decaps(EN,K'),N2), 
           seedMs(R,R2,PK2,EN)))
      else ss(S,A9,B9,I9) 
      fi) 
     if c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      PK2,EN,N2) .
+      A3,PK2,EN,N2) .
   eq clkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = clkLeaked(S) . 
+    A3,PK2,EN,N2)) = clkLeaked(S) . 
   eq pqkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = pqkLeaked(S) . 
+    A3,PK2,EN,N2)) = pqkLeaked(S) . 
   eq hskLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = hskLeaked(S) . 
+    A3,PK2,EN,N2)) = hskLeaked(S) . 
   eq ltkLeaked(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = ltkLeaked(S) . 
+    A3,PK2,EN,N2)) = ltkLeaked(S) . 
   eq time(sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-    PK2,EN,N2)) = time(S) . 
+    A3,PK2,EN,N2)) = time(S) . 
   ceq sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      PK2,EN,N2) = S 
+      A3,PK2,EN,N2) = S 
     if not c-sfinish(S,A2,A,B,V,R,CSs,KEMs,R2,CS,I,K,K',N,
-      PK2,EN,N2) .
+      A3,PK2,EN,N2) .
 
 ** session resumption / abbreviated handshake **
 -- client hello 2
@@ -1582,34 +1641,36 @@ mod HB-TLS12 {
 
 -- server change cipher spec
   op c-sChangeCS2 : Sys
-    Prin Prin Version Rand Sid Rand -> Bool
-  eq c-sChangeCS2(S,A,B,V,R,I,R2) = 
-    sh2M(B,B,A,V,R2,I,cs(ss(S,A,B,I))) \in nw(S) .
-  ceq nw(sChangeCS2(S,A,B,V,R,I,R2)) =
+    Prin Prin Prin Version Rand Sid CipherSuites 
+    Rand -> Bool
+  eq c-sChangeCS2(S,A2,A,B,V,R,I,CSs,R2) = 
+    (not(ss(S,A,B,I) = none) and
+      ch2M(A2,A,B,V,R,I,CSs) \in nw(S) and
+     sh2M(B,B,A,V,R2,I,cs(ss(S,A,B,I))) \in nw(S)) .
+  ceq nw(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) =
       (ccsM(B,B,A) , nw(S))
-    if c-sChangeCS2(S,A,B,V,R,I,R2) .
-  eq ur(sChangeCS2(S,A,B,V,R,I,R2)) = ur(S) .
-  eq uclk(sChangeCS2(S,A,B,V,R,I,R2)) = uclk(S) .
-  eq upqk(sChangeCS2(S,A,B,V,R,I,R2)) = upqk(S) .
-  eq ui(sChangeCS2(S,A,B,V,R,I,R2)) = ui(S) .
-  eq ss(sChangeCS2(S,A,B,V,R,I,R2),A9,B9,I9) 
+    if c-sChangeCS2(S,A2,A,B,V,R,I,CSs,R2) .
+  eq ur(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = ur(S) .
+  eq uclk(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = uclk(S) .
+  eq upqk(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = upqk(S) .
+  eq ui(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = ui(S) .
+  eq ss(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2),A9,B9,I9) 
     = ss(S,A9,B9,I9) .
-  eq clkLeaked(sChangeCS2(S,A,B,V,R,I,R2)) = clkLeaked(S) .
-  eq pqkLeaked(sChangeCS2(S,A,B,V,R,I,R2)) = pqkLeaked(S) .
-  eq hskLeaked(sChangeCS2(S,A,B,V,R,I,R2)) = hskLeaked(S) .
-  eq ltkLeaked(sChangeCS2(S,A,B,V,R,I,R2)) = ltkLeaked(S) .
-  eq time(sChangeCS2(S,A,B,V,R,I,R2)) = time(S) .
-  ceq sChangeCS2(S,A,B,V,R,I,R2) = S 
-    if not c-sChangeCS2(S,A,B,V,R,I,R2) .
+  eq clkLeaked(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = clkLeaked(S) .
+  eq pqkLeaked(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = pqkLeaked(S) .
+  eq hskLeaked(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = hskLeaked(S) .
+  eq ltkLeaked(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = ltkLeaked(S) .
+  eq time(sChangeCS2(S,A2,A,B,V,R,I,CSs,R2)) = time(S) .
+  ceq sChangeCS2(S,A2,A,B,V,R,I,CSs,R2) = S 
+    if not c-sChangeCS2(S,A2,A,B,V,R,I,CSs,R2) .
 
 -- server finish 2
   op c-sfinish2 : Sys
     Prin Prin Prin Version Rand Sid CipherSuites 
     Rand -> Bool
   eq c-sfinish2(S,A2,A,B,V,R,I,CSs,R2) = 
-    (not(ss(S,A,B,I) = none) and
-     ch2M(A2,A,B,V,R,I,CSs) \in nw(S) and
-     sh2M(B,B,A,V,R2,I,cs(ss(S,A,B,I))) \in nw(S)) .
+    c-sChangeCS2(S,A2,A,B,V,R,I,CSs,R2) and
+    ccsM(B,B,A) \in nw(S) .
   ceq nw(sfinish2(S,A2,A,B,V,R,I,CSs,R2)) =
       (sf2M(B,B,A,encFin(
           prf-skey(ms(ss(S,A,B,I)), seedHs(R,R2)),
@@ -1634,65 +1695,65 @@ mod HB-TLS12 {
 -- client change cipher spec
   op c-cChangeCS2 : Sys
     Prin Prin Version Rand Sid CipherSuites 
-    Prin Rand -> Bool
-  eq c-cChangeCS2(S,A,B,V,R,I,CSs,B2,R2) = 
-    (ch2M(A,A,B,V,R,I,CSs) \in nw(S) and
+    Prin Rand 
+    Prin
+    Prin -> Bool
+  eq c-cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) = 
+    (not(ss(S,A,B,I) = none) and
+     ch2M(A,A,B,V,R,I,CSs) \in nw(S) and
      sh2M(B2,B,A,V,R2,I,cs(ss(S,A,B,I))) \in nw(S) and
-     sf2M(B2,B,A,encFin(
+     ccsM(B3,B,A) \in nw(S) and
+     sf2M(B4,B,A,encFin(
         prf-skey(ms(ss(S,A,B,I)), seedHs(R,R2)),
         prf-sfin2(ms(ss(S,A,B,I)),
           hAbbrHs(A,B,V,R,I,CSs,R2,cs(ss(S,A,B,I))))))
       \in nw(S)) .
-  ceq nw(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) =
+  ceq nw(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) =
       (ccsM(A,A,B), nw(S)) 
-    if c-cChangeCS2(S,A,B,V,R,I,CSs,B2,R2) .
-  eq ur(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = ur(S) .
-  eq uclk(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = uclk(S) .
-  eq upqk(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = upqk(S) .
-  eq ui(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = ui(S) .
-  eq ss(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2),A9,B9,I9) 
+    if c-cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) .
+  eq ur(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = ur(S) .
+  eq uclk(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = uclk(S) .
+  eq upqk(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = upqk(S) .
+  eq ui(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = ui(S) .
+  eq ss(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4),A9,B9,I9) 
     = ss(S,A9,B9,I9) .
-  eq clkLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = clkLeaked(S) .
-  eq pqkLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = pqkLeaked(S) .
-  eq hskLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = hskLeaked(S) .
-  eq ltkLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = ltkLeaked(S) .
-  eq time(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2)) = time(S) .
-  ceq cChangeCS2(S,A,B,V,R,I,CSs,B2,R2) = S 
-    if not c-cChangeCS2(S,A,B,V,R,I,CSs,B2,R2) .
+  eq clkLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = clkLeaked(S) .
+  eq pqkLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = pqkLeaked(S) .
+  eq hskLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = hskLeaked(S) .
+  eq ltkLeaked(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = ltkLeaked(S) .
+  eq time(cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = time(S) .
+  ceq cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) = S 
+    if not c-cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) .
 
 -- client finish 2
   op c-cfinish2 : Sys
     Prin Prin Version Rand Sid CipherSuites 
-    Prin Rand -> Bool
-  eq c-cfinish2(S,A,B,V,R,I,CSs,B2,R2) = 
-    (not(ss(S,A,B,I) = none) and
-     ch2M(A,A,B,V,R,I,CSs) \in nw(S) and
-     sh2M(B2,B,A,V,R2,I,cs(ss(S,A,B,I))) \in nw(S) and
-     sf2M(B2,B,A,encFin(
-        prf-skey(ms(ss(S,A,B,I)), seedHs(R,R2)),
-        prf-sfin2(ms(ss(S,A,B,I)),
-          hAbbrHs(A,B,V,R,I,CSs,R2,cs(ss(S,A,B,I))))))
-      \in nw(S)) .
-  ceq nw(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) =
+    Prin Rand 
+    Prin
+    Prin -> Bool
+  eq c-cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) = 
+    c-cChangeCS2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) and
+    ccsM(A,A,B) \in nw(S) .
+  ceq nw(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) =
       (cf2M(A,A,B,encFin(
           prf-ckey(ms(ss(S,A,B,I)), seedHs(R,R2)),
           prf-cfin2(ms(ss(S,A,B,I)),
             hAbbrHs(A,B,V,R,I,CSs,R2,cs(ss(S,A,B,I))))
         )) , nw(S)) 
-    if c-cfinish2(S,A,B,V,R,I,CSs,B2,R2) .
-  eq ur(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = ur(S) .
-  eq uclk(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = uclk(S) .
-  eq upqk(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = upqk(S) .
-  eq ui(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = ui(S) .
-  eq ss(cfinish2(S,A,B,V,R,I,CSs,B2,R2),A9,B9,I9) 
+    if c-cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) .
+  eq ur(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = ur(S) .
+  eq uclk(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = uclk(S) .
+  eq upqk(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = upqk(S) .
+  eq ui(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = ui(S) .
+  eq ss(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4),A9,B9,I9) 
     = ss(S,A9,B9,I9) .
-  eq clkLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = clkLeaked(S) .
-  eq pqkLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = pqkLeaked(S) .
-  eq hskLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = hskLeaked(S) .
-  eq ltkLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = ltkLeaked(S) .
-  eq time(cfinish2(S,A,B,V,R,I,CSs,B2,R2)) = time(S) .
-  ceq cfinish2(S,A,B,V,R,I,CSs,B2,R2) = S 
-    if not c-cfinish2(S,A,B,V,R,I,CSs,B2,R2) .
+  eq clkLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = clkLeaked(S) .
+  eq pqkLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = pqkLeaked(S) .
+  eq hskLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = hskLeaked(S) .
+  eq ltkLeaked(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = ltkLeaked(S) .
+  eq time(cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4)) = time(S) .
+  ceq cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) = S 
+    if not c-cfinish2(S,A,B,V,R,I,CSs,B2,R2,B3,B4) .
 
 -- hello request
   eq nw(helloReq(S,A,B)) = (heReM(B,B,A) , nw(S)) .
