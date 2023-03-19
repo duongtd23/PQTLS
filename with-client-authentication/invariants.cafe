@@ -268,12 +268,34 @@ mod INV {
     implies K2' \in upqk(S) .
 
 -- 4+5+21
-  op inv20 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
-  eq inv20(S,KC,K',K2',SD,SD2,N,M) = 
-    (M \in nw(S) and (sfM?(M) or sf2M?(M)) and 
-     not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
-     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
-     decSym?(getCipher(M),prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2)))
+  -- op inv20 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
+  -- eq inv20(S,KC,K',K2',SD,SD2,N,M) = 
+  --   (M \in nw(S) and (sfM?(M) or sf2M?(M)) and 
+  --    not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
+  --    not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+  --    decSym?(getCipher(M),prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2)))
+  --   implies 
+  --     (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 4+5
+  op inv20 : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey Seed Seed Nat Hash -> Bool
+  eq inv20(S,A,B,B1,KC,K',K2',SD,SD2,N,H) = 
+    (not (A = intruder or B = intruder or A = B) and
+     sfM(B1,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)))
+    implies 
+      (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 5+21
+  op inv20' : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey Seed Seed Nat Hash -> Bool
+  eq inv20'(S,A,B,B1,KC,K',K2',SD,SD2,N,H) = 
+    (not (A = intruder or B = intruder or A = B) and
+     sf2M(B1,B,A,encFin(
+        prf-skey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-sfin2(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)))
     implies 
       (K' \in upqk(S) or K2' \in upqk(S)) .
 
@@ -649,12 +671,34 @@ mod INV {
     implies K2' \in upqk(S) .
 
 -- 4'+5+21
-  op inv44 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
-  eq inv44(S,KC,K',K2',SD,SD2,N,M) = 
-    (M \in nw(S) and (cfM?(M) or cf2M?(M)) and 
-     not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
+  -- op inv44 : Sys ClassicKey PqPriKey PqPriKey Seed Seed Nat Msg -> Bool
+  -- eq inv44(S,KC,K',K2',SD,SD2,N,M) = 
+  --   (M \in nw(S) and (cfM?(M) or cf2M?(M)) and 
+  --    not(src(M) = intruder or dst(M) = intruder or src(M) = dst(M)) and
+  --    not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+  --    decSym?(getCipher(M),prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2)))
+  --   implies 
+  --     (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 4'+5+21
+  op inv44 : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey Seed Seed Nat Hash -> Bool 
+  eq inv44(S,A,B,A1,KC,K',K2',SD,SD2,N,H) =
+    (not (A = intruder or B = intruder or A = B) and
      not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
-     decSym?(getCipher(M),prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2)))
+     cfM(A1,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
+    implies 
+      (K' \in upqk(S) or K2' \in upqk(S)) .
+
+-- 4'+5+21
+  op inv44' : Sys Prin Prin Prin ClassicKey PqPriKey PqPriKey Seed Seed Nat Hash -> Bool 
+  eq inv44'(S,A,B,A1,KC,K',K2',SD,SD2,N,H) =
+    (not (A = intruder or B = intruder or A = B) and
+     not(K' \in pqkLeaked(S) or K2' \in pqkLeaked(S)) and
+     cf2M(A1,A,B,encFin(
+        prf-ckey(prf-ms(KC || pqKey(K' & K2',N),SD),SD2),
+        prf-cfin2(prf-ms(KC || pqKey(K' & K2',N),SD),H))) \in nw(S))
     implies 
       (K' \in upqk(S) or K2' \in upqk(S)) .
 
