@@ -1,8 +1,9 @@
 ## Contents: In this folder, you can find:
 - `hbtls-wtca.cafe`: the specification of the protocol in case client authentication is not requested. See the section below for a detailed explanation.
 - `invariants.cafe`: all invariants/lemmas that are needed for the formal verification.
-- others: proof scores, for example, `gen-pqKeySe.cafe` is the generated proof score for `pqKeySe`. Note that `forwardSe`, `ssKeySe`, `inv7`, `inv8`, `inv15`, and `inv23` are proved without induction, but by using another invariants as lemmas.
+- others files: proof scores, for example, `gen-pqKeySe.cafe` is the generated proof score for `pqKeySe`. Note that `forwardSe`, `ssKeySe`, `inv7`, `inv8`, `inv15`, and `inv23` are proved without induction, but by using another invariants as lemmas.
 - `inputs`: in case you want to re-generate the proof scores, this folder contains all input files that are necessary for that purpose. See README in this folder to find detailed guidance on how to reproduce the proof scores.
+- `pd1-pd2-counterexamples`: Two invalid invariant candidates `pd1` & `pd2` and their counterexamples.
 
 ## CafeOBJ specification without client authentication: a detail description
 We first introduce the following module, where `intruder` and `ca` represent the intruder and the certificate authority:
